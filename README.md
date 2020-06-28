@@ -9,14 +9,11 @@ Table of contents
    * [How to use](#How-to-use)
    * [Requirement](#Requirement)
    * [Build & Installation](#Build--Installation)
-   * [Kernel Configuration](#Kernel-Configuration)
+   * [API](#API)
    * [Help](#Help)
 <!--te-->
 
 Result
-=======
-
-How to use
 =======
 
 Requirement
@@ -25,7 +22,7 @@ Requirement
 Build & Installation
 =======
 
-Kernel Configuration
+API
 =======
 
 Help
