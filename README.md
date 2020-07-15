@@ -25,6 +25,17 @@ Build & Installation
 
 API
 =======
+* GET /node/regist
+  * get all node informations
+* POST /node/regist -d {"name":string, "location":string, "sensors":[string...]}
+  * register node info
+* POST /node/sensor -d {"node_uuid":string, "sensor_uuid":string}
+  * connect sensor info to node
+* GET /sensor/info 
+  * get all sensor informations
+* POST /sensor/regist -d {"name":string, "num_of_values":int, "value_names":[string...]}
+  * register sensor info
+
 
 Help
 =======
