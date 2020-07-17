@@ -62,11 +62,7 @@ class RegisterNode extends Component {
         .then(response => console.log('Success:', JSON.stringify(response)))
         .catch(error => console.error('Error:', error));
     }
-
-    isNodeNameValid = () =>{
-        
-    }
-
+    
     render() {
         let sensorOptions = this.props.sensorList.map((val) =>{
             return {label : val.name, value: val.name, uuid: val.uuid}
@@ -80,7 +76,7 @@ class RegisterNode extends Component {
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="myModalLabel">Register node</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Ã—</span></button>
                         </div>
                         <div class="modal-body">
                             <form >
