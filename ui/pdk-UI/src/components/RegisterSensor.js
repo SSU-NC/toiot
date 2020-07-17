@@ -63,12 +63,12 @@ class RegisterSensor extends Component {
     render() {
         return (
             <>
-            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">register sensor</button>
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#register-sensor-modal">register sensor</button>
+            <div class="modal fade" id="register-sensor-modal" tabindex="-1" role="dialog" aria-labelledby="register-sensor-modal">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header"> 
-                            <h4 class="modal-title" id="myModalLabel">Register sensor</h4>
+                            <h4 class="modal-title" id="register-sensor-modal">Register sensor</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                         </div>
                         <form>
