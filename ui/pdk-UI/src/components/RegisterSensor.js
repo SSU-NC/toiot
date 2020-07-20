@@ -29,14 +29,14 @@ class RegisterSensor extends Component {
         this.setState({ value_list: newvalue_list });
     }
    
-    // handle click event of the Remove button
+    // handle click event of the Add button
     handleAddClick = () => {
        this.setState({
             value_list: [...this.state.value_list, {value_name: ""}]
         }); 
     };
     
-    // handle click event of the Add button
+    // handle click event of the Remove button
     handleRemoveClick = idx => () => {
         this.setState({
             value_list: this.state.value_list.filter((s, sidx) => idx !== sidx)
@@ -46,7 +46,7 @@ class RegisterSensor extends Component {
     handleSubmit(e) {
         e.preventDefault();
       
-        var url = 'http://220.70.2.160:8080/sensor/regist';
+        var url = 'http://220.70.2.160:8080/sensor';
         var data = this.state;
 
         fetch(url, {
@@ -63,7 +63,7 @@ class RegisterSensor extends Component {
     render() {
         return (
             <>
-            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#register-sensor-modal">register sensor</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#register-sensor-modal">register sensor</button>
             <div class="modal fade" id="register-sensor-modal" tabindex="-1" role="dialog" aria-labelledby="register-sensor-modal">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">

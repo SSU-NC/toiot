@@ -40,7 +40,7 @@ class RegisterNode extends Component {
 	handleSubmit(e) {
 		e.preventDefault();
 
-		var url = 'http://220.70.2.160:8080/node/regist';
+		var url = 'http://220.70.2.160:8080/node';
 		var data = this.state;
 		var sensor_uuid = data.sensors.map((val) => {
 			return { uuid: val.uuid };
@@ -119,7 +119,7 @@ class RegisterNode extends Component {
 
 				<button
 					type="button"
-					class="btn btn-primary btn-lg"
+					class="btn btn-primary"
 					data-toggle="modal"
 					data-target="#register-node"
 				>

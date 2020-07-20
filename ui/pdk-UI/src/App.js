@@ -10,32 +10,35 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			sensorlist: [],
-			nodelist: [],
+			sensorList: [],
+			nodeList: [],
 			// rasp: []
 		};
 	}
 	componentDidMount() {
-		this.getSensorList();
-		this.getNodeList();
+		this.getsensorList();
+		this.getnodeList();
 	}
 
-	getSensorList() {
-		var url = 'http://220.70.2.160:8080/sensor/info';
+	getsensorList() {
+		var url = 'http://220.70.2.160:8080/sensor';
 
 		fetch(url)
 			.then((res) => res.json())
-			.then((data) => this.setState({ sensorlist: data }))
+			.then((data) => {
+				console.log(typeof data);
+				this.setState({ sensorList: data });
+			})
 			// .then(response => console.log('Success:', JSON.stringify(response)))
 			.catch((error) => console.error('Error:', error));
 	}
 
-	getNodeList() {
-		var url = 'http://220.70.2.160:8080/node/info';
+	getnodeList() {
+		var url = 'http://220.70.2.160:8080/node';
 
 		fetch(url)
 			.then((res) => res.json())
-			.then((data) => this.setState({ sensorlist: data }))
+			.then((data) => this.setState({ nodeList: data }))
 			// .then(response => console.log('Success:', JSON.stringify(response)))
 			.catch((error) => console.error('Error:', error));
 	}
@@ -52,7 +55,7 @@ class App extends Component {
 								path="/management"
 								render={() => (
 									<SensorManagement
-										sensorList={this.state.sensorlist}
+										sensorList={this.state.sensorList}
 										nodeList={this.state.nodeList}
 									/>
 								)}
@@ -61,7 +64,7 @@ class App extends Component {
 								path="/sensor"
 								render={() => (
 									<SensorManagement
-										sensorList={this.state.sensorlist}
+										sensorList={this.state.sensorList}
 										nodeList={this.state.nodeList}
 									/>
 								)}
@@ -70,7 +73,7 @@ class App extends Component {
 								path="/node"
 								render={() => (
 									<NodeManagement
-										sensorList={this.state.sensorlist}
+										sensorList={this.state.sensorList}
 										nodeList={this.state.nodeList}
 									/>
 								)}

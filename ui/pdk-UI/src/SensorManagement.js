@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import RegisterSensor from "./components/RegisterSensor";
-import RegisterNode from "./components/RegisterNode";
+import SensorTable from "./components/SensorTable";
 
 class SensorManagement extends Component {
     constructor(props) {
@@ -8,9 +8,15 @@ class SensorManagement extends Component {
     }
     render(){
         return(
-            <div style={{float:'right'}}>
-                <RegisterSensor></RegisterSensor>
-            </div>
+            <>
+                <div style={{float:'right'}}>
+                    <RegisterSensor></RegisterSensor>
+                </div>
+                <div>
+                    <h3>Sensor</h3>
+                    <SensorTable sensorList={this.props.sensorList}></SensorTable>
+                </div>
+            </>
         );
     }
 }
