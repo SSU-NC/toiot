@@ -27,6 +27,10 @@ func (nr *nodeRepository) Create(n *model.Node) error {
 	return nr.db.Create(n).Error
 }
 
+func (nr *nodeRepository) Delete(n *model.Node) error {
+	return nr.db.Delete(n).Error
+}
+
 func (nr *nodeRepository) CreateNS(ns *model.NodeSensor) error {
 	return nr.db.Create(ns).Error
 }

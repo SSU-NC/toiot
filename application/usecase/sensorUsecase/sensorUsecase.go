@@ -49,3 +49,10 @@ func (su *sensorUsecase) RegisterSensor(s *model.Sensor) (*model.Sensor, error) 
 	}
 	return &newSensor, nil
 }
+
+func (su *sensorUsecase) DeleteSensor(s *model.Sensor) (*model.Sensor, error) {
+	if err := su.sr.Delete(s); err != nil {
+		return nil, err
+	}
+	return s, nil
+}

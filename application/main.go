@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/KumKeeHyun/PDK/application/interface/db/orm"
 	"github.com/KumKeeHyun/PDK/application/interface/handler"
+	"github.com/KumKeeHyun/PDK/application/service/kafka"
 	"github.com/KumKeeHyun/PDK/application/setting"
 	"github.com/KumKeeHyun/PDK/application/usecase/nodeUsecase"
 	"github.com/KumKeeHyun/PDK/application/usecase/sensorUsecase"
@@ -15,6 +16,7 @@ import (
 func main() {
 	setting.Setup()
 	orm.Setup()
+	kafka.Setup()
 
 	nr := orm.NewNodeRepository()
 	sr := orm.NewSensorRepository()
@@ -34,12 +36,16 @@ func main() {
 	{
 		ng.GET("", h.GetAllInfo)
 		ng.POST("", h.RegisterNode)
+		ng.DELETE("", h.DeleteNode)
 	}
 	sg := r.Group("/sensor")
 	{
 		sg.GET("", h.GetSensorsInfo)
 		sg.POST("", h.RegisterSensor)
+		sg.DELETE("", h.DeleteSensor)
 	}
+
+	r.GET("/kafkaConsumerManager", h.KafkaConsumerManager)
 
 	r.Run()
 }

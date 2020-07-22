@@ -63,3 +63,11 @@ func (nu *nodeUsecase) RegisterNode(n *presenter.Node) (*model.Node, error) {
 	}
 	return &newNode, nil
 }
+
+func (nu *nodeUsecase) DeleteNode(n *presenter.Node) (*model.Node, error) {
+	dn := model.Node{UUID: n.UUID}
+	if err := nu.nr.Delete(&dn); err != nil {
+		return nil, err
+	}
+	return &dn, nil
+}

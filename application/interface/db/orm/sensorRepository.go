@@ -36,6 +36,10 @@ func (sr *sensorRepository) Create(s *model.Sensor) error {
 	return sr.db.Create(s).Error
 }
 
+func (sr *sensorRepository) Delete(s *model.Sensor) error {
+	return sr.db.Delete(s).Error
+}
+
 func (sr *sensorRepository) CreateValue(sv *model.SensorValue) error {
 	return sr.db.Create(sv).Error
 }
