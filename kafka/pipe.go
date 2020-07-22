@@ -10,9 +10,16 @@ import (
 	"github.com/KumKeeHyun/PDK/kafka/elasticPipe"
 	"github.com/KumKeeHyun/PDK/kafka/kafkaPipe"
 	"github.com/KumKeeHyun/PDK/kafka/processing"
+	"github.com/KumKeeHyun/PDK/kafka/setting"
+	"github.com/KumKeeHyun/PDK/kafka/wsClient"
 )
 
 func main() {
+	setting.Setup()
+
+	sock := wsClient.SetupAndStart()
+	defer sock.Close()
+
 	if err := kafkaPipe.Setup(); err != nil {
 		log.Fatal(err.Error())
 		return

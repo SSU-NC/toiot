@@ -5,22 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/KumKeeHyun/PDK/kafka/setting"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
-
-type setting struct {
-	broker  string
-	groupID string
-	topics  []string
-}
-
-var kafkaSetting = setting{
-	broker:  "220.70.2.160:9092",
-	groupID: "test",
-	topics: []string{
-		"sensors",
-	},
-}
 
 var consumer *kafka.Consumer
 
@@ -28,8 +15,8 @@ const BUFSIZE = 1
 
 func Setup() error {
 	config := &kafka.ConfigMap{
-		"bootstrap.servers":               kafkaSetting.broker,
-		"group.id":                        kafkaSetting.groupID,
+		"bootstrap.servers":               setting.KafkaSetting.Broker,
+		"group.id":                        setting.KafkaSetting.GroupID,
 		"session.timeout.ms":              6000,
 		"go.events.channel.enable":        true,
 		"go.application.rebalance.enable": true,
@@ -41,7 +28,7 @@ func Setup() error {
 		return err
 	}
 	consumer = c
-	err = consumer.SubscribeTopics(kafkaSetting.topics, nil)
+	err = consumer.SubscribeTopics(setting.KafkaSetting.Topics, nil)
 	return err
 }
 
@@ -49,6 +36,10 @@ func ConsumKafka(end chan os.Signal) <-chan KafkaData {
 	out := make(chan KafkaData, BUFSIZE)
 	run := true
 	go func() {
+		defer func() {
+			consumer.Close()
+			close(out)
+		}()
 	end:
 		for run == true {
 			select {
@@ -79,8 +70,7 @@ func ConsumKafka(end chan os.Signal) <-chan KafkaData {
 				}
 			}
 		}
-		consumer.Close()
-		close(out)
+
 	}()
 	return out
 }
