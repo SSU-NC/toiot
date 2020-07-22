@@ -8,15 +8,18 @@ import Kibana from './Kibana';
 
 import RegisterAlarm from './components/RegisterAlarm';
 
-class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			sensorList: [],
-			nodeList: [],
-			// rasp: []
-		};
-	}
+interface appState {
+	sensorList: any;
+	nodeList: any;
+}
+
+class App extends Component<{}, appState> {
+	state: appState = {
+		sensorList: [],
+		nodeList: [],
+		// rasp: []
+	};
+
 	componentDidMount() {
 		this.getsensorList();
 		this.getnodeList();
@@ -47,47 +50,44 @@ class App extends Component {
 
 	render() {
 		return (
-			<div>
-				<RegisterAlarm sensorList={this.state.sensorList}/>
-			</div>
 			// <div>
-			// 	<Router>
-			// 		<div>
-			// 			<Nav></Nav>
-			// 			<div className="container pt-4 mt-4">
-			// 				<Route exact path="/" render={Dashboard} />
-			// 				{/* <Route
-			// 					path="/management"
-			// 					render={() => (
-			// 						<SensorManagement
-			// 							sensorList={this.state.sensorList}
-			// 							nodeList={this.state.nodeList}
-			// 						/>
-			// 					)}
-			// 				/> */}
-			// 				<Route
-			// 					path="/sensor"
-			// 					render={() => (
-			// 						<SensorManagement
-			// 							sensorList={this.state.sensorList}
-			// 							nodeList={this.state.nodeList}
-			// 						/>
-			// 					)}
-			// 				/>
-			// 				<Route
-			// 					path="/node"
-			// 					render={() => (
-			// 						<NodeManagement
-			// 							sensorList={this.state.sensorList}
-			// 							nodeList={this.state.nodeList}
-			// 						/>
-			// 					)}
-			// 				/>
-			// 				<Route path="/kibana" component={Kibana} />
-			// 			</div>
-			// 		</div>
-			// 	</Router>
+			// 	<RegisterAlarm />
 			// </div>
+			<div>
+				<Router>
+					<div>
+						<Nav></Nav>
+						<div className="container pt-4 mt-4">
+							<Route exact path="/" render={Dashboard} />
+							{/* <Route
+								path="/management"
+								render={() => (
+									<SensorManagement
+										sensorList={this.state.sensorList}
+										nodeList={this.state.nodeList}
+									/>
+								)}
+							/> */}
+							<Route
+								path="/sensor"
+								render={() => (
+									<SensorManagement sensorList={this.state.sensorList} />
+								)}
+							/>
+							<Route
+								path="/node"
+								render={() => (
+									<NodeManagement
+										sensorList={this.state.sensorList}
+										nodeList={this.state.nodeList}
+									/>
+								)}
+							/>
+							<Route path="/kibana" component={Kibana} />
+						</div>
+					</div>
+				</Router>
+			</div>
 		);
 	}
 }

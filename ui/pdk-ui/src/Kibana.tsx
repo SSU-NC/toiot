@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Kibana(props) {
+function Kibana() {
 	return (
 		 <div>link to kibana</div>
 	);

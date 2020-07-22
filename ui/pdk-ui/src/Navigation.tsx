@@ -9,21 +9,21 @@ class Navigation extends Component {
 					<div className="container">
 						<div className="navbar-collapse" id="navbarNavAltMarkup">
 							<ul className="navbar-nav">
-								<li class="nav-item active">
+								<li className="nav-item active">
 									<NavLink className="nav-item nav-link" to="/">
 										HOME
 									</NavLink>
 								</li>
-								<li class="nav-item dropdown">
+								<li className="nav-item dropdown">
 									<NavLink className="nav-item nav-link dropdown-toggle" role="button" data-toggle="dropdown" to="/management">
 										MANAGEMENT
 									</NavLink>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<Link class="dropdown-item" to="/sensor">SENSOR</Link>
-										<Link class="dropdown-item" to="/node">NODE</Link>
+									<div className="dropdown-menu" aria-labelledby="navbarDropdown">
+										<Link className="dropdown-item" to="/sensor">SENSOR</Link>
+										<Link className="dropdown-item" to="/node">NODE</Link>
 									</div>
 								</li>
-								<li class="nav-item">
+								<li className="nav-item">
 									<NavLink className="nav-item nav-link" to="/kibana">
 										KIBANA
 									</NavLink>
