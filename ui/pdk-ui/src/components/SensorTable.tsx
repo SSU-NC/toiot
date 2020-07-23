@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { sensorListElem, value_list_elem } from './ElementsInterface';
+
+
 //import DeleteRequest from './DeleteRequest'
 
 interface SensorTableProps {
-	sensorList: any;
+	sensorList: Array<sensorListElem>;
 }
 
 class SensorTable extends Component<SensorTableProps> {
@@ -34,14 +37,14 @@ class SensorTable extends Component<SensorTableProps> {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.sensorList.map((sensor: any, idx: number) => (
+						{this.props.sensorList.map((sensor: sensorListElem, idx: number) => (
 							<tr>
 								<th scope="row">{idx}</th>
 								<td>{sensor.name}</td>
 								<td>{sensor.uuid}</td>
 								<td>
 									{sensor.value_list.map(
-										(value: any) => value.value_name + ', '
+										(value: value_list_elem) => value.value_name + ', '
 									)}
 								</td>
 								<td>

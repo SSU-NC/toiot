@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import RegisterNode from "./components/RegisterNode";
 import NodeTable from "./components/NodeTable";
+import { sensorListElem, nodeListElem } from './components/ElementsInterface';
 
 interface SensorManagementProps {
-    sensorList?: any;
-    nodeList?: any;
+    sensorList: Array<sensorListElem>;
+    nodeList: Array<nodeListElem>;
 }
 
 const SensorManagement: React.FunctionComponent<SensorManagementProps> = props => {

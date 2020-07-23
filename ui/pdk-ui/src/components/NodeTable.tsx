@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { nodeListElem } from './ElementsInterface';
 
 interface NodeTableProps {
-	nodeList: any;
+	nodeList: Array<nodeListElem>;
 }
 
 class NodeTable extends Component<NodeTableProps> {
@@ -33,7 +34,7 @@ class NodeTable extends Component<NodeTableProps> {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.nodeList.map((node: any, idx: number) => (
+						{this.props.nodeList.map((node: nodeListElem, idx: number) => (
 							<tr>
 								<th scope="row">{idx}</th>
 								<td>{node.name}</td>

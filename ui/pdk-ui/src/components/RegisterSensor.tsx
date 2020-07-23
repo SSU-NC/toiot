@@ -3,8 +3,12 @@ import React, { Component } from 'react';
 // add, delete input : https://codesandbox.io/s/00xq32n3pn?from-embed=&file=/src/index.js
 
 interface RegisterSensorState {
-    value_list: any;
+    value_list: Array<value_list_elem>;
     name: string;
+}
+
+interface value_list_elem {
+	value_name: string;
 }
 
 class RegisterSensor extends Component<{}, RegisterSensorState> {
@@ -21,14 +25,14 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
         name: ""
     };
 
-    handleNameChange = (e: any) => {
+    handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             name: e.target.value
         });
     }
 
-    handleValueChange = (idx: number) => (e: any) => {
-        const newvalue_list = this.state.value_list.map((value: any, sidx: number) => {
+    handleValueChange = (idx: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newvalue_list = this.state.value_list.map((value: value_list_elem, sidx: number) => {
             if (idx !== sidx) return value;
             return { ...value, value_name: e.target.value };
         });
@@ -49,7 +53,7 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
         });
     };
 
-    handleSubmit = (e: any) => {
+    handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
       
         var url = 'http://220.70.2.160:8080/sensor';
@@ -88,12 +92,12 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
                                 </div>
                                 <div className="form-group">
                                     <label>Value name</label>
-                                    {this.state.value_list.map((value_list: any, idx: number) => (
+                                    {this.state.value_list.map((value: value_list_elem, idx: number) => (
                                         <div className="input-group mb-3">
                                             <div className="input-group-prepend">
                                                 <span className="input-group-text">{idx}</span>
                                             </div>
-                                            <input type="text" className="form-control" name="value_list" placeholder={"Enter value name"} value={value_list.value_name} onChange={this.handleValueChange(idx)}/>
+                                            <input type="text" className="form-control" name="value_list" placeholder={"Enter value name"} value={value.value_name} onChange={this.handleValueChange(idx)}/>
                                             <div className="input-group-append">
                                                 <button className="btn btn-primary btn-sm" type="button" id="button-addon2" onClick={this.handleRemoveClick(idx)}>
                                                     <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

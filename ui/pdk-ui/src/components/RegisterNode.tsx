@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-
+import { sensorListElem } from './ElementsInterface';
 // react-select : https://github.com/JedWatson/react-select
 
 interface RegisterNodeState {
 	node_name: string;
 	location: string;
-	sensors: any;
+	sensors: Array<sensorOptionsElem>;
 }
+
 interface RegisterNodeProps {
-	sensorList?: any;
+	sensorList: Array<sensorListElem>;
+}
+
+interface sensorOptionsElem {
+	label: string;
+	value: string;
+	uuid: string;
 }
 
 class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
@@ -26,27 +33,27 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		location: '',
 		sensors: [],
 	};
-	handleNameChange = (e: any) => {
+	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({
 			node_name: e.target.value,
 		});
 	};
-	handleLocationChange = (e: any) => {
+	handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({
 			location: e.target.value,
 		});
 	};
-	handleSensorsChange = (sensors: any) => {
-		this.setState({ sensors });
+	handleSensorsChange = (sensors: Array<sensorOptionsElem>) => {
+		this.setState({
+			sensors,
+		});
 	};
-	handleSubmit = (e: any) => {
+	handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		var url: string;
-		url = 'http://220.70.2.160:8080/node';
-		var data: any;
-		data = this.state;
-		var sensor_uuid = data.sensors.map((val: any) => {
+		var url = 'http://220.70.2.160:8080/node';
+		var data = this.state;
+		var sensor_uuid = data.sensors.map((val: sensorOptionsElem) => {
 			return { uuid: val.uuid };
 		});
 
@@ -75,7 +82,8 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 	};
 
 	render() {
-		let sensorOptions = this.props.sensorList.map((val: any) => {
+		let sensorOptions: Array<sensorOptionsElem>;
+		sensorOptions = this.props.sensorList.map((val: sensorListElem) => {
 			return { label: val.name, value: val.name, uuid: val.uuid };
 		});
 
@@ -139,11 +147,10 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 										<label>Select sensors</label>
 										<Select
 											isMulti
-											className="form-control"
+											className="form-control basic-multi-select"
 											name="sensors"
 											options={sensorOptions}
-											classNameName="basic-multi-select"
-											classNameNamePrefix="select"
+											classNamePrefix="select"
 											value={this.state.sensors}
 											onChange={this.handleSensorsChange}
 										/>

@@ -8,9 +8,11 @@ import Kibana from './Kibana';
 
 import RegisterAlarm from './components/RegisterAlarm';
 
+import { sensorListElem, nodeListElem } from './components/ElementsInterface';
+
 interface appState {
-	sensorList: any;
-	nodeList: any;
+	sensorList: Array<sensorListElem>;
+	nodeList: Array<nodeListElem>;
 }
 
 class App extends Component<{}, appState> {
@@ -51,7 +53,7 @@ class App extends Component<{}, appState> {
 	render() {
 		return (
 			// <div>
-			// 	<RegisterAlarm />
+			// 	<RegisterAlarm sensorList={this.state.sensorList} />
 			// </div>
 			<div>
 				<Router>
