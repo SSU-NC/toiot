@@ -7,6 +7,17 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
+type Server struct {
+	Address string
+	Port    string
+}
+
+func (c *Server) MakeAddr() string {
+	return fmt.Sprintf("%s:%s", c.Address, c.Port)
+}
+
+var Serversetting = &Server{}
+
 type Kafka struct {
 	Broker         string   `toml:"broker"`
 	GroupID        string   `toml:"group_id"`
@@ -22,12 +33,6 @@ type Elastic struct {
 
 var ElasticSetting = &Elastic{}
 
-type WebSocket struct {
-	URL string `toml:"url"`
-}
-
-var WebsocketSetting = &WebSocket{}
-
 func Setup() {
 	tree, err := toml.LoadFile("conf/config.toml")
 	if err != nil {
@@ -35,14 +40,14 @@ func Setup() {
 		return
 	}
 
+	serverTree := tree.Get("server").(*toml.Tree)
+	serverTree.Unmarshal(Serversetting)
+
 	kafkaTree := tree.Get("kafka").(*toml.Tree)
 	kafkaTree.Unmarshal(KafkaSetting)
 
 	elasticTree := tree.Get("elastic").(*toml.Tree)
 	elasticTree.Unmarshal(ElasticSetting)
 
-	wsTree := tree.Get("websocket").(*toml.Tree)
-	wsTree.Unmarshal(WebsocketSetting)
-
-	fmt.Println(KafkaSetting, ElasticSetting, WebsocketSetting)
+	fmt.Println(Serversetting, KafkaSetting, ElasticSetting)
 }

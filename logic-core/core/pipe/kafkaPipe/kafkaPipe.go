@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/KumKeeHyun/PDK/kafka/setting"
+	"github.com/KumKeeHyun/PDK/logic-core/setting"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 

@@ -4,18 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/KumKeeHyun/PDK/kafka/elasticPipe"
-	"github.com/KumKeeHyun/PDK/kafka/kafkaPipe"
-	"github.com/KumKeeHyun/PDK/kafka/wsClient"
+	"github.com/KumKeeHyun/PDK/logic-core/core/pipe/elasticPipe"
+	"github.com/KumKeeHyun/PDK/logic-core/core/pipe/kafkaPipe"
+	"github.com/KumKeeHyun/PDK/logic-core/logic-core-api/model"
 )
 
 const BUFSIZE = 100
-
-var valueNames = []string{
-	"x",
-	"y",
-	"z",
-}
 
 func ProcessingPipe(in <-chan kafkaPipe.KafkaData) <-chan elasticPipe.ElasticData {
 	out := make(chan elasticPipe.ElasticData, BUFSIZE)
@@ -35,9 +29,6 @@ func ProcessingPipe(in <-chan kafkaPipe.KafkaData) <-chan elasticPipe.ElasticDat
 }
 
 func DataProcessing(in kafkaPipe.KafkaData) (elasticPipe.ElasticData, error) {
-	wsClient.Repo.Mu.RLock()
-	defer wsClient.Repo.Mu.RUnlock()
-
 	out := elasticPipe.ElasticData{
 		Index: in.Key,
 		Doc:   in.Value,
@@ -46,18 +37,17 @@ func DataProcessing(in kafkaPipe.KafkaData) (elasticPipe.ElasticData, error) {
 	v, ok := in.Value["node_uuid"]
 	if ok {
 		delete(out.Doc, "node_uuid")
-		n_uuid := v.(string)
-		node, ok := wsClient.Repo.Info.NodeInfo[n_uuid]
-		if ok {
+		nID := v.(string)
+		node, err := model.RegisterRepo.GetNode(nID)
+		if err == nil {
 			out.Doc["node"] = node
 		} else {
-			s := fmt.Sprintf("not exist node %s\n", n_uuid)
-			return out, errors.New(s)
+			return out, err
 		}
 	}
 
-	sensor, ok := wsClient.Repo.Info.SensorInfo[in.Key]
-	if !ok {
+	sensor, err := model.RegisterRepo.GetSensor(in.Key)
+	if err != nil {
 		s := fmt.Sprintf("not exist sensor %s\n", in.Key)
 		return out, errors.New(s)
 	}
@@ -65,7 +55,7 @@ func DataProcessing(in kafkaPipe.KafkaData) (elasticPipe.ElasticData, error) {
 	values := in.Value["value"].([]interface{})
 	newValues := map[string]interface{}{}
 	for i, vn := range sensor.ValueList {
-		newValues[vn.ValueName] = values[i]
+		newValues[vn] = values[i]
 	}
 	out.Doc["value"] = newValues
 

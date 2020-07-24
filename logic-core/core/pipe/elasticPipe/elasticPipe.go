@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/KumKeeHyun/PDK/kafka/setting"
+	"github.com/KumKeeHyun/PDK/logic-core/setting"
 	"github.com/elastic/go-elasticsearch"
 )
 
