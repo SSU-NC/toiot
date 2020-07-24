@@ -8,9 +8,10 @@ import (
 )
 
 type Kafka struct {
-	Broker  string   `toml:"broker"`
-	GroupID string   `toml:"group_id"`
-	Topics  []string `toml:"topics"`
+	Broker         string   `toml:"broker"`
+	GroupID        string   `toml:"group_id"`
+	Topics         []string `toml:"topics"`
+	NumOfConsumers int      `toml:"num_of_consumers"`
 }
 
 var KafkaSetting = &Kafka{}

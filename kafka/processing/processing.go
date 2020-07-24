@@ -9,7 +9,7 @@ import (
 	"github.com/KumKeeHyun/PDK/kafka/wsClient"
 )
 
-const BUFSIZE = 1
+const BUFSIZE = 100
 
 var valueNames = []string{
 	"x",
@@ -41,6 +41,19 @@ func DataProcessing(in kafkaPipe.KafkaData) (elasticPipe.ElasticData, error) {
 	out := elasticPipe.ElasticData{
 		Index: in.Key,
 		Doc:   in.Value,
+	}
+
+	v, ok := in.Value["node_uuid"]
+	if ok {
+		delete(out.Doc, "node_uuid")
+		n_uuid := v.(string)
+		node, ok := wsClient.Repo.Info.NodeInfo[n_uuid]
+		if ok {
+			out.Doc["node"] = node
+		} else {
+			s := fmt.Sprintf("not exist node %s\n", n_uuid)
+			return out, errors.New(s)
+		}
 	}
 
 	sensor, ok := wsClient.Repo.Info.SensorInfo[in.Key]

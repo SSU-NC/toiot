@@ -10,7 +10,7 @@ import (
 
 var es *elasticsearch.Client
 
-const BUFSIZE = 1
+const BUFSIZE = 100
 
 func Setup() (*elasticsearch.Client, error) {
 	config := elasticsearch.Config{

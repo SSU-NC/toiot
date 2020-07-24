@@ -31,8 +31,9 @@ func main() {
 
 	end := make(chan os.Signal)
 	signal.Notify(end, syscall.SIGINT, syscall.SIGTERM)
+	go func() { <-end; os.Exit(0) }()
 
-	done := elasticPipe.PushToElastic(processing.ProcessingPipe(kafkaPipe.ConsumKafka(end)))
+	done := elasticPipe.PushToElastic(processing.ProcessingPipe(kafkaPipe.StartConsumer()))
 	for res := range done {
 		fmt.Println(res)
 	}
