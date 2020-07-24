@@ -5,7 +5,8 @@ class Navigation extends Component {
 	render() {
 		return (
 			<div>
-				<nav className="navbar navbar-expand-lg navbar-violet fixed-top">
+				<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+					<Link className="navbar-brand" style={{color:'pink'}} to="#">ToIoT</Link>
 					<div className="container">
 						<div className="navbar-collapse" id="navbarNavAltMarkup">
 							<ul className="navbar-nav">
@@ -21,6 +22,14 @@ class Navigation extends Component {
 									<div className="dropdown-menu" aria-labelledby="navbarDropdown">
 										<Link className="dropdown-item" to="/sensor">SENSOR</Link>
 										<Link className="dropdown-item" to="/node">NODE</Link>
+									</div>
+								</li>
+								<li className="nav-item dropdown">
+									<NavLink className="nav-item nav-link dropdown-toggle" role="button" data-toggle="dropdown" to="/management">
+										SERVICE
+									</NavLink>
+									<div className="dropdown-menu" aria-labelledby="navbarDropdown">
+										<Link className="dropdown-item" to="/alarm">ALARM</Link>
 									</div>
 								</li>
 								<li className="nav-item">

@@ -73,19 +73,40 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
     render() {
         return (
             <>
-            <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#register-sensor-modal">register sensor</button>
+            <button 
+                type="button" 
+                className="btn btn-primary" 
+                data-toggle="modal" 
+                data-target="#register-sensor-modal"
+            >
+                register sensor
+            </button>
             <div className="modal fade" id="register-sensor-modal" role="dialog" aria-labelledby="register-sensor-modal">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header"> 
                             <h4 className="modal-title" id="register-sensor-modal">Register sensor</h4>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <button 
+                                type="button" 
+                                className="close" 
+                                data-dismiss="modal" 
+                                aria-label="Close"
+                            >
+                                <span aria-hidden="true">×</span>
+                            </button>
                         </div>
                         <form>
                             <div className="modal-body">
                                 <div className="form-group">
                                     <label>Sensor name</label>
-                                    <input type="text" className="form-control" name="name" placeholder="name" value={this.state.name} onChange={this.handleNameChange}/>
+                                    <input 
+                                        type="text" 
+                                        className="form-control" 
+                                        name="name" 
+                                        placeholder="name" 
+                                        value={this.state.name} 
+                                        onChange={this.handleNameChange}
+                                    />
                                     <div className="invalid-feedback">
                                         This sensor name is already exist.
                                     </div>

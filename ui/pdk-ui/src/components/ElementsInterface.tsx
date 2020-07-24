@@ -24,3 +24,10 @@ export interface value_list_elem {
 	value_name: string;
 	index: number;
 }
+
+// sensorOptions interface
+export interface sensorOptionsElem {
+	label: string;
+	value: string;
+	uuid: string;
+}

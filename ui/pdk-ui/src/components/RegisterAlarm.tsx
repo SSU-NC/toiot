@@ -1,26 +1,54 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { sensorListElem } from './ElementsInterface';
+import { sensorListElem, sensorOptionsElem, value_list_elem } from './ElementsInterface';
 
 interface RegisterAlarmState {
-	sensor: any;
+	alarm_name: string;
+	alarm_msg: string;
+	email: string;
+	sensor: sensorOptionsElem;
+	value_list: Array<value_list_elem>;
 }
 
 interface RegisterAlarmProps {
 	sensorList: Array<sensorListElem>;
 }
 
-interface sensorOptionsElem {
-	label: string;
-	value: string;
-	uuid: string;
-}
-
 class RegisterAlarm extends Component<RegisterAlarmProps, RegisterAlarmState> {
-
 	state: RegisterAlarmState = {
-		sensor: {},
+		alarm_name: '',
+		alarm_msg:'',
+		email:'',
+		sensor: {label: '', value: '', uuid: '' }, // 알람받을 sensor 1개
+		value_list: [] // 알람받을 value 값 list
 	};
+
+	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({
+			alarm_name: e.target.value,
+		});
+	};
+	handleMsgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({
+			alarm_msg: e.target.value,
+		});
+	};
+	handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({
+			email: e.target.value,
+		});
+	};
+	handleSensorChange = (sensor: any) => {
+		//sensors: Array<sensorOptionsElem> 쓰면 실행 안됨..
+		this.setState({
+			sensor,
+		});
+	};
+	handleRemoveClick = (idx: number) => () => {
+        this.setState({
+            value_list: this.state.value_list.filter((s: any, sidx:number) => idx !== sidx)
+        });
+    };
 
 	render() {
 		let sensorOptions = this.props.sensorList.map((val: sensorListElem) => {
@@ -41,7 +69,7 @@ class RegisterAlarm extends Component<RegisterAlarmProps, RegisterAlarmState> {
 							options={sensorOptions}
 							classNamePrefix="select"
 							value={this.state.sensor}
-							//onChange={this.handleSensorsChange}
+							onChange={this.handleSensorChange}
 						/>
 					</div>
 					<div className="form-group">
@@ -51,8 +79,8 @@ class RegisterAlarm extends Component<RegisterAlarmProps, RegisterAlarmState> {
 							className="form-control"
 							name="alarm_name"
 							placeholder="name"
-							// value={this.state.alarm_name}
-							// onChange={this.handleNameChange}
+							value={this.state.alarm_name}
+							onChange={this.handleNameChange}
 						/>
 					</div>
 					<div className="form-group">
@@ -62,8 +90,8 @@ class RegisterAlarm extends Component<RegisterAlarmProps, RegisterAlarmState> {
 							className="form-control"
 							name="alarm_msg"
 							placeholder="Enter alarm msg which you want to get alert"
-							// value={this.state.alarm_msg}
-							// onChange={this.handleNameChange}
+							value={this.state.alarm_msg}
+							onChange={this.handleMsgChange}
 						/>
 					</div>
 					<div className="form-group">
@@ -73,7 +101,9 @@ class RegisterAlarm extends Component<RegisterAlarmProps, RegisterAlarmState> {
 							className="form-control"
 							id="email"
 							aria-describedby="emailHelp"
-							placeholder="iotoi@example.com"
+							placeholder="toiot@example.com"
+							value={this.state.email}
+							onChange={this.handleEmailChange}
 						/>
 						<small id="emailHelp" className="form-text text-muted">
 							We'll send message to this e-mail.
@@ -96,10 +126,29 @@ class RegisterAlarm extends Component<RegisterAlarmProps, RegisterAlarmState> {
 							</div>
 						</div>
 					</div>
+					{/* <div className="form-group">
+                        <label>Value name</label>
+                        {this.state.value_list.map((value: value_list_elem, idx: number) => (
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text">{idx}</span>
+                                </div>
+                                <input type="text" className="form-control" name="value_list" placeholder={"Enter value name"} value={value.value_name} onChange={this.handleValueChange(idx)}/>
+                                <div className="input-group-append">
+                                    <button className="btn btn-primary btn-sm" type="button" id="button-addon2" onClick={this.handleRemoveClick(idx)}>
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div> */}
 					<button
 						type="submit"
-						className="btn btn-primary"
+						className="btn"
 						data-dismiss="modal"
+						style={{background:'pink'}}
 					>
 						Submit
 					</button>

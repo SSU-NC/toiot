@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { sensorListElem } from './ElementsInterface';
+import { sensorListElem, sensorOptionsElem } from './ElementsInterface';
 // react-select : https://github.com/JedWatson/react-select
 
 interface RegisterNodeState {
@@ -13,21 +13,7 @@ interface RegisterNodeProps {
 	sensorList: Array<sensorListElem>;
 }
 
-interface sensorOptionsElem {
-	label: string;
-	value: string;
-	uuid: string;
-}
-
 class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
-	constructor(props: any) {
-		super(props);
-
-		this.handleNameChange = this.handleNameChange.bind(this);
-		this.handleLocationChange = this.handleLocationChange.bind(this);
-		this.handleSensorsChange = this.handleSensorsChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
 	state: RegisterNodeState = {
 		node_name: '',
 		location: '',
@@ -43,7 +29,8 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			location: e.target.value,
 		});
 	};
-	handleSensorsChange = (sensors: Array<sensorOptionsElem>) => {
+	handleSensorsChange = (sensors: any) => {
+		//sensors: Array<sensorOptionsElem> ?? ?? ??..
 		this.setState({
 			sensors,
 		});

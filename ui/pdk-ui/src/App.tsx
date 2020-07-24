@@ -52,9 +52,6 @@ class App extends Component<{}, appState> {
 
 	render() {
 		return (
-			// <div>
-			// 	<RegisterAlarm sensorList={this.state.sensorList} />
-			// </div>
 			<div>
 				<Router>
 					<div>
@@ -83,6 +80,12 @@ class App extends Component<{}, appState> {
 										sensorList={this.state.sensorList}
 										nodeList={this.state.nodeList}
 									/>
+								)}
+							/>
+							<Route
+								path="/alarm"
+								render={() => (
+									<RegisterAlarm sensorList={this.state.sensorList} />
 								)}
 							/>
 							<Route path="/kibana" component={Kibana} />
