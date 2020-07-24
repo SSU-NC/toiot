@@ -6,15 +6,22 @@ import SensorManagement from './SensorManagement';
 import NodeManagement from './NodeManagement';
 import Kibana from './Kibana';
 
-class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			sensorList: [],
-			nodeList: [],
-			// rasp: []
-		};
-	}
+import RegisterAlarm from './components/RegisterAlarm';
+
+import { sensorListElem, nodeListElem } from './components/ElementsInterface';
+
+interface appState {
+	sensorList: Array<sensorListElem>;
+	nodeList: Array<nodeListElem>;
+}
+
+class App extends Component<{}, appState> {
+	state: appState = {
+		sensorList: [],
+		nodeList: [],
+		// rasp: []
+	};
+
 	componentDidMount() {
 		this.getsensorList();
 		this.getnodeList();
@@ -63,10 +70,7 @@ class App extends Component {
 							<Route
 								path="/sensor"
 								render={() => (
-									<SensorManagement
-										sensorList={this.state.sensorList}
-										nodeList={this.state.nodeList}
-									/>
+									<SensorManagement sensorList={this.state.sensorList} />
 								)}
 							/>
 							<Route
@@ -76,6 +80,12 @@ class App extends Component {
 										sensorList={this.state.sensorList}
 										nodeList={this.state.nodeList}
 									/>
+								)}
+							/>
+							<Route
+								path="/alarm"
+								render={() => (
+									<RegisterAlarm sensorList={this.state.sensorList} />
 								)}
 							/>
 							<Route path="/kibana" component={Kibana} />

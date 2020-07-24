@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import RegisterSensor from "./components/RegisterSensor";
 import SensorTable from "./components/SensorTable";
 
-class SensorManagement extends Component {
-    constructor(props) {
-        super(props);
-    }
+interface SensorManagementProps {
+    sensorList: any;
+}
+
+class SensorManagement extends Component<SensorManagementProps> {
     render(){
         return(
             <>
