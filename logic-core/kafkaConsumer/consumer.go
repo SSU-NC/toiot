@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/KumKeeHyun/PDK/logic-core/adapter"
 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 	"github.com/KumKeeHyun/PDK/logic-core/setting"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
@@ -52,12 +53,15 @@ func (c *consumer) run(out chan<- model.KafkaData) {
 			switch e := ev.(type) {
 			case *kafka.Message:
 				fmt.Printf("key : %s, Value : %s\n", string(e.Key), string(e.Value))
-				d := model.KafkaData{
+
+				ad := adapter.KafkaData{
 					Key: string(e.Key),
 				}
-				if err := json.Unmarshal(e.Value, &d.Value); err != nil {
+				if err := json.Unmarshal(e.Value, &ad.Value); err != nil {
 					continue
 				}
+				d := adapter.AppToKafka(&ad)
+				// TODO : check valid
 				out <- d
 			case kafka.AssignedPartitions:
 				fmt.Fprintf(os.Stderr, "%% %v\n", e)
@@ -77,3 +81,5 @@ func (c *consumer) run(out chan<- model.KafkaData) {
 func (c *consumer) stop() {
 	c.ctx <- struct{}{}
 }
+
+// sensor_1: {"nid" : "node_1", "values" : [0.013, 0.0032], "timestamp" : "2020-08-03 16:20:55"}
