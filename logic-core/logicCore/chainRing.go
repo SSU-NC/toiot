@@ -1,3 +1,7 @@
+/*
+TODO : ring(node) chain
+*/
+
 package logicCore
 
 import (

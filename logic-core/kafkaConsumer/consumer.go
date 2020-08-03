@@ -1,3 +1,7 @@
+/*
+TODO : change kafka module confluent to sarama
+*/
+
 package kafkaConsumer
 
 import (

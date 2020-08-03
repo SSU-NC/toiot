@@ -33,7 +33,13 @@ type Elastic struct {
 
 var ElasticSetting = &Elastic{}
 
-func Setup() {
+type AppServer struct {
+	Address string `toml:"address`
+}
+
+var AppServerSetting = &AppServer{}
+
+func init() {
 	tree, err := toml.LoadFile("conf/config.toml")
 	if err != nil {
 		log.Fatalf("setting.Setup, fail to parse 'conf.config.toml': %v", err)
@@ -49,5 +55,8 @@ func Setup() {
 	elasticTree := tree.Get("elastic").(*toml.Tree)
 	elasticTree.Unmarshal(ElasticSetting)
 
-	fmt.Println(Serversetting, KafkaSetting, ElasticSetting)
+	appSrvTree := tree.Get("appserver").(*toml.Tree)
+	appSrvTree.Unmarshal(AppServerSetting)
+
+	fmt.Println(Serversetting, KafkaSetting, ElasticSetting, AppServerSetting)
 }

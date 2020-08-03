@@ -9,41 +9,6 @@ import (
 
 var metaData *metaRepo
 
-var nodeInfo = map[string]model.Node{
-	"node_1": model.Node{
-		Name:  "hn-1floor",
-		Group: "soongsil",
-	},
-	"node_2": model.Node{
-		Name:  "hn-2floor",
-		Group: "soongsil",
-	},
-}
-
-var sensorInfo = map[string]model.Sensor{
-	"sensor_0": model.Sensor{
-		Name: "temporature",
-		ValueNames: []string{
-			"degree",
-		},
-	},
-	"sensor_1": model.Sensor{
-		Name: "dust",
-		ValueNames: []string{
-			"pm10",
-			"pm2.5",
-		},
-	},
-	"sensor_2": model.Sensor{
-		Name: "air",
-		ValueNames: []string{
-			"co",
-			"no",
-			"so",
-		},
-	},
-}
-
 func NewMetaRepo() *metaRepo {
 	if metaData != nil {
 		return metaData
@@ -60,8 +25,7 @@ func NewMetaRepo() *metaRepo {
 		},
 	}
 
-	metaData.ninfo = nodeInfo
-	metaData.sinfo = sensorInfo
+	initMetaRepoRequest(metaData)
 
 	return metaData
 }
