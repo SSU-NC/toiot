@@ -6,10 +6,9 @@ function Kibana() {
 
 	return (
 		<div className="embed-responsive embed-responsive-16by9">
-			<Iframe url={kibanaUrl}
+			<Iframe 
+				url={kibanaUrl}
 				className="embed-responsive-item"
-				frameborder="0" 
-				align="middle"
 			/>
 		</div>
 	);

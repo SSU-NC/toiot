@@ -1,0 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/ui/pdk-ui/node_modules
+/ui/pdk-ui/.pnp
+/ui/pdk-ui/.pnp.js
+
+# testing
+/ui/pdk-ui/coverage
+
+# production
+/ui/pdk-ui/build
+
+# misc
+/ui/pdk-ui/.DS_Store
+/ui/pdk-ui/.env.local
+/ui/pdk-ui/.env.development.local
+/ui/pdk-ui/.env.test.local
+/ui/pdk-ui/.env.production.local
+
+/ui/pdk-ui/npm-debug.log*
+/ui/pdk-ui/yarn-debug.log*
+/ui/pdk-ui/yarn-error.log*
