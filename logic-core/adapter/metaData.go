@@ -1,18 +1,6 @@
-package wsClient
+package adapter
 
-const (
-	Init = iota
-	NewNode
-	UpdateNode
-	DeleteNode
-	NewSensor
-	DeleteSensor
-)
-
-type KafkaMessage struct {
-	Type int                    `json:"type"`
-	Msg  map[string]interface{} `json:"message"`
-}
+import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
 
 type Node struct {
 	UUID     string `json:"uuid"`
@@ -32,12 +20,20 @@ type SensorValue struct {
 	Index      int    `json:"index"`
 }
 
-type RegisterInit struct {
-	NodeInfo   []Node   `json:"node_info"`
-	SensorInfo []Sensor `json:"sensor_info"`
+func AppToNode(an *Node) model.Node {
+	return model.Node{
+		Name:  an.Name,
+		Group: an.Location,
+	}
 }
 
-type RegisterInfo struct {
-	NodeInfo   map[string]Node
-	SensorInfo map[string]Sensor
+func AppToSensor(as *Sensor) model.Sensor {
+	s := model.Sensor{
+		Name:       as.Name,
+		ValueNames: make([]string, len(as.ValueList)),
+	}
+	for i, v := range as.ValueList {
+		s.ValueNames[i] = v.ValueName
+	}
+	return s
 }

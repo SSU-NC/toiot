@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/KumKeeHyun/PDK/application/interface/db/orm"
 	"github.com/KumKeeHyun/PDK/application/interface/handler"
-	"github.com/KumKeeHyun/PDK/application/service/kafka"
 	"github.com/KumKeeHyun/PDK/application/setting"
 	"github.com/KumKeeHyun/PDK/application/usecase/nodeUsecase"
 	"github.com/KumKeeHyun/PDK/application/usecase/sensorUsecase"
@@ -16,7 +15,6 @@ import (
 func main() {
 	setting.Setup()
 	orm.Setup()
-	kafka.Setup()
 
 	nr := orm.NewNodeRepository()
 	sr := orm.NewSensorRepository()
@@ -45,7 +43,7 @@ func main() {
 		sg.DELETE("", h.DeleteSensor)
 	}
 
-	r.GET("/kafkaConsumerManager", h.KafkaConsumerManager)
+	r.GET("/registerInfo", h.RegisterInfo)
 
 	r.Run()
 }

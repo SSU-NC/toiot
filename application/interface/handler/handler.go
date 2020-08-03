@@ -1,11 +1,7 @@
 package handler
 
 import (
-	"log"
 	"net/http"
-
-	"github.com/KumKeeHyun/PDK/application/service/kafka"
-	"github.com/gorilla/websocket"
 
 	"github.com/KumKeeHyun/PDK/application/domain/model"
 	"github.com/KumKeeHyun/PDK/application/interface/presenter"
@@ -47,11 +43,6 @@ func (h *Handler) RegisterNode(c *gin.Context) {
 		return
 	}
 
-	kafka.MessageManager.Submit(kafka.KafkaMessage{
-		Type: kafka.NewNode,
-		Msg:  *new,
-	})
-
 	c.JSON(http.StatusOK, *new)
 }
 
@@ -68,10 +59,6 @@ func (h *Handler) DeleteNode(c *gin.Context) {
 		return
 	}
 
-	kafka.MessageManager.Submit(kafka.KafkaMessage{
-		Type: kafka.DeleteNode,
-		Msg:  *dn,
-	})
 	c.JSON(http.StatusOK, *dn)
 }
 
@@ -97,11 +84,6 @@ func (h *Handler) RegisterSensor(c *gin.Context) {
 		return
 	}
 
-	kafka.MessageManager.Submit(kafka.KafkaMessage{
-		Type: kafka.NewSensor,
-		Msg:  *new,
-	})
-
 	c.JSON(http.StatusOK, *new)
 }
 
@@ -118,44 +100,15 @@ func (h *Handler) DeleteSensor(c *gin.Context) {
 		return
 	}
 
-	kafka.MessageManager.Submit(kafka.KafkaMessage{
-		Type: kafka.DeleteSensor,
-		Msg:  *ds,
-	})
 	c.JSON(http.StatusOK, *ds)
 }
 
-func (h *Handler) KafkaConsumerManager(c *gin.Context) {
-	listen := make(chan interface{})
-	kafka.MessageManager.Register(listen)
-
-	conn, err := websocket.Upgrade(c.Writer, c.Request, nil, 1024, 0124)
-	if err != nil {
-		log.Fatalf("upgrade : %s", err.Error())
-		return
+func (h *Handler) RegisterInfo(c *gin.Context) {
+	nodeInfo, _ := h.nu.GetRegister()
+	sensorInfo, _ := h.su.GetRegister()
+	msg := map[string]interface{}{
+		"node_info":   nodeInfo,
+		"sensor_info": sensorInfo,
 	}
-
-	defer func() {
-		kafka.MessageManager.Unregister(listen)
-		close(listen)
-		conn.Close()
-	}()
-
-	nodeInfo, err := h.nu.GetRegister()
-	sensorInfo, err := h.su.GetRegister()
-
-	conn.WriteJSON(kafka.KafkaMessage{
-		Type: kafka.Init,
-		Msg: map[string]interface{}{
-			"node_info":   nodeInfo,
-			"sensor_info": sensorInfo,
-		},
-	})
-
-	for {
-		select {
-		case m := <-listen:
-			err = conn.WriteJSON(m)
-		}
-	}
+	c.JSON(http.StatusOK, msg)
 }
