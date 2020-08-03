@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { sensorListElem, value_list_elem } from './ElementsInterface';
+import { SENSOR_URL } from '../defineUrl';
 
 
 //import DeleteRequest from './DeleteRequest'
@@ -10,7 +11,7 @@ interface SensorTableProps {
 
 class SensorTable extends Component<SensorTableProps> {
 	handleRemoveClick = (sensor_uuid: string) => () => {
-		var url = 'http://220.70.2.160:8080/sensor';
+		var url = SENSOR_URL;
 
 		fetch(url, {
 			method: 'DELETE',

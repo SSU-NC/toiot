@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { SENSOR_URL } from '../defineUrl';
 // form : https://getbootstrap.com/docs/4.0/components/forms/?
 // add, delete input : https://codesandbox.io/s/00xq32n3pn?from-embed=&file=/src/index.js
 
@@ -56,7 +57,7 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
     handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
       
-        var url = 'http://220.70.2.160:8080/sensor';
+        var url = SENSOR_URL;
         var data = this.state;
 
         fetch(url, {

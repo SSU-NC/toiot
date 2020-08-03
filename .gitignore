@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+### frontend ignore ###
 
 # dependencies
 /ui/pdk-ui/node_modules
@@ -21,3 +21,7 @@
 /ui/pdk-ui/npm-debug.log*
 /ui/pdk-ui/yarn-debug.log*
 /ui/pdk-ui/yarn-error.log*
+
+# url
+/ui/pdk-ui/src/defineUrl.tsx
+/ui/pdk-ui/.env
