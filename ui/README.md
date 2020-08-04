@@ -2,9 +2,9 @@
 
 ## Setting IP, PORT
 
-<!--
+### Solution 1 : environment variable
 
-Please add `/PDK/ui/pdk-ui/.env` file for using kibana, connect with backend
+Add `/PDK/ui/pdk-ui/.env.development` file for using kibana, connect with backend.
 For example..
 
 ```
@@ -13,9 +13,11 @@ DB_PORT=8080
 KIBANA_IP=456.456.456.456
 KIBANA_PORT=5601
 ```
--->
 
-Please add `/PDK/ui/pdk-ui/src/defineUrl.tsx` file for using kibana, connect with backend
+### Solution 2 : export variable
+
+If you cannot solve the problem, do solution 2.
+Modify `/PDK/ui/pdk-ui/src/defineUrl.tsx`.
 For example..
 
 ```

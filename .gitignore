@@ -23,5 +23,4 @@
 /ui/pdk-ui/yarn-error.log*
 
 # url
-/ui/pdk-ui/src/defineUrl.tsx
-/ui/pdk-ui/.env
+/ui/pdk-ui/.env.development
