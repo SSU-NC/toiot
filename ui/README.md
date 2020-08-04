@@ -8,10 +8,10 @@ Add `/PDK/ui/pdk-ui/.env.development` file for using kibana, connect with backen
 For example..
 
 ```
-DB_IP=123.123.123.123
-DB_PORT=8080
-KIBANA_IP=456.456.456.456
-KIBANA_PORT=5601
+REACT_APP_DB_IP=220.70.2.160
+REACT_APP_DB_PORT=8080
+REACT_APP_KIBANA_IP=220.70.2.1
+REACT_APP_KIBANA_PORT=5601
 ```
 
 ### Solution 2 : export variable
