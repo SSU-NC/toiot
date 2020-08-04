@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { nodeListElem } from './ElementsInterface';
+import { NODE_URL } from '../defineUrl';
 
 interface NodeTableProps {
 	nodeList: Array<nodeListElem>;
@@ -7,7 +8,7 @@ interface NodeTableProps {
 
 class NodeTable extends Component<NodeTableProps> {
 	handleRemoveClick = (node_uuid: string) => () => {
-		var url = 'http://220.70.2.160:8080/node';
+		var url = NODE_URL;
 
 		fetch(url, {
 			method: 'DELETE',

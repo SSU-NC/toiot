@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import { sensorListElem, sensorOptionsElem } from './ElementsInterface';
+import { NODE_URL } from '../defineUrl';
+
 // react-select : https://github.com/JedWatson/react-select
 
 interface RegisterNodeState {
@@ -38,7 +40,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 	handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		var url = 'http://220.70.2.160:8080/node';
+		var url = NODE_URL;
 		var data = this.state;
 		var sensor_uuid = data.sensors.map((val: sensorOptionsElem) => {
 			return { uuid: val.uuid };

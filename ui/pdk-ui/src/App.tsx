@@ -9,6 +9,7 @@ import Kibana from './Kibana';
 import RegisterAlarm from './components/RegisterAlarm';
 
 import { sensorListElem, nodeListElem } from './components/ElementsInterface';
+import { SENSOR_URL, NODE_URL } from './defineUrl';
 
 interface appState {
 	sensorList: Array<sensorListElem>;
@@ -28,7 +29,7 @@ class App extends Component<{}, appState> {
 	}
 
 	getsensorList() {
-		var url = 'http://220.70.2.160:8080/sensor';
+		var url = SENSOR_URL;
 
 		fetch(url)
 			.then((res) => res.json())
@@ -41,7 +42,7 @@ class App extends Component<{}, appState> {
 	}
 
 	getnodeList() {
-		var url = 'http://220.70.2.160:8080/node';
+		var url = NODE_URL;
 
 		fetch(url)
 			.then((res) => res.json())
