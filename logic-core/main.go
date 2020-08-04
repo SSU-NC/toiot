@@ -5,7 +5,7 @@ import (
 
 	"github.com/KumKeeHyun/PDK/logic-core/dataService/memory"
 	"github.com/KumKeeHyun/PDK/logic-core/elasticClient"
-	"github.com/KumKeeHyun/PDK/logic-core/kafkaConsumer"
+	kafkaConsumer "github.com/KumKeeHyun/PDK/logic-core/kafkaConsumer/confluent"
 	"github.com/KumKeeHyun/PDK/logic-core/logicCore"
 	"github.com/KumKeeHyun/PDK/logic-core/rest"
 	_ "github.com/KumKeeHyun/PDK/logic-core/setting"
