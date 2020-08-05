@@ -3,11 +3,11 @@ package model
 import "time"
 
 type LogicData struct {
-	SID       string
-	SName     string
-	Values    map[string]float64
-	NodeInfo  Node
-	Timestamp time.Time
+	SID       string             `json:"s_id"`
+	SName     string             `json:"name"`
+	Values    map[string]float64 `json:"values"`
+	NodeInfo  Node               `json:"node"`
+	Timestamp time.Time          `json:"timestamp"`
 }
 
 type LogicRing struct {
