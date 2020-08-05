@@ -1,6 +1,10 @@
 package logicCoreUC
 
-import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
+import (
+	"strings"
+
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+)
 
 func (lcuc *logicCoreUsecase) ToLogicData(kd *model.KafkaData) (model.LogicData, error) {
 	n, err := lcuc.mr.GetNode(kd.Value.NID)
@@ -28,7 +32,7 @@ func (lcuc *logicCoreUsecase) ToLogicData(kd *model.KafkaData) (model.LogicData,
 
 func (lcuc *logicCoreUsecase) ToDocument(ld *model.LogicData) model.Document {
 	return model.Document{
-		Index: ld.SName + " " + ld.NodeInfo.Group,
+		Index: strings.ReplaceAll(ld.SName, " ", "-") + "-" + ld.NodeInfo.Group,
 		Doc:   *ld,
 	}
 }

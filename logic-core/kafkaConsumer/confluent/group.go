@@ -2,17 +2,16 @@
 TODO : change kafka module confluent to sarama
 */
 
-package kafkaConsumer
+package confluent
 
 import (
 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
 )
 
 var kafkaConsumer *group
 
 type group struct {
-	cs  []*consumer
+	c   *consumer
 	out chan model.KafkaData
 }
 
@@ -22,19 +21,14 @@ func NewKafkaConsumer() *group {
 	}
 
 	outBufSize := 100
-	numOfConsumers := setting.KafkaSetting.NumOfConsumers
 
 	kafkaConsumer = &group{
-		cs:  make([]*consumer, numOfConsumers),
 		out: make(chan model.KafkaData, outBufSize),
 	}
 
-	for i := 0; i < numOfConsumers; i++ {
-		kafkaConsumer.cs[i] = NewConsumer()
-		if kafkaConsumer.cs[i] != nil {
-			go kafkaConsumer.cs[i].run(kafkaConsumer.out)
-		}
-	}
+	kafkaConsumer.c = NewConsumer()
+	go kafkaConsumer.c.run(kafkaConsumer.out)
+
 	return kafkaConsumer
 }
 

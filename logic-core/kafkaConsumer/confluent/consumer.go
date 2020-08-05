@@ -1,8 +1,7 @@
 /*
 TODO : change kafka module confluent to sarama
 */
-
-package kafkaConsumer
+package confluent
 
 import (
 	"encoding/json"
@@ -56,7 +55,7 @@ func (c *consumer) run(out chan<- model.KafkaData) {
 		case ev := <-c.c.Events():
 			switch e := ev.(type) {
 			case *kafka.Message:
-				fmt.Printf("key : %s, Value : %s\n", string(e.Key), string(e.Value))
+				fmt.Printf("confluent\nkey : %s, Value : %s\n", string(e.Key), string(e.Value))
 
 				ad := adapter.KafkaData{
 					Key: string(e.Key),
