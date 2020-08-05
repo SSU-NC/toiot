@@ -25,11 +25,11 @@ func NewElasticClient() *client {
 	if elasticClient != nil {
 		return elasticClient
 	}
-	inBufSize := 100
+	inBufSize := setting.ElasticSetting.ChanBufSize
 
 	config := elasticsearch.Config{
 		Addresses:  setting.ElasticSetting.Addresses,
-		MaxRetries: 3,
+		MaxRetries: setting.ElasticSetting.RequestRetry,
 	}
 	cli, err := elasticsearch.NewClient(config)
 	if err != nil {
@@ -39,9 +39,9 @@ func NewElasticClient() *client {
 	elasticClient = &client{
 		es:      cli,
 		in:      make(chan model.Document, inBufSize),
-		ticker:  time.NewTicker(time.Duration(2) * time.Second),
-		docBuf:  make([]*model.Document, 0, 100),
-		bufSize: 90,
+		ticker:  time.NewTicker(time.Duration(setting.ElasticSetting.BatchTicker) * time.Second),
+		docBuf:  make([]*model.Document, 0, setting.ElasticSetting.BatchSize),
+		bufSize: setting.ElasticSetting.BatchSize,
 	}
 
 	go elasticClient.run()
@@ -69,7 +69,7 @@ func (ec *client) GetInput() chan<- model.Document {
 
 func (ec *client) insertDoc(d *model.Document) {
 	ec.docBuf = append(ec.docBuf, d)
-	if len(ec.docBuf) >= ec.bufSize {
+	if len(ec.docBuf) >= (ec.bufSize - 10) {
 		ec.bulk()
 	}
 }
@@ -81,7 +81,7 @@ func (ec *client) bulk() {
 		res.Body.Close()
 
 		fmt.Println(bulkStr)
-		ec.docBuf = make([]*model.Document, 0, 100)
+		ec.docBuf = make([]*model.Document, 0, ec.bufSize)
 	}
 }
 

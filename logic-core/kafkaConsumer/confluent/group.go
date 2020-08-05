@@ -6,6 +6,7 @@ package confluent
 
 import (
 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/setting"
 )
 
 var kafkaConsumer *group
@@ -20,7 +21,7 @@ func NewKafkaConsumer() *group {
 		return kafkaConsumer
 	}
 
-	outBufSize := 100
+	outBufSize := setting.KafkaSetting.ChanBufSize
 
 	kafkaConsumer = &group{
 		out: make(chan model.KafkaData, outBufSize),

@@ -26,7 +26,7 @@ func NewKafkaConsumer() *group {
 		return kafkaConsumer
 	}
 
-	outBufSize := 100
+	outBufSize := setting.KafkaSetting.ChanBufSize
 
 	kafkaConsumer = &group{
 		out: make(chan model.KafkaData, outBufSize),
