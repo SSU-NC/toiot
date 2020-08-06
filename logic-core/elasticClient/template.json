@@ -1,0 +1,35 @@
+{
+    "index_patterns": [
+      "pdk*"
+    ],
+    "settings": {
+      "number_of_shards": 2
+    },
+  
+     "mappings" : {
+        "properties" : {
+          "name" : {
+            "type" : "keyword"
+          },
+          "node" : {
+            "properties" : {
+              "group" : {
+                "type" : "keyword"
+              },
+              "location" : {
+                "type": "geo_point"
+              },
+              "name" : {
+                "type" : "keyword"
+              }
+            }
+          },
+          "s_id" : {
+            "type" : "keyword"
+          },
+          "timestamp" : {
+            "type" : "date"
+          }
+        }
+      }
+  }
