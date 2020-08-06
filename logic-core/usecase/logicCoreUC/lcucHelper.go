@@ -32,7 +32,7 @@ func (lcuc *logicCoreUsecase) ToLogicData(kd *model.KafkaData) (model.LogicData,
 
 func (lcuc *logicCoreUsecase) ToDocument(ld *model.LogicData) model.Document {
 	return model.Document{
-		Index: strings.ReplaceAll(ld.SName, " ", "-") + "-" + ld.NodeInfo.Group,
+		Index: "pdk-" + strings.ReplaceAll(ld.SName, " ", "-") + "-" + ld.NodeInfo.Group,
 		Doc:   *ld,
 	}
 }
