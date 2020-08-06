@@ -5,8 +5,8 @@ import Dashboard from './Dashboard';
 import SensorManagement from './SensorManagement';
 import NodeManagement from './NodeManagement';
 import Kibana from './Kibana';
-
 import RegisterAlarm from './components/RegisterAlarm';
+import LogicCore from './components/LogicCore';
 
 import { sensorListElem, nodeListElem } from './components/ElementsInterface';
 import { SENSOR_URL, NODE_URL } from './defineUrl';
@@ -59,15 +59,6 @@ class App extends Component<{}, appState> {
 						<Nav></Nav>
 						<div className="container pt-4 mt-4">
 							<Route exact path="/" render={Dashboard} />
-							{/* <Route
-								path="/management"
-								render={() => (
-									<SensorManagement
-										sensorList={this.state.sensorList}
-										nodeList={this.state.nodeList}
-									/>
-								)}
-							/> */}
 							<Route
 								path="/sensor"
 								render={() => (
@@ -88,6 +79,15 @@ class App extends Component<{}, appState> {
 								render={() => (
 									<RegisterAlarm sensorList={this.state.sensorList} />
 								)}
+							/>
+							<Route 
+							path="/logicCore" 
+							render={() => (
+									<LogicCore 
+										sensorList={this.state.sensorList} 
+										nodeList={this.state.nodeList}
+									/>
+								)}  
 							/>
 							<Route path="/kibana" component={Kibana} />
 						</div>

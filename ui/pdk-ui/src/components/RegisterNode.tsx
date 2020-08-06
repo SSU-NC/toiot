@@ -73,7 +73,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 	render() {
 		let sensorOptions: Array<sensorOptionsElem>;
 		sensorOptions = this.props.sensorList.map((val: sensorListElem) => {
-			return { label: val.name, value: val.name, uuid: val.uuid };
+			return { label: val.name, value: val.name, uuid: val.uuid, value_list:val.value_list };
 		});
 
 		return (
@@ -136,7 +136,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 										<label>Select sensors</label>
 										<Select
 											isMulti
-											className="form-control basic-multi-select"
+											className="basic-multi-select"
 											name="sensors"
 											options={sensorOptions}
 											classNamePrefix="select"

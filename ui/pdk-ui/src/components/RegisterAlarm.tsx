@@ -19,7 +19,7 @@ class RegisterAlarm extends Component<RegisterAlarmProps, RegisterAlarmState> {
 		alarm_name: '',
 		alarm_msg:'',
 		email:'',
-		sensor: {label: '', value: '', uuid: '' }, // 알람받을 sensor 1개
+		sensor: {label: '', value: '', uuid: '', value_list:[] }, // 알람받을 sensor 1개
 		value_list: [] // 알람받을 value 값 list
 	};
 
@@ -52,7 +52,7 @@ class RegisterAlarm extends Component<RegisterAlarmProps, RegisterAlarmState> {
 
 	render() {
 		let sensorOptions = this.props.sensorList.map((val: sensorListElem) => {
-			return { label: val.name, value: val.name, uuid: val.uuid };
+			return { label: val.name, value: val.name, uuid: val.uuid, value_list:val.value_list};
 		});
 
 		return (
@@ -64,7 +64,6 @@ class RegisterAlarm extends Component<RegisterAlarmProps, RegisterAlarmState> {
 					<div className="form-group">
 						<label>Select sensors</label>
 						<Select
-							className="form-control"
 							name="sensors"
 							options={sensorOptions}
 							classNamePrefix="select"
