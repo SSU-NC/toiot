@@ -1,6 +1,8 @@
 package sql
 
 import (
+	"fmt"
+
 	"github.com/KumKeeHyun/PDK/application/domain/model"
 	"github.com/KumKeeHyun/PDK/application/setting"
 	"github.com/jinzhu/gorm"
@@ -9,8 +11,8 @@ import (
 var dbConn *gorm.DB
 
 func Setup() {
-	driver, conn := setting.Databasesetting.MakeConnection()
-	dbConn, _ = gorm.Open(driver, conn)
+	conn := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", setting.Databasesetting.User, setting.Databasesetting.Pass, setting.Databasesetting.TCP, setting.Databasesetting.Database)
+	dbConn, _ = gorm.Open(setting.Databasesetting.Driver, conn)
 
 	dbConn.AutoMigrate(
 		&model.Node{},

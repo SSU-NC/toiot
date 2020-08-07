@@ -20,14 +20,10 @@ var Serversetting = &Server{}
 
 type Database struct {
 	Driver   string `toml:"driver"`
+	TCP      string `toml:"tcp"`
 	User     string `toml:"user"`
 	Pass     string `toml:"pass"`
 	Database string `toml:"database"`
-}
-
-func (c *Database) MakeConnection() (string, string) {
-	connection := fmt.Sprintf("%s:%s@/%s?parseTime=true", c.User, c.Pass, c.Database)
-	return c.Driver, connection
 }
 
 var Databasesetting = &Database{}
