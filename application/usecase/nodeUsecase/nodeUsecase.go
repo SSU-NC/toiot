@@ -1,9 +1,9 @@
 package nodeUsecase
 
 import (
+	"github.com/KumKeeHyun/PDK/application/adapter"
 	"github.com/KumKeeHyun/PDK/application/domain/model"
 	"github.com/KumKeeHyun/PDK/application/domain/repository"
-	"github.com/KumKeeHyun/PDK/application/interface/presenter"
 )
 
 type nodeUsecase struct {
@@ -18,12 +18,12 @@ func NewNodeUsecase(nr repository.NodeRepository, sr repository.SensorRepository
 	}
 }
 
-func (nu *nodeUsecase) GetAllNodes() ([]presenter.Node, error) {
+func (nu *nodeUsecase) GetAllNodes() ([]adapter.Node, error) {
 	ns, err := nu.nr.GetAll()
 	if err != nil {
 		return nil, err
 	}
-	nodes := presenter.ToNodes(ns)
+	nodes := adapter.ToNodes(ns)
 	for i := range nodes {
 		nodes[i].Sensors, err = nu.sr.GetByNodeUUID(nodes[i].UUID)
 		if err != nil {
@@ -47,7 +47,7 @@ func (nu *nodeUsecase) GetRegister() ([]model.Node, error) {
 	return nodes, nil
 }
 
-func (nu *nodeUsecase) RegisterNode(n *presenter.Node) (*model.Node, error) {
+func (nu *nodeUsecase) RegisterNode(n *adapter.Node) (*model.Node, error) {
 	newNode := model.NewNode(n.Name, n.Location)
 	if err := nu.nr.Create(&newNode); err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (nu *nodeUsecase) RegisterNode(n *presenter.Node) (*model.Node, error) {
 	return &newNode, nil
 }
 
-func (nu *nodeUsecase) DeleteNode(n *presenter.Node) (*model.Node, error) {
+func (nu *nodeUsecase) DeleteNode(n *adapter.Node) (*model.Node, error) {
 	dn := model.Node{UUID: n.UUID}
 	if err := nu.nr.Delete(&dn); err != nil {
 		return nil, err

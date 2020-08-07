@@ -1,10 +1,10 @@
-package handler
+package rest
 
 import (
 	"net/http"
 
+	"github.com/KumKeeHyun/PDK/application/adapter"
 	"github.com/KumKeeHyun/PDK/application/domain/model"
-	"github.com/KumKeeHyun/PDK/application/interface/presenter"
 	"github.com/KumKeeHyun/PDK/application/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -31,7 +31,7 @@ func (h *Handler) GetAllInfo(c *gin.Context) {
 }
 
 func (h *Handler) RegisterNode(c *gin.Context) {
-	var node presenter.Node
+	var node adapter.Node
 
 	if err := c.ShouldBindJSON(&node); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -47,7 +47,7 @@ func (h *Handler) RegisterNode(c *gin.Context) {
 }
 
 func (h *Handler) DeleteNode(c *gin.Context) {
-	var node presenter.Node
+	var node adapter.Node
 	if err := c.ShouldBindJSON(&node); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

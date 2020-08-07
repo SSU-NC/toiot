@@ -32,7 +32,7 @@ func (c *Database) MakeConnection() (string, string) {
 
 var Databasesetting = &Database{}
 
-func Setup() {
+func init() {
 	tree, err := toml.LoadFile("conf/config.toml")
 	if err != nil {
 		log.Fatalf("setting.Setup, fail to parse 'conf.config.toml': %v", err)

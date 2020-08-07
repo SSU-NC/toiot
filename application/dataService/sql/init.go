@@ -1,4 +1,4 @@
-package orm
+package sql
 
 import (
 	"github.com/KumKeeHyun/PDK/application/domain/model"
