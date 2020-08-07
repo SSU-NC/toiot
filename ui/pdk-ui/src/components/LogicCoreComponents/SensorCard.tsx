@@ -5,7 +5,7 @@ import '../LogicCore.css';
 
 interface SensorCardProps{ 
     sensorList: Array<sensorListElem>;
-	handleSensorCardChange: (sensor:any) => void;
+	handleSensorCardChange: (sensor: any) => void;
 }
 
 class SensorCard extends Component< SensorCardProps, {} > {

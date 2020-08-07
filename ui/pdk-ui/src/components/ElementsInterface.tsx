@@ -22,7 +22,7 @@ export interface value_list_elem {
 // used to <Select> options
 export interface sensorOptionsElem {
 	label: string;
-	value: string; // 이때 value는 sensor내의 value값들이 아닌, select component를 사용하기 위해 있는 필드
+	value: string; // 이때 value는 sensor내의 value값들이 아닌, select component를 사용하기 위해
 	uuid: string;
 	value_list: Array<value_list_elem>;
 }

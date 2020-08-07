@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { sensorListElem, sensorOptionsElem, valueOptionsElem, groupOptionsElem, nodeListElem } from './ElementsInterface';
+import { sensorListElem, sensorOptionsElem, groupOptionsElem, nodeListElem } from './ElementsInterface';
+import { timeRange, lcValue, lcTime, lcGroup, lcAlarm, lcEmail, lcAction} from './LcElementsInterface'
 import './LogicCore.css';
 import SensorCard from './LogicCoreComponents/SensorCard';
 import ValueCard from './LogicCoreComponents/ValueCard';
@@ -16,7 +17,14 @@ interface LogicCoreProps{
 interface LogicCoreState{
 	sensor: sensorOptionsElem;
 	group: Array<groupOptionsElem>;
-	values: Array<valueOptionsElem>;
+	value: Array<lcValue>;
+	time_range: Array<timeRange>;
+	action: Array<lcAction>;
+}
+
+interface LogicCorePost {
+	sensor_uuid: string; 
+	logic: Array<lcValue | lcTime | lcGroup | lcAlarm | lcEmail>;
 }
 
 class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
@@ -28,21 +36,33 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 			value_list:[]
 		},
 		group: [],
-		values: [], 
+		value: [],
+		time_range: [],
+		action: [],
 	}
-	handleSensorCardChange = (sensor: any) => {
+	handleSensorCardChange = (sensor: sensorOptionsElem) => {
 		this.setState({
 			sensor,
 		});
 	};
-	handleGroupCardChange =(group: any) => {
+	handleGroupCardChange = (group: Array<groupOptionsElem>) => {
 		this.setState({
 			group,
 		});
 	};
-	handleValueCardChange = (values: any) => {
+	handleValueCardChange = (value: lcValue) => {
 		this.setState({
-			values,
+			value: [value],
+		});
+	};
+	handleTimeCardChange = (time_range: Array<timeRange>) => {
+		this.setState({
+			time_range,
+		});
+	};
+	handleActionCardChange = (action: lcAction) => {
+		this.setState({
+			action: [action]
 		});
 	};
 	render() {
@@ -53,11 +73,11 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 					<SensorCard sensorList={this.props.sensorList} handleSensorCardChange={this.handleSensorCardChange}/>
 					<ValueCard valueList={this.state.sensor.value_list} handleValueCardChange={this.handleValueCardChange}/>
 					<GroupCard nodeList={this.props.nodeList} handleGroupCardChange={this.handleGroupCardChange}/>
-					<TimeCard/>
-					<ActionCard/>
+					<TimeCard handleTimeCardChange={this.handleTimeCardChange}/>
+					<ActionCard handleActionCardChange={this.handleActionCardChange}/>
 					<button
 						type="submit"
-						className="btn"
+						className="btn float-right"
 						data-dismiss="modal"
 						style={{ background: 'pink' }}
 					>
