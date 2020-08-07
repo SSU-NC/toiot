@@ -7,9 +7,9 @@ function Main() {
 
 	return (
 		<div className="embed-responsive embed-responsive-16by9"
-		style={{position:"absolute", width:"50%" , height:"50%", left :"0px"}} >	
+		style={{position:"absolute", width:"100%" , height:"80%", left :"0px"}} >	
 			<Iframe url={kibanaUrl} className="embed-responsive-item"  
-			 
+	               height = "50%"
 			scrolling="yes" >
 			</Iframe>
 		</div>
