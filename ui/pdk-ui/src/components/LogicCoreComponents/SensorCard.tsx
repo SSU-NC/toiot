@@ -19,7 +19,7 @@ class SensorCard extends Component< SensorCardProps, {} > {
                 <div className="card form-group">
 					<div className="card-body row ">
 						<div className="col-2 right-divider">
-							<h4 className="align-center">sensor</h4>
+							<span style={{fontSize:'18pt', fontWeight:500}}>sensor</span>
 							</div>
 							<div className="col-5">
 								<Select

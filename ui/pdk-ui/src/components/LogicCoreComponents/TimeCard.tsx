@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
-import { timeRange } from '../LcElementsInterface';
+import { timeRange, lcTime } from '../LcElementsInterface';
 
 import '../LogicCore.css';
 
 interface TimeCardProps{ 
-    handleTimeCardChange: (time_range: Array<timeRange>) => void;
+    handleTimeCardChange: (time_range: lcTime) => void;
 }
 
 interface TimeCardState{
+    logic: "time",
     range: Array<timeRange>;
 }
 
 class TimeCard extends Component< TimeCardProps, TimeCardState > {
     state: TimeCardState = {
+        logic: "time",
         range: [{start: "00:10:10", end: "23:59:59"}],
     }
     // handle click event of the Add button
@@ -20,7 +22,7 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
         await this.setState({
             range: [...this.state.range, {start: "00:10:10",end: "23:59:59"}]
         }); 
-        this.props.handleTimeCardChange(this.state.range);
+        this.props.handleTimeCardChange(this.state);
      };
      
      // handle click event of the Remove button
@@ -28,7 +30,7 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
         await this.setState({
             range: this.state.range.filter((s: any, sidx:number) => idx !== sidx)
         });
-        this.props.handleTimeCardChange(this.state.range);
+        this.props.handleTimeCardChange(this.state);
     };
   
     handleTimeChange = (idx: number) => async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +40,7 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
             return {...range, end: e.target.value};
         });
         await this.setState({ range: new_range });
-        this.props.handleTimeCardChange(this.state.range);
+        this.props.handleTimeCardChange(this.state);
     };
 
     render() {
@@ -47,7 +49,7 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
             <div className="card form-group" >
             <div className="card-body row">
                 <div className="col-2 right-divider">
-                    <h4 className="align-middle">time</h4>
+                    <span style={{fontSize:'18pt', fontWeight:500}}>time</span>
                 </div>
                 <div className="col-6">
                     <div className="row">

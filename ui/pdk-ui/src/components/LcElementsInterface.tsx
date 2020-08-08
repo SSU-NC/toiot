@@ -3,24 +3,22 @@ export interface numRange {
 	min: number;
 	max: number;
 }
-
 export interface timeRange {
 	start: string;
 	end: string;
 }
 
 export interface lcValue {
-    logic: "value";
+    logic: string;
 	value: string;
     range: Array<numRange>;
 }
 export interface lcTime {
-    logic: "group";
+    logic: string;
 	range: Array<timeRange>;
 }
-
 export interface lcGroup {
-    logic: "group";
+    logic: string;
     group: Array<string>;
 }
 export interface lcAction {
@@ -28,11 +26,7 @@ export interface lcAction {
     text: string;
 }
 
-export interface lcAlarm {
-    logic: "alarm"; 
-	msg: string;
-}
-export interface lcEmail {
-    logic: "email"; 
-    email: string;
+export interface LogicCorePost {
+	sensor_uuid: string; 
+	logic: Array< lcValue | lcTime | lcGroup | lcAction >;
 }
