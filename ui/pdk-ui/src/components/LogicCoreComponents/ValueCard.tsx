@@ -2,29 +2,33 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import '../LogicCore.css';
 import { valueOptionsElem, value_list_elem } from '../ElementsInterface'
-import { numRange, lcValue } from '../LcElementsInterface';
+import { numRange, logicElem } from '../LcElementsInterface';
 
 interface ValueCardProps{ 
 	valueList: Array<value_list_elem>;
-	handleValueCardChange: (value: lcValue) => void;
+	handleValueCardChange: (value: logicElem) => void;
 	handleRemoveValueCardClick: () => void;
 }
 
 interface ValueCardState {
-	logic: string;
-	value: string;
-    range: Array<numRange>;
+	elem: string;
+	arg: { 
+		value: string;
+		range: Array<numRange>;
+	}
 }
 class ValueCard extends Component< ValueCardProps, ValueCardState > {
     state: ValueCardState = {
-		logic: 'value',
-		value: '',
-		range: [{min: 0, max: 255}],
+		elem: 'value',
+		arg: { 
+			value: '',
+			range: [{min: 0, max: 255}],
+		}
 	}
 	// handle click event of the Add button
     handleAddClick = async () => {
         await this.setState({
-            range: [...this.state.range, {min: 0, max: 255}]
+            arg:{value: this.state.arg.value, range: [...this.state.arg.range, {min: 0, max: 255}]},
         }); 
 		this.props.handleValueCardChange(this.state);
      };
@@ -32,23 +36,23 @@ class ValueCard extends Component< ValueCardProps, ValueCardState > {
      // handle click event of the Remove button
     handleRemoveClick = (idx: number) => async () => {
         await this.setState({
-            range: this.state.range.filter((s: any, sidx:number) => idx !== sidx)
+            arg: {value: this.state.arg.value, range: this.state.arg.range.filter((s: any, sidx:number) => idx !== sidx) },
 		});
 		this.props.handleValueCardChange(this.state);
     };
   
     handleNumChange = (idx: number) => async (e: any) => {
-        const new_range_elem = this.state.range.map((rangeElem: numRange, sidx: number) => {
+        const new_range_elem = this.state.arg.range.map((rangeElem: numRange, sidx: number) => {
             if (idx !== sidx) return rangeElem;
             if (e.target.id === "val_min") return { ...rangeElem, min: e.target.value};
             return { ...rangeElem, max: e.target.value};
 		});
-		await this.setState({ range: new_range_elem });
+		await this.setState({ arg:{value: this.state.arg.value, range: new_range_elem} });
 		this.props.handleValueCardChange(this.state);
 	};
 	handleValueChange = async(e: any) => {
 		await this.setState({
-			value: e.value,
+			arg: {value: e.value, range: this.state.arg.range},
 		})
 		this.props.handleValueCardChange(this.state);
 	}
@@ -86,7 +90,7 @@ class ValueCard extends Component< ValueCardProps, ValueCardState > {
 					</div>
 					<div className="col-1"></div>
 					<div className="col-4">
-					{this.state.range.map((range: numRange, idx: number) => (
+					{this.state.arg.range.map((range: numRange, idx: number) => (
 					<div className="input-group mb-2">
 						<input
 							type="number"
@@ -96,7 +100,7 @@ class ValueCard extends Component< ValueCardProps, ValueCardState > {
 							value={range.min}
 							onChange={this.handleNumChange(idx)}
 						/>
-						<span>&lt; {this.state.value} &lt;</span>
+						<span>&lt; {this.state.arg.value} &lt;</span>
 						<input
 							type="number"
 							className="form-control"

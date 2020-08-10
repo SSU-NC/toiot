@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { sensorListElem, sensorOptionsElem, groupOptionsElem, nodeListElem } from './ElementsInterface';
-import { lcValue, lcAction, LogicCorePost, lcGroup, lcTime } from './LcElementsInterface'
+import { sensorListElem, sensorOptionsElem, nodeListElem } from './ElementsInterface';
+import { logicElem, LogicCorePost } from './LcElementsInterface'
 import './LogicCore.css';
 import SensorCard from './LogicCoreComponents/SensorCard';
 import ValueCard from './LogicCoreComponents/ValueCard';
@@ -17,10 +17,10 @@ interface LogicCoreProps{
 interface LogicCoreState{
 	logic_name: string;
 	sensor_info: sensorOptionsElem;
-	selected_value: Array<lcValue>;
-	selected_time: lcTime;
-	selected_action: Array<lcAction>;
-	selected_group: lcGroup;
+	selected_value: Array<logicElem>;
+	selected_time: logicElem;
+	selected_action: Array<logicElem>;
+	selected_group: logicElem;
 
 	submit_msg: LogicCorePost;
 }
@@ -35,8 +35,8 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 			value_list:[]
 		},
 		selected_value: [],
-		selected_group: {logic:"empty", group: []},
-		selected_time: {logic:"empty", range: []},
+		selected_group: {elem:"empty", arg: {group: []}},
+		selected_time: {elem:"empty", arg:{range: []}},
 		selected_action: [],
 
 		submit_msg: {
@@ -57,26 +57,27 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 			sensor_info,
 		});
 	};
-	handleGroupCardChange = (selectedGroups: Array<groupOptionsElem>) => {
+	handleGroupCardChange = (selected_group: logicElem) => {
 		this.setState({
-			selected_group :{ logic: "group", group : selectedGroups.map((selectedGroup: groupOptionsElem)=>(selectedGroup.value)),},
+			//selected_group :{ logic: "group", group : selectedGroups.map((selectedGroup: groupOptionsElem)=>(selectedGroup.value)),},
+			selected_group,
 		});
 	};
-	handleValueCardChange = (idx: number) => (selectedValue: lcValue) => {
-		const new_selected_value = this.state.selected_value.map((value: lcValue, sidx: number) => {
+	handleValueCardChange = (idx: number) => (selectedValue: logicElem) => {
+		const new_selected_value = this.state.selected_value.map((value: logicElem, sidx: number) => {
             if (idx !== sidx) return value;
             return selectedValue;
         });
 		this.setState({ selected_value: new_selected_value });
 		
 	};
-	handleTimeCardChange = (selected_time: lcTime) => {
+	handleTimeCardChange = (selected_time: logicElem) => {
 	 this.setState({
 			selected_time,
 		});
 	};
-	handleActionCardChange = (idx: number) => (selectedAction: lcAction) => {
-		const new_selected_action = this.state.selected_action.map((action: lcAction, sidx: number) => {
+	handleActionCardChange = (idx: number) => (selectedAction: logicElem) => {
+		const new_selected_action = this.state.selected_action.map((action: logicElem, sidx: number) => {
             if (idx !== sidx) return action;
             return selectedAction;
         });
@@ -86,12 +87,12 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 	// handle add card button click event
 	handleAddValueCardClick = () => {
        this.setState({
-            selected_value: [...this.state.selected_value, {logic: "empty", value: "", range:[{min:0,max:255}]}]
+            selected_value: [...this.state.selected_value, {elem: "empty", arg: {value: "", range:[{min:0,max:255}]}}]
 		 });
 	}
 	handleAddActionCardClick = () => {
 		 this.setState({
-            selected_action: [...this.state.selected_action, {logic: "empty", text:""}]
+            selected_action: [...this.state.selected_action, {elem: "empty", arg:{text:""}}]
 		 });
 	}
 
@@ -109,7 +110,7 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 
     handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		//e.preventDefault();
-		let logic_array : Array< lcValue | lcTime | lcGroup | lcAction>= [ 
+		let logic_array : Array< logicElem>= [ 
 			this.state.selected_group, 
 			this.state.selected_time,
 		];

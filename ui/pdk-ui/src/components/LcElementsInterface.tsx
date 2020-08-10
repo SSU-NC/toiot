@@ -8,26 +8,30 @@ export interface timeRange {
 	end: string;
 }
 
-export interface lcValue {
-    logic: string;
+export interface logicElem {
+	elem: string;
+	arg: lcValueArg | lcTimeArg | lcGroupArg | lcActionArg;
+}
+
+interface lcValueArg{
 	value: string;
     range: Array<numRange>;
 }
-export interface lcTime {
-    logic: string;
+
+export interface lcTimeArg {
 	range: Array<timeRange>;
 }
-export interface lcGroup {
-    logic: string;
+
+export interface lcGroupArg {
     group: Array<string>;
 }
-export interface lcAction {
-    logic: string; 
+
+export interface lcActionArg {
     text: string;
 }
 
 export interface LogicCorePost {
 	sensor_uuid: string; 
 	logic_name: string,
-	logic: Array< lcValue | lcTime | lcGroup | lcAction >;
+	logic: Array<logicElem>;
 }

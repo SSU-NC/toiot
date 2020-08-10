@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { lcAction } from '../LcElementsInterface';
+import { logicElem } from '../LcElementsInterface';
 import '../LogicCore.css';
 
 interface ActionCardProps { 
-	handleActionCardChange: (value: lcAction) => void;
+	handleActionCardChange: (value: logicElem) => void;
 	handleRemoveActionCardClick: () => void;
 }
 
 interface ActionCardState { 
-	logic: string;
-	text: string;
+	elem: string;
+	arg : {
+		text: string;
+	}
 }
 interface actionOptionsElem {
 	label: string;
@@ -19,19 +21,19 @@ interface actionOptionsElem {
 
 class ActionCard extends Component< ActionCardProps, ActionCardState > {
 	state: ActionCardState = {
-		logic: '',
-		text: ''
+		elem: '',
+		arg: { text: ''}
 	}
 	handleActionChange = async(e: any) => {
 		await this.setState({
-			logic: e.value,
+			elem: e.value,
 		})
 		this.props.handleActionCardChange(this.state);
 	}
 
 	handleTextChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
 		await this.setState({
-			text: e.target.value,
+			arg: {text: e.target.value},
 		})
 		this.props.handleActionCardChange(this.state);
 	}
@@ -62,7 +64,7 @@ class ActionCard extends Component< ActionCardProps, ActionCardState > {
 					
 					<div className="col-1"></div>
 					<div className="col-5">
-						{(this.state.logic === "alarm") ?
+						{(this.state.elem === "alarm") ?
 						(
 						<div>
 							<span>Alarm MSG</span>
@@ -70,14 +72,14 @@ class ActionCard extends Component< ActionCardProps, ActionCardState > {
 								type="text"
 								className="form-control"
 								name="alarm_msg"
-								value={this.state.text}
+								value={this.state.arg.text}
 								placeholder="Enter alarm msg which you want to get alert"
 								onChange={this.handleTextChange}
 							/>
 						</div>
 						
 						) :
-						((this.state.logic === "email") ? 
+						((this.state.elem === "email") ? 
 						(
 						<div>
 							<span>Email address</span>
@@ -85,7 +87,7 @@ class ActionCard extends Component< ActionCardProps, ActionCardState > {
 								type="email"
 								className="form-control"
 								id="email"
-								value={this.state.text}
+								value={this.state.arg.text}
 								aria-describedby="emailHelp"
 								placeholder="toiot@example.com"
 								onChange={this.handleTextChange}

@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, Component } from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Nav from './Navigation';
 import Dashboard from './Dashboard';
@@ -6,8 +6,8 @@ import SensorManagement from './SensorManagement';
 import NodeManagement from './NodeManagement';
 import Kibana from './Kibana';
 import RegisterAlarm from './components/RegisterAlarm';
-import LogicCore from './components/LogicCore';
-
+import LogicCoreManagement from './LogicCoreManagement';
+import RegisterLogicCore from './components/RegisterLogicCore'
 import { sensorListElem, nodeListElem } from './components/ElementsInterface';
 import { SENSOR_URL, NODE_URL } from './defineUrl';
 
@@ -83,13 +83,18 @@ class App extends Component<{}, appState> {
 							<Route 
 							path="/logicCore" 
 							render={() => (
-									<LogicCore 
+									<LogicCoreManagement 
 										sensorList={this.state.sensorList} 
 										nodeList={this.state.nodeList}
 									/>
 								)}  
 							/>
 							<Route path="/kibana" component={Kibana} />
+							<Route path="/registerLogic" 
+								render={() => (
+									<RegisterLogicCore sensorList={this.state.sensorList} nodeList={this.state.nodeList}/>
+								)}>
+							</Route>
 						</div>
 					</div>
 				</Router>

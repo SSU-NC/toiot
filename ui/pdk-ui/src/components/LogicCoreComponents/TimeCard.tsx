@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
-import { timeRange, lcTime } from '../LcElementsInterface';
+import { timeRange, logicElem } from '../LcElementsInterface';
 
 import '../LogicCore.css';
 
 interface TimeCardProps{ 
-    handleTimeCardChange: (time_range: lcTime) => void;
+    handleTimeCardChange: (time_range: logicElem) => void;
 }
 
 interface TimeCardState{
-    logic: "time",
-    range: Array<timeRange>;
+    elem: "time",
+    arg: { range: Array<timeRange> }
 }
 
 class TimeCard extends Component< TimeCardProps, TimeCardState > {
     state: TimeCardState = {
-        logic: "time",
-        range: [{start: "00:10:10", end: "23:59:59"}],
+        elem: "time",
+        arg: {range: [{start: "00:10:10", end: "23:59:59"}]}
     }
     // handle click event of the Add button
     handleAddClick = async () => {
         await this.setState({
-            range: [...this.state.range, {start: "00:10:10",end: "23:59:59"}]
+            arg: {range: [...this.state.arg.range, {start: "00:10:10",end: "23:59:59"}]}
         }); 
         this.props.handleTimeCardChange(this.state);
      };
@@ -28,18 +28,18 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
      // handle click event of the Remove button
     handleRemoveClick = (idx: number) => async () => {
         await this.setState({
-            range: this.state.range.filter((s: any, sidx:number) => idx !== sidx)
+            arg: {range: this.state.arg.range.filter((s: any, sidx:number) => idx !== sidx)}
         });
         this.props.handleTimeCardChange(this.state);
     };
   
     handleTimeChange = (idx: number) => async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const new_range = this.state.range.map((range: timeRange, sidx: number) => {
+        const new_range = this.state.arg.range.map((range: timeRange, sidx: number) => {
             if (idx !== sidx) return range;
             if (e.target.id === "start-time-input") return { ...range, start: e.target.value};
             return {...range, end: e.target.value};
         });
-        await this.setState({ range: new_range });
+        await this.setState({ arg: {range: new_range} });
         this.props.handleTimeCardChange(this.state);
     };
 
@@ -54,7 +54,7 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
                 <div className="col-6">
                     <div className="row">
                         <div className="input-group row margin-left">
-                            {this.state.range.map((range: timeRange, idx: number) => (
+                            {this.state.arg.range.map((range: timeRange, idx: number) => (
                                 <div className="input-group margin-bottom">
                                     <div className="col">
                                 <input

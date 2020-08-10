@@ -2,13 +2,32 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import { nodeListElem, groupOptionsElem } from '../ElementsInterface'
 import '../LogicCore.css';
+import { logicElem } from '../LcElementsInterface';
 
 interface GroupCardProps{ 
 	nodeList: Array<nodeListElem>;
-    handleGroupCardChange: (group: any) => void;
+    handleGroupCardChange: (group: logicElem) => void;
+}
+interface GroupCardState {
+	elem: "group",
+	arg: {
+		group: Array<string>;
+	}
 }
 
-class GroupCard extends Component< GroupCardProps, {} > {
+class GroupCard extends Component< GroupCardProps, GroupCardState > {
+	state: GroupCardState ={
+		elem: "group",
+		arg: {
+			group: [],
+		}
+	}
+	handleGroupChange = async(e: any) => {
+		await this.setState({
+			arg:{group :[ e.target.value ]},
+		})
+		this.props.handleGroupCardChange(this.state);
+	}
     render() {
         let groupOptions: Array<groupOptionsElem>;
 		groupOptions = this.props.nodeList.map((val: nodeListElem) => {
@@ -26,7 +45,7 @@ class GroupCard extends Component< GroupCardProps, {} > {
 							name="group" 
 							options={groupOptions} 
 							classNamePrefix="select"
-							onChange={this.props.handleGroupCardChange} 
+							onChange={this.handleGroupChange} 
 						/>
 					</div>
 				</div>
