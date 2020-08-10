@@ -1,8 +1,11 @@
 package main
 
 import (
+	"log"
+
 	"github.com/KumKeeHyun/PDK/application/dataService/sql"
 	"github.com/KumKeeHyun/PDK/application/rest"
+	"github.com/KumKeeHyun/PDK/application/setting"
 	"github.com/KumKeeHyun/PDK/application/usecase/nodeUsecase"
 	"github.com/KumKeeHyun/PDK/application/usecase/sensorUsecase"
 	"github.com/gin-contrib/cors"
@@ -42,6 +45,7 @@ func main() {
 	}
 
 	r.GET("/registerInfo", h.RegisterInfo)
+	r.POST("/logic/new", h.CreateLogic)
 
-	r.Run()
+	log.Fatal(r.Run(setting.Appsetting.Server))
 }

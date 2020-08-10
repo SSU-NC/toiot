@@ -2,6 +2,8 @@ package sql
 
 import (
 	"fmt"
+	"log"
+	"time"
 
 	"github.com/KumKeeHyun/PDK/application/domain/model"
 	"github.com/KumKeeHyun/PDK/application/setting"
@@ -11,8 +13,24 @@ import (
 var dbConn *gorm.DB
 
 func Setup() {
-	conn := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", setting.Databasesetting.User, setting.Databasesetting.Pass, setting.Databasesetting.TCP, setting.Databasesetting.Database)
+	conn := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", setting.Databasesetting.User, setting.Databasesetting.Pass, setting.Databasesetting.Server, setting.Databasesetting.Database)
 	dbConn, _ = gorm.Open(setting.Databasesetting.Driver, conn)
+
+	retry := 30
+	for {
+		err := dbConn.DB().Ping()
+		if err != nil {
+			dbConn, _ = gorm.Open(setting.Databasesetting.Driver, conn)
+			if retry == 0 {
+				log.Fatalf("Not able to establish connection to database")
+			}
+			log.Printf(fmt.Sprintf("Could not connect to database. Wait 2 seconds. %d retries left...", retry))
+			retry--
+			time.Sleep(2 * time.Second)
+		} else {
+			break
+		}
+	}
 
 	dbConn.AutoMigrate(
 		&model.Node{},

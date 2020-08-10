@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/KumKeeHyun/PDK/application/adapter"
@@ -111,4 +112,19 @@ func (h *Handler) RegisterInfo(c *gin.Context) {
 		"sensor_info": sensorInfo,
 	}
 	c.JSON(http.StatusOK, msg)
+}
+
+func (h *Handler) CreateLogic(c *gin.Context) {
+	var test struct {
+		SensorUUID string                   `json:"sensor_uuid"`
+		LogicName  string                   `json:"logic_name"`
+		Logics     []map[string]interface{} `json:"logic"`
+	}
+
+	if err := c.ShouldBindJSON(&test); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	fmt.Printf("[new logic chain]\n%v\n", test)
+	c.JSON(http.StatusOK, test)
 }
