@@ -15,7 +15,6 @@ class SensorCard extends Component< SensorCardProps, {} > {
 			return { label: val.name, value: val.name, uuid: val.uuid, value_list: val.value_list};
 		});
         return(
-            <form >
                 <div className="card form-group">
 					<div className="card-body row ">
 						<div className="col-2 right-divider">
@@ -30,9 +29,7 @@ class SensorCard extends Component< SensorCardProps, {} > {
 								/>
 						</div>
 					</div>
-                </div>
-            </form>
-			
+                </div>		
         )
     }
 }

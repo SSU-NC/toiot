@@ -28,5 +28,6 @@ export interface lcAction {
 
 export interface LogicCorePost {
 	sensor_uuid: string; 
+	logic_name: string,
 	logic: Array< lcValue | lcTime | lcGroup | lcAction >;
 }
