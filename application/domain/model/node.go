@@ -3,17 +3,23 @@ package model
 import "github.com/rs/xid"
 
 type Node struct {
-	UUID     string `json:"uuid" gorm:"primary_key;type:char(20);not null;"`
-	Name     string `json:"name" gorm:"type:varchar(32);not null"`
-	Location string `json:"location" gorm:"type:varchar(64)"`
-	//Sensors  []*Sensor `gorm:"many2many:node_sensors"`
+	UUID    string   `json:"uuid" gorm:"primary_key;type:char(20);not null;"`
+	Name    string   `json:"name" gorm:"type:varchar(32);unique;not null"`
+	Group   string   `json:"location" gorm:"type:varchar(64)"`
+	LocLat  float64  `json:"lat"`
+	LocLon  float64  `json:"lon"`
+	SinkID  uint     `json:"sink_id" gorm:"not null"`
+	Sensors []Sensor `json:"sensors" gorm:"-"`
 }
 
-func NewNode(name, loc string) Node {
+func NewNode(name, grp string, lat, lon float64, sinkID uint) Node {
 	return Node{
-		UUID:     xid.New().String(),
-		Name:     name,
-		Location: loc,
+		UUID:   xid.New().String(),
+		Name:   name,
+		Group:  grp,
+		LocLat: lat,
+		LocLon: lon,
+		SinkID: sinkID,
 	}
 }
 

@@ -8,6 +8,7 @@ import (
 	"github.com/KumKeeHyun/PDK/application/setting"
 	"github.com/KumKeeHyun/PDK/application/usecase/nodeUsecase"
 	"github.com/KumKeeHyun/PDK/application/usecase/sensorUsecase"
+	"github.com/KumKeeHyun/PDK/application/usecase/sinkUsecase"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
@@ -17,13 +18,15 @@ import (
 func main() {
 	sql.Setup()
 
+	sir := sql.NewSinkRepository()
 	nr := sql.NewNodeRepository()
 	sr := sql.NewSensorRepository()
 
+	siu := sinkUsecase.NewSinkUsecase(sir, nr)
 	nu := nodeUsecase.NewNodeUsecase(nr, sr)
 	su := sensorUsecase.NewSensorUsecase(sr)
 
-	h := rest.NewHandler(nu, su)
+	h := rest.NewHandler(siu, nu, su)
 
 	r := gin.Default()
 	config := cors.DefaultConfig()
@@ -31,9 +34,16 @@ func main() {
 	config.AllowCredentials = true
 	r.Use(cors.New(config))
 
+	sig := r.Group("/sink")
+	{
+		sig.GET("", h.GetSinkInfo)
+		sig.GET("/:id", h.GetSinkByID)
+		sig.POST("", h.RegisterSink)
+		sig.DELETE("", h.DeleteSink)
+	}
 	ng := r.Group("/node")
 	{
-		ng.GET("", h.GetAllInfo)
+		ng.GET("", h.GetNodesInfo)
 		ng.POST("", h.RegisterNode)
 		ng.DELETE("", h.DeleteNode)
 	}

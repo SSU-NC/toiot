@@ -3,6 +3,7 @@ package rest
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/KumKeeHyun/PDK/application/adapter"
 	"github.com/KumKeeHyun/PDK/application/domain/model"
@@ -11,19 +12,83 @@ import (
 )
 
 type Handler struct {
-	nu usecase.NodeUsecase
-	su usecase.SensorUsecase
+	siu usecase.SinkUsecase
+	nu  usecase.NodeUsecase
+	su  usecase.SensorUsecase
 }
 
-func NewHandler(nu usecase.NodeUsecase, su usecase.SensorUsecase) *Handler {
+func NewHandler(siu usecase.SinkUsecase, nu usecase.NodeUsecase, su usecase.SensorUsecase) *Handler {
 	return &Handler{
-		nu: nu,
-		su: su,
+		siu: siu,
+		nu:  nu,
+		su:  su,
 	}
 }
 
-func (h *Handler) GetAllInfo(c *gin.Context) {
-	nodes, err := h.nu.GetAllNodes()
+func (h *Handler) GetSinkInfo(c *gin.Context) {
+	sinks, err := h.siu.GetAllSinks()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, sinks)
+}
+
+func (h *Handler) GetSinkByID(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	sink, err := h.siu.GetSinkByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, *sink)
+}
+
+func (h *Handler) RegisterSink(c *gin.Context) {
+	var sink model.Sink
+	if err := c.ShouldBindJSON(&sink); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := sink.CheckIP(); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	new, err := h.siu.RegisterSink(&sink)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, *new)
+}
+
+func (h *Handler) DeleteSink(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	sink := model.Sink{
+		ID: uint(id),
+	}
+
+	err = h.siu.DeleteSink(&sink)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, sink)
+}
+
+func (h *Handler) GetNodesInfo(c *gin.Context) {
+	nodes, err := h.nu.GetAllNodesWithSensorsWithValues()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -33,12 +98,13 @@ func (h *Handler) GetAllInfo(c *gin.Context) {
 
 func (h *Handler) RegisterNode(c *gin.Context) {
 	var node adapter.Node
-
 	if err := c.ShouldBindJSON(&node); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	new, err := h.nu.RegisterNode(&node)
+	n := adapter.NodeToModel(&node)
+	fmt.Printf("node:%v\nn:%v\n", node, n)
+	new, err := h.nu.RegisterNode(&n)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -53,8 +119,9 @@ func (h *Handler) DeleteNode(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	n := adapter.NodeToModel(&node)
 
-	dn, err := h.nu.DeleteNode(&node)
+	dn, err := h.nu.DeleteNode(&n)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -64,7 +131,7 @@ func (h *Handler) DeleteNode(c *gin.Context) {
 }
 
 func (h *Handler) GetSensorsInfo(c *gin.Context) {
-	sensors, err := h.su.GetAllSensors()
+	sensors, err := h.su.GetAllSensorsWithValues()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -79,6 +146,7 @@ func (h *Handler) RegisterSensor(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	new, err := h.su.RegisterSensor(&sensor)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -105,8 +173,8 @@ func (h *Handler) DeleteSensor(c *gin.Context) {
 }
 
 func (h *Handler) RegisterInfo(c *gin.Context) {
-	nodeInfo, _ := h.nu.GetRegister()
-	sensorInfo, _ := h.su.GetRegister()
+	nodeInfo, _ := h.nu.GetAllNodes()
+	sensorInfo, _ := h.su.GetAllSensorsWithValues()
 	msg := map[string]interface{}{
 		"node_info":   nodeInfo,
 		"sensor_info": sensorInfo,

@@ -15,17 +15,24 @@ func NewSensorRepository() *sensorRepository {
 	}
 }
 
-func (sr *sensorRepository) GetAll() (s []model.Sensor, err error) {
-	return s, sr.db.Find(&s).Error
+func (sr *sensorRepository) GetAll() (ss []model.Sensor, err error) {
+	return ss, sr.db.Find(&ss).Error
 }
 
-func (sr *sensorRepository) GetByNodeUUID(nid string) (s []model.Sensor, err error) {
-	return s, sr.db.Table("node_sensors").Select("*").Joins("join sensors on sensors.uuid=sensor_uuid").Where("node_uuid=?", nid).Scan(&s).Error
+func (sr *sensorRepository) GetByNodeUUID(nid string) (ss []model.Sensor, err error) {
+	return ss, sr.db.Table("node_sensors").Select("*").Joins("join sensors on sensors.uuid=sensor_uuid").Where("node_uuid=?", nid).Scan(&ss).Error
+}
 
+func (sr *sensorRepository) GetByNodeUUIDWithValues(nid string) (ss []model.Sensor, err error) {
+	return ss, sr.db.Table("node_sensors").Select("*").Joins("join sensors on sensors.uuid=sensor_uuid").Where("node_uuid=?", nid).Joins("join sensor_values on sensor_values.sensor_uuid=sensors.uuid").Order("index").Scan(&ss).Error
 }
 
 func (sr *sensorRepository) GetByUUID(sid string) (s *model.Sensor, err error) {
 	return s, sr.db.Where("uuid=?", sid).Find(s).Error
+}
+
+func (sr *sensorRepository) GetByUUIDWithValues(sid string) (s *model.Sensor, err error) {
+	return s, sr.db.Table("sensors").Where("uuid=?", sid).Joins("join sensor_values on sensor_values.sensor_uuid=uuid").Order("index").Scan(&s).Error
 }
 
 func (sr *sensorRepository) GetValuesByUUID(sid string) (sv []model.SensorValue, err error) {

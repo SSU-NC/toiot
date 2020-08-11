@@ -4,7 +4,7 @@ import "github.com/rs/xid"
 
 type Sensor struct {
 	UUID      string        `json:"uuid" gorm:"primary_key;type:char(20);not null;"`
-	Name      string        `json:"name" gorm:"type:varchar(32);not null"`
+	Name      string        `json:"name" gorm:"type:varchar(32);unique;not null"`
 	ValueList []SensorValue `json:"value_list" gorm:"foreignkey:sensor_uuid"`
 }
 
