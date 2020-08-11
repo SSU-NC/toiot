@@ -1,6 +1,6 @@
 package kcTest
 
-import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
+import "github.com/seheee/PDK/logic-core/domain/model"
 
 var kafkaConsumer *group
 

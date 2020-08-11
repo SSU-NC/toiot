@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/domain/model"
 )
 
 type consumer struct {

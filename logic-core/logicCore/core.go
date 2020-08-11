@@ -1,9 +1,9 @@
 package logicCore
 
 import (
+	"fmt"
 	"errors"
-
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/domain/model"
 )
 
 type logicCore struct {
@@ -24,6 +24,7 @@ func NewLogicCore() *logicCore {
 	}
 }
 
+/*
 func (m *mux) CreateAndStartLogic(r *model.ChainRequest) {
 	listen := make(chan model.LogicData, 100)
 	lchs, ok := m.chTable[r.SID]
@@ -35,7 +36,28 @@ func (m *mux) CreateAndStartLogic(r *model.ChainRequest) {
 
 	chain := chainFactory(r.Rings)
 	for d := range listen {
-		chain.execute(&d)
+		chain.exec(&d)
+	}
+}
+*/
+
+func (m *mux) CreateAndStartLogic(r *model.RingRequest) {
+	listen := make(chan model.LogicData, 100)
+	lchs, ok := m.chTable[r.Sensor]
+	if !ok {
+		m.chTable[r.Sensor] = make(map[string]chan model.LogicData)
+		lchs, _ = m.chTable[r.Sensor]
+	}
+	lchs[r.LogicName] = listen
+	m.logicTable[r.LogicName] = r.Sensor
+	/*for r.Logic[0].Elem == "empty" {
+		r.Logic = r.Logic[1:]
+	}*/
+	chain := chainFactory(r)
+	fmt.Println(chain)
+	fmt.Println(chain.next)
+	for d := range listen {
+		chain.exec(&d)
 	}
 }
 

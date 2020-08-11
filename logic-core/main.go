@@ -8,14 +8,14 @@ import (
 	"runtime/trace"
 	"syscall"
 
-	"github.com/KumKeeHyun/PDK/logic-core/dataService/memory"
-	"github.com/KumKeeHyun/PDK/logic-core/elasticClient"
-	kafkaConsumer "github.com/KumKeeHyun/PDK/logic-core/kafkaConsumer/confluent"
-	"github.com/KumKeeHyun/PDK/logic-core/logicCore"
-	"github.com/KumKeeHyun/PDK/logic-core/rest"
-	_ "github.com/KumKeeHyun/PDK/logic-core/setting"
-	"github.com/KumKeeHyun/PDK/logic-core/usecase/logicCoreUC"
-	"github.com/KumKeeHyun/PDK/logic-core/usecase/metaDataUC"
+	"github.com/seheee/PDK/logic-core/dataService/memory"
+	"github.com/seheee/PDK/logic-core/elasticClient"
+	kafkaConsumer "github.com/seheee/PDK/logic-core/kafkaConsumer/confluent"
+	"github.com/seheee/PDK/logic-core/logicCore"
+	"github.com/seheee/PDK/logic-core/rest"
+	_ "github.com/seheee/PDK/logic-core/setting"
+	"github.com/seheee/PDK/logic-core/usecase/logicCoreUC"
+	"github.com/seheee/PDK/logic-core/usecase/metaDataUC"
 )
 
 func main() {

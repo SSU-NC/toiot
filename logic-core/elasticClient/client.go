@@ -2,16 +2,17 @@ package elasticClient
 
 import (
 	"fmt"
-	"strings"
-	"time"
+	"bytes"
+	"encoding/json"
 
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
+	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/setting"
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
 var elasticClient *client
 
+/*
 type client struct {
 	es *elasticsearch.Client
 	in chan model.Document
@@ -59,6 +60,51 @@ func (ec *client) run() {
 		}
 	}
 }
+*/
+
+type client struct {
+	es *elasticsearch.Client
+	in chan model.Document
+}
+
+func NewElasticClient() *client {
+	if elasticClient != nil {
+		return elasticClient
+	}
+
+	inBufSize := 100
+
+	config := elasticsearch.Config{
+		Addresses: setting.ElasticSetting.Addresses,
+	}
+	cli, err := elasticsearch.NewClient(config)
+	if err != nil {
+		return nil
+	}
+
+	elasticClient = &client{
+		es: cli,
+		in: make(chan model.Document, inBufSize),
+	}
+
+	go elasticClient.run()
+
+	return elasticClient
+}
+
+func (ec *client) run() {
+	for doc := range elasticClient.in {
+		fmt.Printf("Doc: %v\n", doc)
+		d, err := json.Marshal(doc.Doc)
+		if err != nil {
+			continue
+		}
+		ec.es.Index(
+			doc.Index,
+			bytes.NewReader(d),
+		)
+	}
+}
 
 func (ec *client) GetInput() chan<- model.Document {
 	if ec != nil {
@@ -67,6 +113,7 @@ func (ec *client) GetInput() chan<- model.Document {
 	return nil
 }
 
+/*
 func (ec *client) insertDoc(d *model.Document) {
 	ec.docBuf = append(ec.docBuf, d)
 	if len(ec.docBuf) >= (ec.bufSize - 10) {
@@ -83,7 +130,7 @@ func (ec *client) bulk() {
 		fmt.Println(bulkStr)
 		ec.docBuf = make([]*model.Document, 0, ec.bufSize)
 	}
-}
+}*/
 
 func docsToSlice(docs []*model.Document) []string {
 	res := make([]string, len(docs))

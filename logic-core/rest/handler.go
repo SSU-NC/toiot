@@ -3,8 +3,9 @@ package rest
 import (
 	"net/http"
 
-	"github.com/KumKeeHyun/PDK/logic-core/adapter"
-	"github.com/KumKeeHyun/PDK/logic-core/usecase"
+	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/adapter"
+	"github.com/seheee/PDK/logic-core/usecase"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,6 +13,7 @@ type Handler struct {
 	mduc usecase.MetaDataUsecase
 	lcuc usecase.LogicCoreUsecase
 }
+
 
 func NewHandler(mduc usecase.MetaDataUsecase, lcuc usecase.LogicCoreUsecase) *Handler {
 	return &Handler{
@@ -21,11 +23,45 @@ func NewHandler(mduc usecase.MetaDataUsecase, lcuc usecase.LogicCoreUsecase) *Ha
 }
 
 func (h *Handler) NewLogicChain(c *gin.Context) {
-	// TODO
+	var rr model.RingRequest
+	if err := c.ShouldBindJSON(&rr); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	if err := h.lcuc.SetLogicChain(&rr); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, rr)
+	}
 }
 
 func (h *Handler) DeleteLogicChain(c *gin.Context) {
-	// TODO
+	var rr model.RingRequest
+	if err := c.ShouldBindJSON(&rr); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	if err := h.lcuc.RemoveLogicChain(rr.LogicName); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, rr)
+	}
+}
+
+func (h *Handler) DeleteLogicChain(c *gin.Context) {
+	var rr model.RingRequest
+	if err := c.ShouldBindJSON(&rr); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	if err := h.lcuc.RemoveLogicChainBySID(rr.Sensor); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, rr)
+	}
 }
 
 func (h *Handler) NewNode(c *gin.Context) {

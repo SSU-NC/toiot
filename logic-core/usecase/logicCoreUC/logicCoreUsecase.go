@@ -1,9 +1,10 @@
 package logicCoreUC
 
 import (
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/repository"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/service"
+	"errors"
+	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/domain/repository"
+	"github.com/seheee/PDK/logic-core/domain/service"
 )
 
 type logicCoreUsecase struct {
@@ -45,12 +46,27 @@ func NewLogicCoreUsecase(mr repository.MetaRepo, ks service.KafkaConsumerGroup, 
 	return lcu
 }
 
-func (lu *logicCoreUsecase) SetLogicChain(r *model.ChainRequest) error {
+func (lu *logicCoreUsecase) SetLogicChain(r *model.RingRequest) error {
 	// TODO : check chain request validate
-	lu.ls.CreateAndStartLogic(r)
+	_, err := lu.mr.GetSensor(r.Sensor)
+	if err != nil {
+		return errors.New("sensor does not exist")
+	}
+	chs := lu.ls.GetLogicChans(r.Sensor)
+	_, ok := chs[r.LogicName]
+	if ok {
+		return errors.New("logic name already exists")
+	}
+	go lu.ls.CreateAndStartLogic(r)
 	return nil
 }
 
 func (lu *logicCoreUsecase) RemoveLogicChain(lname string) error {
 	return lu.ls.RemoveLogic(lname)
 }
+
+func (lu *logicCoreUsecase) RemoveLogicChainsBySID(sid string) error {
+	return lu.ls.RemoveLogicsBySID(sid)
+}
+
+

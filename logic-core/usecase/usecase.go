@@ -1,14 +1,15 @@
 package usecase
 
-import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
+import "github.com/seheee/PDK/logic-core/domain/model"
 
 // type ConsumerManageUsecase interface {
 // 	SetNumOfConsumers(int) (int, error)
 // }
 
 type LogicCoreUsecase interface {
-	SetLogicChain(r *model.ChainRequest) error
+	SetLogicChain(r *model.RingRequest) error
 	RemoveLogicChain(lname string) error
+	RemoveLogicChainsBySID(sid string) error
 }
 
 type MetaDataUsecase interface {

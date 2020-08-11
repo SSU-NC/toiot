@@ -1,6 +1,6 @@
 package adapter
 
-import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
+import "github.com/seheee/PDK/logic-core/domain/model"
 
 type Node struct {
 	UUID     string `json:"uuid"`

@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"github.com/KumKeeHyun/PDK/application/domain/model"
-	"github.com/KumKeeHyun/PDK/application/interface/presenter"
+	"github.com/seheee/PDK/application/domain/model"
+	"github.com/seheee/PDK/application/interface/presenter"
 )
 
 type NodeUsecase interface {

@@ -1,4 +1,4 @@
-module github.com/KumKeeHyun/PDK/logic-core
+module github.com/seheee/PDK/logic-core
 
 go 1.13
 

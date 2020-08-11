@@ -1,6 +1,6 @@
 package presenter
 
-import "github.com/KumKeeHyun/PDK/application/domain/model"
+import "github.com/seheee/PDK/application/domain/model"
 
 type Node struct {
 	UUID     string         `json:"uuid"`

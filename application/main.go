@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/KumKeeHyun/PDK/application/interface/db/orm"
-	"github.com/KumKeeHyun/PDK/application/interface/handler"
-	"github.com/KumKeeHyun/PDK/application/setting"
-	"github.com/KumKeeHyun/PDK/application/usecase/nodeUsecase"
-	"github.com/KumKeeHyun/PDK/application/usecase/sensorUsecase"
+	"github.com/seheee/PDK/application/interface/db/orm"
+	"github.com/seheee/PDK/application/interface/handler"
+	"github.com/seheee/PDK/application/setting"
+	"github.com/seheee/PDK/application/usecase/nodeUsecase"
+	"github.com/seheee/PDK/application/usecase/sensorUsecase"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 

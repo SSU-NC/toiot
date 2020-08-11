@@ -20,3 +20,12 @@ type ChainRequest struct {
 	Name  string      `json:"name"`
 	Rings []LogicRing `json:"rings"`
 }
+
+type RingRequest struct {
+	Sensor string `json:"sensor_uuid"`
+	LogicName string `json:"logic_name"`
+	Logic []struct {
+		Elem string `json:"elem"`
+		Arg map[string]interface{} `json:"arg"`
+	} `json:"logic"`
+}
