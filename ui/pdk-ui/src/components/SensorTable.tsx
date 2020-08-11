@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { sensorListElem, value_list_elem } from './ElementsInterface';
+import { sensorListElem, value_list_elem } from '../ElemInterface/ElementsInterface';
 import { SENSOR_URL } from '../defineUrl';
 
 

@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import { timeRange, logicElem } from '../LcElementsInterface';
+import { timeRange, logicElem } from '../../ElemInterface/LcElementsInterface';
 
 import '../LogicCore.css';
 
-interface TimeCardProps{ 
-    handleTimeCardChange: (time_range: logicElem) => void;
+interface ShowInputTimeCardProps{ 
+    handleShowInputTimeCardChange: (time_range: logicElem) => void;
 }
 
-interface TimeCardState{
+interface ShowInputTimeCardState{
     elem: "time",
     arg: { range: Array<timeRange> }
 }
 
-class TimeCard extends Component< TimeCardProps, TimeCardState > {
-    state: TimeCardState = {
+class ShowInputTimeCard extends Component< ShowInputTimeCardProps, ShowInputTimeCardState > {
+    state: ShowInputTimeCardState = {
         elem: "time",
         arg: {range: [{start: "00:10:10", end: "23:59:59"}]}
     }
@@ -22,7 +22,7 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
         await this.setState({
             arg: {range: [...this.state.arg.range, {start: "00:10:10",end: "23:59:59"}]}
         }); 
-        this.props.handleTimeCardChange(this.state);
+        this.props.handleShowInputTimeCardChange(this.state);
      };
      
      // handle click event of the Remove button
@@ -30,7 +30,7 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
         await this.setState({
             arg: {range: this.state.arg.range.filter((s: any, sidx:number) => idx !== sidx)}
         });
-        this.props.handleTimeCardChange(this.state);
+        this.props.handleShowInputTimeCardChange(this.state);
     };
   
     handleTimeChange = (idx: number) => async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +40,7 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
             return {...range, end: e.target.value};
         });
         await this.setState({ arg: {range: new_range} });
-        this.props.handleTimeCardChange(this.state);
+        this.props.handleShowInputTimeCardChange(this.state);
     };
 
     render() {
@@ -77,7 +77,7 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
                             </div>
                                 <button className="btn btn-sm" type="button" id="button-addon2" onClick={this.handleRemoveClick(idx)}>
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                                        <path fillRule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
                                     </svg>
                                 </button>
                             </div>
@@ -95,4 +95,4 @@ class TimeCard extends Component< TimeCardProps, TimeCardState > {
     }
 }
 
-export default TimeCard;
+export default ShowInputTimeCard;

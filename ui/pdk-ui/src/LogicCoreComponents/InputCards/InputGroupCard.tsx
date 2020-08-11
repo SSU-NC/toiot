@@ -1,33 +1,37 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { nodeListElem, groupOptionsElem } from '../ElementsInterface'
-import '../LogicCore.css';
-import { logicElem } from '../LcElementsInterface';
+import { ValueType } from "react-select";
 
-interface GroupCardProps{ 
+import { nodeListElem, groupOptionsElem } from '../../ElemInterface/ElementsInterface'
+import '../LogicCore.css';
+import { logicElem } from '../../ElemInterface/LcElementsInterface';
+
+interface InputGroupCardProps{ 
 	nodeList: Array<nodeListElem>;
-    handleGroupCardChange: (group: logicElem) => void;
+    handleInputGroupCardChange: (group: logicElem) => void;
 }
-interface GroupCardState {
+interface InputGroupCardState {
 	elem: "group",
 	arg: {
 		group: Array<string>;
 	}
 }
 
-class GroupCard extends Component< GroupCardProps, GroupCardState > {
-	state: GroupCardState ={
+class InputGroupCard extends Component< InputGroupCardProps, InputGroupCardState > {
+	state: InputGroupCardState ={
 		elem: "group",
 		arg: {
 			group: [],
 		}
 	}
-	handleGroupChange = async(e: any) => {
+	handleGroupChange = async(selectedOptions?: any) => {
+		var groups = (selectedOptions && selectedOptions.map((groupOption: groupOptionsElem) => {return groupOption.label}));
 		await this.setState({
-			arg:{group :[ e.target.value ]},
+			arg:{ group: groups},
 		})
-		this.props.handleGroupCardChange(this.state);
+		this.props.handleInputGroupCardChange(this.state);
 	}
+	
     render() {
         let groupOptions: Array<groupOptionsElem>;
 		groupOptions = this.props.nodeList.map((val: nodeListElem) => {
@@ -45,7 +49,7 @@ class GroupCard extends Component< GroupCardProps, GroupCardState > {
 							name="group" 
 							options={groupOptions} 
 							classNamePrefix="select"
-							onChange={this.handleGroupChange} 
+							onChange={(selectedOptions?: ValueType<groupOptionsElem>)=>(this.handleGroupChange(selectedOptions ))}
 						/>
 					</div>
 				</div>
@@ -54,4 +58,4 @@ class GroupCard extends Component< GroupCardProps, GroupCardState > {
     }
 }
 
-export default GroupCard;
+export default InputGroupCard;

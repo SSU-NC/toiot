@@ -7,19 +7,22 @@ import NodeManagement from './NodeManagement';
 import Kibana from './Kibana';
 import RegisterAlarm from './components/RegisterAlarm';
 import LogicCoreManagement from './LogicCoreManagement';
-import RegisterLogicCore from './components/RegisterLogicCore'
-import { sensorListElem, nodeListElem } from './components/ElementsInterface';
+import RegisterLogic from './LogicCoreComponents/RegisterLogic'
+import { sensorListElem, nodeListElem } from './ElemInterface/ElementsInterface';
 import { SENSOR_URL, NODE_URL } from './defineUrl';
+import { logicCoreElem } from './ElemInterface/LcElementsInterface';
 
 interface appState {
 	sensorList: Array<sensorListElem>;
 	nodeList: Array<nodeListElem>;
+	logicCore: Array<logicCoreElem>
 }
 
 class App extends Component<{}, appState> {
 	state: appState = {
 		sensorList: [],
 		nodeList: [],
+		logicCore:[],
 		// rasp: []
 	};
 
@@ -86,13 +89,14 @@ class App extends Component<{}, appState> {
 									<LogicCoreManagement 
 										sensorList={this.state.sensorList} 
 										nodeList={this.state.nodeList}
+										logicCore={this.state.logicCore}
 									/>
 								)}  
 							/>
 							<Route path="/kibana" component={Kibana} />
 							<Route path="/registerLogic" 
 								render={() => (
-									<RegisterLogicCore sensorList={this.state.sensorList} nodeList={this.state.nodeList}/>
+									<RegisterLogic sensorList={this.state.sensorList} nodeList={this.state.nodeList}/>
 								)}>
 							</Route>
 						</div>

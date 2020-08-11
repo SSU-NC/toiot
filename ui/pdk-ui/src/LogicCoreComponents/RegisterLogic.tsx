@@ -1,32 +1,30 @@
 import React, { Component } from 'react';
-import { sensorListElem, sensorOptionsElem, nodeListElem } from './ElementsInterface';
-import { logicElem, LogicCorePost } from './LcElementsInterface'
+import { sensorListElem, sensorOptionsElem, nodeListElem } from '../ElemInterface/ElementsInterface';
+import { logicElem } from '../ElemInterface/LcElementsInterface'
 import './LogicCore.css';
-import SensorCard from './LogicCoreComponents/SensorCard';
-import ValueCard from './LogicCoreComponents/ValueCard';
-import GroupCard from './LogicCoreComponents/GroupCard';
-import TimeCard from './LogicCoreComponents/TimeCard';
-import ActionCard from './LogicCoreComponents/ActionCard';
-import { } from '../defineUrl';
+import InputSensorCard from './InputCards/InputSensorCard';
+import InputValueCard from './InputCards/InputValueCard';
+import InputGroupCard from './InputCards/InputGroupCard';
+import InputTimeCard from './InputCards/InputTimeCard';
+import InputActionCard from './InputCards/InputActionCard';
+import { LOGIC_URL } from '../defineUrl';
 
-interface LogicCoreProps{ 
+interface RegisterLogicProps{ 
 	sensorList: Array<sensorListElem>;
 	nodeList: Array<nodeListElem>;
 }
 
-interface LogicCoreState{
+interface RegisterLogicState{
 	logic_name: string;
 	sensor_info: sensorOptionsElem;
 	selected_value: Array<logicElem>;
 	selected_time: logicElem;
 	selected_action: Array<logicElem>;
 	selected_group: logicElem;
-
-	submit_msg: LogicCorePost;
 }
 
-class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
-	state: LogicCoreState = {
+class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
+	state: RegisterLogicState = {
 		logic_name: '',
 		sensor_info: {
 			uuid: '',
@@ -38,12 +36,6 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 		selected_group: {elem:"empty", arg: {group: []}},
 		selected_time: {elem:"empty", arg:{range: []}},
 		selected_action: [],
-
-		submit_msg: {
-			sensor_uuid: '',
-			logic_name: '',
-			logic: []
-		},
 	}
 	handleLogicNameChange  = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
@@ -109,30 +101,30 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 	};
 
     handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-		//e.preventDefault();
+		e.preventDefault();
 		let logic_array : Array< logicElem>= [ 
 			this.state.selected_group, 
 			this.state.selected_time,
 		];
 		logic_array = logic_array.concat(this.state.selected_action, this.state.selected_value);
+
+		// Filter elem: 'empty' field
+		logic_array = logic_array.filter(function(logic) {
+			return logic.elem !== 'empty';
+		})
+
+		var request_msg = {sensor_uuid: this.state.sensor_info.uuid, logic_name: this.state.logic_name, logic: logic_array};
+        var url = LOGIC_URL;
 		
-        this.setState({
-			//selected_group :{ logic: "group", group : selectedGroups.map((selectedGroup: groupOptionsElem)=>(selectedGroup.value)),},
-			submit_msg:  {sensor_uuid: this.state.sensor_info.uuid, logic_name: this.state.logic_name , logic: logic_array},
-		});
-
-        var url = ''; // ??
-        var data : LogicCorePost = this.state.submit_msg;
-
         fetch(url, {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: JSON.stringify(request_msg),
         headers:{
             'Content-Type': 'application/json'
         }
         }).then(res => res.json())
         .then(response => console.log('Success:', JSON.stringify(response)))
-        .catch(error => console.error('Error:', error));
+		.catch(error => console.error('Error:', error));
     }
 
 	render() {
@@ -156,14 +148,14 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 					</div>
 					<br/><br/>
 					<h5>Build Logic</h5>
-					<SensorCard sensorList={this.props.sensorList} handleSensorCardChange={this.handleSensorCardChange}/>
-					<GroupCard nodeList={this.props.nodeList} handleGroupCardChange={this.handleGroupCardChange}/>
-					<TimeCard handleTimeCardChange={this.handleTimeCardChange}/>
+					<InputSensorCard sensorList={this.props.sensorList} handleInputSensorCardChange={this.handleSensorCardChange}/>
+					<InputGroupCard nodeList={this.props.nodeList} handleInputGroupCardChange={this.handleGroupCardChange}/>
+					<InputTimeCard handleInputTimeCardChange={this.handleTimeCardChange}/>
 					{this.state.selected_value.map((d: any , idx: number) => (
-						<ValueCard valueList={this.state.sensor_info.value_list} handleRemoveValueCardClick={this.handleRemoveValueCardClick(idx)} handleValueCardChange={this.handleValueCardChange(idx)}/>
+						<InputValueCard valueList={this.state.sensor_info.value_list} handleRemoveInputValueCardClick={this.handleRemoveValueCardClick(idx)} handleInputValueCardChange={this.handleValueCardChange(idx)} index={idx}/>
 					))}
 					{this.state.selected_action.map((d: any , idx: number) => (
-					<ActionCard handleActionCardChange={this.handleActionCardChange(idx)} handleRemoveActionCardClick={this.handleRemoveActionCardClick(idx)}/>
+					<InputActionCard handleInputActionCardChange={this.handleActionCardChange(idx)} handleRemoveInputActionCardClick={this.handleRemoveActionCardClick(idx)} index={idx}/>
 					))}
 					<button type="button" className="btn margin-right" style={{background:'pink'}} onClick={this.handleAddValueCardClick}>Add value</button>
 					<button type="button" className="btn" style={{background:'pink'}} onClick={this.handleAddActionCardClick}>Add action</button>
@@ -184,4 +176,4 @@ class LogicCore extends Component<LogicCoreProps, LogicCoreState> {
 	}
 }
 
-export default LogicCore;
+export default RegisterLogic;

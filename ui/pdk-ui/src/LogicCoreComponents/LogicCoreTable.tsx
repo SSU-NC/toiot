@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
-import { nodeListElem } from '../ElemInterface/ElementsInterface';
-import { NODE_URL } from '../defineUrl';
+import { logicCore, logicCoreElem } from '../ElemInterface/LcElementsInterface';
+import ShowLogic from './ShowLogic';
+import { LOGIC_URL } from '../defineUrl';
 
-interface NodeTableProps {
-	nodeList: Array<nodeListElem>;
+interface logicTableProps {
+	logicCore: Array<logicCoreElem>;
 }
 
-class NodeTable extends Component<NodeTableProps> {
-	handleRemoveClick = (node_uuid: string) => () => {
-		var url = NODE_URL;
+class logicTable extends Component<logicTableProps> {
+
+    handleShowClick = (logic: logicCore) => () => {
+
+    }
+
+	handleRemoveClick = (logic_name: string) => () => {
+		var url = LOGIC_URL;//logic_URL;
 
 		fetch(url, {
 			method: 'DELETE',
-			body: JSON.stringify({ uuid: node_uuid }),
+			body: JSON.stringify({ name: logic_name }),
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		})
 			.then((res) => res.json())
 			.catch((error) => console.error('Error:', error));
-	};
-
+    };
+    
 	render() {
 		return (
 			<>
@@ -29,24 +35,24 @@ class NodeTable extends Component<NodeTableProps> {
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">name</th>
-							<th scope="col">uuid</th>
-							<th scope="col">sensors</th>
+							<th scope="col">logic info</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.nodeList.map((node: nodeListElem, idx: number) => (
+						{this.props.logicCore.map((logic: logicCoreElem, idx: number) => (
 							<tr>
 								<th scope="row">{idx}</th>
-								<td>{node.name}</td>
-								<td>{node.uuid}</td>
-								<td>{node.sensors.map((sensor: any) => sensor.name + ', ')}</td>
+								<td>{logic.logic_name}</td>
+								<td>
+                                    <ShowLogic logic={logic}/>
+								</td>
 								<td>
 									<button
 										className="btn btn-default btn-sm"
 										type="button"
 										id="button-delete"
-										onClick={this.handleRemoveClick(node.uuid)}
+										onClick={this.handleRemoveClick(logic.logic_name)}
 									>
 										<svg
 											width="1em"
@@ -72,4 +78,4 @@ class NodeTable extends Component<NodeTableProps> {
 	}
 }
 
-export default NodeTable;
+export default logicTable;

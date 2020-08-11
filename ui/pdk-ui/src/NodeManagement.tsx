@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RegisterNode from "./components/RegisterNode";
 import NodeTable from "./components/NodeTable";
-import { sensorListElem, nodeListElem } from './components/ElementsInterface';
+import { sensorListElem, nodeListElem } from './ElemInterface/ElementsInterface';
 
 interface SensorManagementProps {
     sensorList: Array<sensorListElem>;

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import {sensorOptionsElem,sensorListElem} from '../ElementsInterface'
+import {sensorOptionsElem,sensorListElem} from '../../ElemInterface/ElementsInterface'
 import '../LogicCore.css';
 
-interface SensorCardProps{ 
+interface InputSensorCardProps{ 
     sensorList: Array<sensorListElem>;
-	handleSensorCardChange: (sensor: any) => void;
+	handleInputSensorCardChange: (sensor: any) => void;
 }
 
-class SensorCard extends Component< SensorCardProps, {} > {
+class InputSensorCard extends Component< InputSensorCardProps, {} > {
     render() {
         let sensorOptions: Array<sensorOptionsElem>;
 		sensorOptions = this.props.sensorList.map((val: sensorListElem) => {
@@ -25,7 +25,7 @@ class SensorCard extends Component< SensorCardProps, {} > {
 									name="sensor" 
 									options={sensorOptions} 
 									classNamePrefix="select" 
-									onChange={this.props.handleSensorCardChange}
+									onChange={this.props.handleInputSensorCardChange}
 								/>
 						</div>
 					</div>
@@ -34,4 +34,4 @@ class SensorCard extends Component< SensorCardProps, {} > {
     }
 }
 
-export default SensorCard;
+export default InputSensorCard;

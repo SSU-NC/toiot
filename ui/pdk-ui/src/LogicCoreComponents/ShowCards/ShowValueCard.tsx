@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import '../LogicCore.css';
-import { valueOptionsElem, value_list_elem } from '../ElementsInterface'
-import { numRange, logicElem } from '../LcElementsInterface';
+import { valueOptionsElem, value_list_elem } from '../../ElemInterface/ElementsInterface'
+import { numRange, logicElem } from '../../ElemInterface/LcElementsInterface';
 
-interface ValueCardProps{ 
+interface ShowInputValueCardProps{ 
 	valueList: Array<value_list_elem>;
-	handleValueCardChange: (value: logicElem) => void;
-	handleRemoveValueCardClick: () => void;
+	handleShowInputValueCardChange: (value: logicElem) => void;
+	handleRemoveShowInputValueCardClick: () => void;
+	index: number;
 }
 
-interface ValueCardState {
+interface ShowInputValueCardState {
 	elem: string;
 	arg: { 
 		value: string;
 		range: Array<numRange>;
 	}
 }
-class ValueCard extends Component< ValueCardProps, ValueCardState > {
-    state: ValueCardState = {
+class ShowInputValueCard extends Component< ShowInputValueCardProps, ShowInputValueCardState > {
+    state: ShowInputValueCardState = {
 		elem: 'value',
 		arg: { 
 			value: '',
@@ -30,7 +31,7 @@ class ValueCard extends Component< ValueCardProps, ValueCardState > {
         await this.setState({
             arg:{value: this.state.arg.value, range: [...this.state.arg.range, {min: 0, max: 255}]},
         }); 
-		this.props.handleValueCardChange(this.state);
+		this.props.handleShowInputValueCardChange(this.state);
      };
      
      // handle click event of the Remove button
@@ -38,7 +39,7 @@ class ValueCard extends Component< ValueCardProps, ValueCardState > {
         await this.setState({
             arg: {value: this.state.arg.value, range: this.state.arg.range.filter((s: any, sidx:number) => idx !== sidx) },
 		});
-		this.props.handleValueCardChange(this.state);
+		this.props.handleShowInputValueCardChange(this.state);
     };
   
     handleNumChange = (idx: number) => async (e: any) => {
@@ -48,19 +49,13 @@ class ValueCard extends Component< ValueCardProps, ValueCardState > {
             return { ...rangeElem, max: e.target.value};
 		});
 		await this.setState({ arg:{value: this.state.arg.value, range: new_range_elem} });
-		this.props.handleValueCardChange(this.state);
+		this.props.handleShowInputValueCardChange(this.state);
 	};
 	handleValueChange = async(e: any) => {
 		await this.setState({
 			arg: {value: e.value, range: this.state.arg.range},
 		})
-		this.props.handleValueCardChange(this.state);
-	}
-	handleHoverIn=()=>{
-		
-	}
-	handleHoverOut=()=>{
-
+		this.props.handleShowInputValueCardChange(this.state);
 	}
     render() {
 		let valueOptions: Array<valueOptionsElem>;
@@ -70,9 +65,9 @@ class ValueCard extends Component< ValueCardProps, ValueCardState > {
         return(
             <div className="card form-group">
 				<div className="card-body row">
-					<div className="col-2 right-divider" onMouseEnter={this.handleHoverIn} onMouseLeave={this.handleHoverOut}>
-						<span style={{fontSize:'18pt', fontWeight:500}} >value</span>
-						<button className="btn btn-sm float-right" type="button" id="button-addon2" onClick={this.props.handleRemoveValueCardClick}>
+					<div className="col-2 right-divider">
+						<span style={{fontSize:'18pt', fontWeight:500}} >value #{this.props.index}</span>
+						<button className="btn btn-sm float-right" type="button" id="button-addon2" onClick={this.props.handleRemoveShowInputValueCardClick}>
 							<svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 								<path 
 									fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
@@ -128,4 +123,4 @@ class ValueCard extends Component< ValueCardProps, ValueCardState > {
     }
 }
 
-export default ValueCard;
+export default ShowInputValueCard;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { sensorListElem, sensorOptionsElem, value_list_elem } from './ElementsInterface';
+import { sensorListElem, sensorOptionsElem, value_list_elem } from '../ElemInterface/ElementsInterface';
 
 interface RegisterAlarmState {
 	alarm_name: string;

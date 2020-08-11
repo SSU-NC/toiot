@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { logicElem } from '../LcElementsInterface';
+import { logicElem } from '../../ElemInterface/LcElementsInterface';
 import '../LogicCore.css';
 
-interface ActionCardProps { 
-	handleActionCardChange: (value: logicElem) => void;
-	handleRemoveActionCardClick: () => void;
+interface InputActionCardProps { 
+	handleInputActionCardChange: (value: logicElem) => void;
+	handleRemoveInputActionCardClick: () => void;
+	index:number;
 }
 
-interface ActionCardState { 
+interface InputActionCardState { 
 	elem: string;
 	arg : {
 		text: string;
@@ -19,8 +20,8 @@ interface actionOptionsElem {
 	value: string;
 }
 
-class ActionCard extends Component< ActionCardProps, ActionCardState > {
-	state: ActionCardState = {
+class InputActionCard extends Component< InputActionCardProps, InputActionCardState > {
+	state: InputActionCardState = {
 		elem: '',
 		arg: { text: ''}
 	}
@@ -28,14 +29,14 @@ class ActionCard extends Component< ActionCardProps, ActionCardState > {
 		await this.setState({
 			elem: e.value,
 		})
-		this.props.handleActionCardChange(this.state);
+		this.props.handleInputActionCardChange(this.state);
 	}
 
 	handleTextChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
 		await this.setState({
 			arg: {text: e.target.value},
 		})
-		this.props.handleActionCardChange(this.state);
+		this.props.handleInputActionCardChange(this.state);
 	}
 
     render() {
@@ -46,8 +47,8 @@ class ActionCard extends Component< ActionCardProps, ActionCardState > {
             <div className="card form-group">
 				<div className="card-body row">
 					<div className=" col-2 right-divider">
-					<span style={{fontSize:'18pt', fontWeight:500}} >action</span>
-						<button className="btn btn-sm float-right" type="button" id="button-addon2" onClick={this.props.handleRemoveActionCardClick}>
+						<span style={{fontSize:'18pt', fontWeight:500}} >action #{this.props.index}</span>
+						<button className="btn btn-sm float-right" type="button" id="button-addon2" onClick={this.props.handleRemoveInputActionCardClick}>
 							<svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 								<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
 							</svg>
@@ -106,4 +107,4 @@ class ActionCard extends Component< ActionCardProps, ActionCardState > {
     }
 }
 
-export default ActionCard;
+export default InputActionCard;

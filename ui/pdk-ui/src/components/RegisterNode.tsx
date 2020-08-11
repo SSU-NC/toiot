@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { sensorListElem, sensorOptionsElem } from './ElementsInterface';
+import { sensorListElem, sensorOptionsElem } from '../ElemInterface/ElementsInterface';
 import { NODE_URL } from '../defineUrl';
 
 // react-select : https://github.com/JedWatson/react-select

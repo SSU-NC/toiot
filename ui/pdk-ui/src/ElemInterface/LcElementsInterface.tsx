@@ -30,8 +30,12 @@ export interface lcActionArg {
     text: string;
 }
 
-export interface LogicCorePost {
+export interface logicCoreElem {
 	sensor_uuid: string; 
 	logic_name: string,
 	logic: Array<logicElem>;
+}
+
+export interface logicCore {
+	logic_core: Array<logicCoreElem>;
 }
