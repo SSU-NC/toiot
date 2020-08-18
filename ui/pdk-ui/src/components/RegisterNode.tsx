@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { sensorListElem, sensorOptionsElem } from '../ElemInterface/ElementsInterface';
+import { sensorListElem, sensorOptionsElem, sinkListElem, locationElem, sinkOptionsElem } from '../ElemInterface/ElementsInterface';
 import { NODE_URL } from '../defineUrl';
-
 // react-select : https://github.com/JedWatson/react-select
 
 interface RegisterNodeState {
 	node_name: string;
-	location: string;
+	group: string;
+	location: locationElem;
+	sink_id: number;
 	sensors: Array<sensorOptionsElem>;
 }
 
 interface RegisterNodeProps {
 	sensorList: Array<sensorListElem>;
+	sinkList: Array<sinkListElem>;
 }
 
 class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 	state: RegisterNodeState = {
 		node_name: '',
-		location: '',
+		group: '',
+		location: {
+			lon: 0,
+			lat: 0
+		},
+		sink_id: 0,
 		sensors: [],
 	};
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,15 +33,31 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			node_name: e.target.value,
 		});
 	};
-	handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	handleGroupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({
-			location: e.target.value,
+			group: e.target.value,
 		});
+	};
+	handleLatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({
+			location: { ...this.state.location, lat: parseFloat(e.target.value) },
+		})
+	};
+	handleLonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({
+			location: { ...this.state.location, lon: parseFloat(e.target.value) },
+		})
 	};
 	handleSensorsChange = (sensors: any) => {
 		//sensors: Array<sensorOptionsElem> ?? ?? ??..
 		this.setState({
 			sensors,
+		});
+	};
+	handleSinkChange = (sink: any) => {
+		//sensors: Array<sensorOptionsElem> ?? ?? ??..
+		this.setState({
+			sink_id: sink.id,
 		});
 	};
 	handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -49,7 +72,11 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		console.log(
 			JSON.stringify({
 				name: data.node_name,
-				location: data.location,
+				group: data.group,
+				location: {
+					lat: data.location.lat,
+					lon: data.location.lon
+				},
 				sensors: sensor_uuid,
 			})
 		);
@@ -58,7 +85,12 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			method: 'POST', // or 'PUT'
 			body: JSON.stringify({
 				name: data.node_name,
-				location: data.location,
+				group: data.group,
+				location: {
+					lat: data.location.lat,
+					lon: data.location.lon
+				},
+				sink_id: data.sink_id,
 				sensors: sensor_uuid,
 			}),
 			headers: {
@@ -75,7 +107,10 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		sensorOptions = this.props.sensorList.map((val: sensorListElem) => {
 			return { label: val.name, value: val.name, uuid: val.uuid, value_list:val.value_list };
 		});
-
+		let sinkOptions: Array<sinkOptionsElem>;
+		sinkOptions = this.props.sinkList.map((val: sinkListElem) => {
+			return { label: val.name, value: val.name, id: val.id };
+		});
 		return (
 			<>
 				<button
@@ -122,15 +157,35 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 										/>
 									</div>
 									<div className="form-group">
-										<label>Location</label>
+										<label>group</label>
 										<input
 											type="text"
 											className="form-control"
-											name="location"
-											placeholder="location"
-											value={this.state.location}
-											onChange={this.handleLocationChange}
+											name="group"
+											placeholder="group"
+											value={this.state.group}
+											onChange={this.handleGroupChange}
 										/>
+									</div>
+									<div className="form-group">
+										<label>location - latitude</label>
+										<input
+											type="number"
+											className="form-control col-3 margin-right"
+											name="lat"
+											value={this.state.location.lat}
+											onChange={this.handleLatChange}
+										/>
+									</div>
+										<div className="form-group">
+										<label>location - longitude</label>
+										<input
+											type="number"
+											className="form-control col-3"
+											name="lon"
+											value={this.state.location.lon}
+											onChange={this.handleLonChange}
+										/>						
 									</div>
 									<div className="form-group">
 										<label>Select sensors</label>
@@ -142,6 +197,16 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 											classNamePrefix="select"
 											value={this.state.sensors}
 											onChange={this.handleSensorsChange}
+										/>
+									</div>
+									<div className="form-group">
+										<label>Select sink</label>
+										<Select
+											className="basic-select"
+											name="sink"
+											options={sinkOptions}
+											classNamePrefix="select"
+											onChange={this.handleSinkChange}
 										/>
 									</div>
 									<div className="modal-footer">

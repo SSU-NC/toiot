@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import RegisterNode from "./components/RegisterNode";
 import NodeTable from "./components/NodeTable";
-import { sensorListElem, nodeListElem } from './ElemInterface/ElementsInterface';
+import { sensorListElem, nodeListElem, sinkListElem } from './ElemInterface/ElementsInterface';
 
-interface SensorManagementProps {
+interface NodeManagementProps {
     sensorList: Array<sensorListElem>;
+    sinkList: Array<sinkListElem>
     nodeList: Array<nodeListElem>;
 }
 
-const SensorManagement: React.FunctionComponent<SensorManagementProps> = props => {
+const NodeManagement: React.FunctionComponent<NodeManagementProps> = props => {
     return(
         <>
         <div style={{float:'right'}}>
-            <RegisterNode sensorList={props.sensorList}></RegisterNode>
+            <RegisterNode sensorList={props.sensorList} sinkList={props.sinkList}></RegisterNode>
         </div>
         <div>
             <h3>Node</h3>
@@ -22,7 +23,7 @@ const SensorManagement: React.FunctionComponent<SensorManagementProps> = props =
     );
 }
 /*
-class SensorManagement extends Component {
+class NodeManagement extends Component {
     render(){
         return(
             <>
@@ -38,4 +39,4 @@ class SensorManagement extends Component {
     }
 }*/
 
-export default SensorManagement;
+export default NodeManagement;

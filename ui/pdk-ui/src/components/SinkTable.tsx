@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { nodeListElem } from '../ElemInterface/ElementsInterface';
-import { NODE_URL } from '../defineUrl';
+import { sinkListElem } from '../ElemInterface/ElementsInterface';
+import { SINK_URL } from '../defineUrl';
 
-interface NodeTableProps {
-	nodeList: Array<nodeListElem>;
+//import DeleteRequest from './DeleteRequest'
+
+interface SinkTableProps {
+	sinkList: Array<sinkListElem>;
 }
 
-class NodeTable extends Component<NodeTableProps> {
-	handleRemoveClick = (node_uuid: string) => () => {
-		var url = NODE_URL;
+class SinkTable extends Component<SinkTableProps> {
+	handleRemoveClick = (sink_id: number) => () => {
+		var url = SINK_URL + '/' + sink_id;
 
 		fetch(url, {
 			method: 'DELETE',
-			body: JSON.stringify({ uuid: node_uuid }),
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -29,26 +30,26 @@ class NodeTable extends Component<NodeTableProps> {
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">name</th>
-							<th scope="col">uuid</th>
-							<th scope="col">sensors</th>
-							<th scope="col">group</th>
+							<th scope="col">id</th>
+							<th scope="col">location</th>
+							<th scope="col">ip</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.nodeList.map((node: nodeListElem, idx: number) => (
+						{this.props.sinkList.map((sink: sinkListElem, idx: number) => (
 							<tr>
 								<th scope="row">{idx}</th>
-								<td>{node.name}</td>
-								<td>{node.uuid}</td>
-								<td>{node.sensors.map((sensor: any) => sensor.name + ', ')}</td>
-								<td>{node.group}</td>
+								<td>{sink.name}</td>
+								<td>{sink.id}</td>
+                                <td>{sink.location}</td>
+                                <td>{sink.ip}</td>
 								<td>
 									<button
 										className="btn btn-default btn-sm"
 										type="button"
 										id="button-delete"
-										onClick={this.handleRemoveClick(node.uuid)}
+										onClick={this.handleRemoveClick(sink.id)}
 									>
 										<svg
 											width="1em"
@@ -74,4 +75,4 @@ class NodeTable extends Component<NodeTableProps> {
 	}
 }
 
-export default NodeTable;
+export default SinkTable;
