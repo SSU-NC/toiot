@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, Component } from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Nav from './Navigation';
 import SensorManagement from './SensorManagement';
@@ -7,25 +7,51 @@ import Dashboard from './KibanaDashboard';
 import Visualize from './KibanaVisualize';
 import Main from './Main'; 
 import RegisterAlarm from './components/RegisterAlarm';
-
-import { sensorListElem, nodeListElem } from './components/ElementsInterface';
+import LogicCoreManagement from './LogicCoreManagement';
+import RegisterLogic from './LogicCoreComponents/RegisterLogic'
+import { sensorListElem, nodeListElem } from './ElemInterface/ElementsInterface';
 import { SENSOR_URL, NODE_URL } from './defineUrl';
+import { logicCoreElem } from './ElemInterface/LcElementsInterface';
+
+// 임시 logic core
+var logicTable_ex: Array<logicCoreElem> = 
+([{sensor_uuid:"bsoiu4r11806ceiloq5g",
+logic_name:"logic 1",
+logic:[
+	{arg:{group:["soongsil"]},elem:"group"},
+	{arg:{range:[{end:"13:00",start:"01:00"},{end:"23:59:59",start:"03:12:12"}]},elem:"time"},
+	{arg:{text:"ringring"},elem:"alarm"},
+	{arg:{range:[{max:10,min:0},{max:255,min:30}],value:"pm10"},elem:"value"},
+	{arg:{range:[{max:200,min:100}],value:"pm2.5"},elem:"value"}
+]},
+{"sensor_uuid":"bsoittb11806ceiloq50",
+"logic_name":"logic 2",
+"logic":[
+	{"arg":{"group":["songpa","soongsil"]},"elem":"group"},
+	{"arg":{"range":[{"end":"23:59:59","start":"00:10:10"},{"end":"12:00","start":"06:12:12"}]},"elem":"time"},
+	{"arg":{"text":"toiot@example.com"},"elem":"email"},
+	{"arg":{"range":[{"max":255,"min":100}],"value":"celsius"},"elem":"value"}
+]}
+]);
 
 interface appState {
 	sensorList: Array<sensorListElem>;
 	nodeList: Array<nodeListElem>;
+	logicCore: Array<logicCoreElem>
 }
 
 class App extends Component<{}, appState> {
 	state: appState = {
 		sensorList: [],
 		nodeList: [],
+		logicCore:[],
 		// rasp: []
 	};
 
 	componentDidMount() {
 		this.getsensorList();
 		this.getnodeList();
+		this.getlogicCore();
 	}
 
 	getsensorList() {
@@ -34,7 +60,6 @@ class App extends Component<{}, appState> {
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) => {
-				console.log(typeof data);
 				this.setState({ sensorList: data });
 			})
 			// .then(response => console.log('Success:', JSON.stringify(response)))
@@ -51,6 +76,19 @@ class App extends Component<{}, appState> {
 			.catch((error) => console.error('Error:', error));
 	}
 
+	getlogicCore() {
+		this.setState({logicCore: logicTable_ex});
+		/*
+		var url = LOGICCORE_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ logicCore: data }))
+			// .then(response => console.log('Success:', JSON.stringify(response)))
+			.catch((error) => console.error('Error:', error));
+		*/
+	}
+
 	render() {
 		return (
 			<div>
@@ -59,15 +97,6 @@ class App extends Component<{}, appState> {
 						<Nav></Nav>
 						<div className="container pt-4 mt-4">
 							<Route exact path="/" render={Main} />
-							{/* <Route
-								path="/management"
-								render={() => (
-									<SensorManagement
-										sensorList={this.state.sensorList}
-										nodeList={this.state.nodeList}
-									/>
-								)}
-							/> */}
 							<Route
 								path="/sensor"
 								render={() => (
@@ -89,6 +118,23 @@ class App extends Component<{}, appState> {
 									<RegisterAlarm sensorList={this.state.sensorList} />
 								)}
 							/>
+							<Route 
+							path="/logicCore" 
+							render={() => (
+									<LogicCoreManagement 
+										sensorList={this.state.sensorList} 
+										nodeList={this.state.nodeList}
+										logicCore={this.state.logicCore}
+									/>
+								)}  
+							/>
+							<Route path="/kibana" component={Kibana} />
+							<Route path="/registerLogic" 
+								render={() => (
+									<RegisterLogic sensorList={this.state.sensorList} nodeList={this.state.nodeList}/>
+								)}>
+							</Route>
+
 						    <Route path= "/visualize" component={Visualize}/>
 							<Route path= "/dashboard" component={Dashboard}/> 
 						</div>
