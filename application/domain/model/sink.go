@@ -11,7 +11,7 @@ type Sink struct {
 	Name     string `json:"name" gorm:"type:varchar(32);unique"`
 	Location string `json:"location" gorm:"type:varchar(64)"`
 	IP       string `json:"ip" gorm:"type:char(16);not null"`
-	Nodes    []Node `json:"nodes" gorm:"foreignkey:sink_id"`
+	Nodes    []Node `json:"nodes" gorm:"foreignkey:SinkID"`
 }
 
 func (s *Sink) CheckIP() error {

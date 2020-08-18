@@ -9,7 +9,7 @@ type Node struct {
 	LocLat  float64  `json:"lat"`
 	LocLon  float64  `json:"lon"`
 	SinkID  uint     `json:"sink_id" gorm:"not null"`
-	Sensors []Sensor `json:"sensors" gorm:"-"`
+	Sensors []Sensor `json:"sensors" gorm:"foreignkey:UUID"`
 }
 
 func NewNode(name, grp string, lat, lon float64, sinkID uint) Node {

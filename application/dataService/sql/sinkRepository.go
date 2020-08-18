@@ -24,7 +24,8 @@ func (sir *sinkRepository) GetAllWithNodes() (sis []model.Sink, err error) {
 }
 
 func (sir *sinkRepository) GetByID(id uint) (si *model.Sink, err error) {
-	return si, sir.db.Where("id=?", id).Find(&si).Error
+	si = new(model.Sink)
+	return si, sir.db.Where("id=?", id).First(si).Error
 }
 
 func (sir *sinkRepository) GetByIDWithNodes(id uint) (si *model.Sink, err error) {
