@@ -9,10 +9,6 @@ interface logicTableProps {
 
 class logicTable extends Component<logicTableProps> {
 
-    handleShowClick = (logic: logicCore) => () => {
-
-    }
-
 	handleRemoveClick = (logic_name: string) => () => {
 		var url = LOGIC_URL;//logic_URL;
 
@@ -45,7 +41,7 @@ class logicTable extends Component<logicTableProps> {
 								<th scope="row">{idx}</th>
 								<td>{logic.logic_name}</td>
 								<td>
-                                    <ShowLogic logic={logic}/>
+                                    <ShowLogic index={idx} logic={logic}/>
 								</td>
 								<td>
 									<button

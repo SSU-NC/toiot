@@ -13,7 +13,7 @@ export interface logicElem {
 	arg: lcValueArg | lcTimeArg | lcGroupArg | lcActionArg;
 }
 
-interface lcValueArg{
+export interface lcValueArg{
 	value: string;
     range: Array<numRange>;
 }
@@ -32,6 +32,7 @@ export interface lcActionArg {
 
 export interface logicCoreElem {
 	sensor_uuid: string; 
+	id?: number; // request: undefined, receive: number
 	logic_name: string,
 	logic: Array<logicElem>;
 }

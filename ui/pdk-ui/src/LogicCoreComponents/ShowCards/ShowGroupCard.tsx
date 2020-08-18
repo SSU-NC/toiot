@@ -1,61 +1,33 @@
 import React, { Component } from 'react';
-import Select from 'react-select';
-import { ValueType } from "react-select";
-
-import { nodeListElem, groupOptionsElem } from '../../ElemInterface/ElementsInterface'
 import '../LogicCore.css';
-import { logicElem } from '../../ElemInterface/LcElementsInterface';
+import {  logicElem,lcGroupArg } from '../../ElemInterface/LcElementsInterface';
 
-interface ShowInputGroupCardProps{ 
-	nodeList: Array<nodeListElem>;
-    handleShowInputGroupCardChange: (group: logicElem) => void;
-}
-interface ShowInputGroupCardState {
-	elem: "group",
-	arg: {
-		group: Array<string>;
-	}
+interface ShowGroupCardProps{
+	logic_elem: logicElem;
 }
 
-class ShowInputGroupCard extends Component< ShowInputGroupCardProps, ShowInputGroupCardState > {
-	state: ShowInputGroupCardState ={
-		elem: "group",
-		arg: {
-			group: [],
-		}
-	}
-	handleGroupChange = async(selectedOptions?: any) => {
-		var groups = (selectedOptions && selectedOptions.map((groupOption: groupOptionsElem) => {return groupOption.label}));
-		await this.setState({
-			arg:{ group: groups},
-		})
-		this.props.handleShowInputGroupCardChange(this.state);
-	}
-	
+class ShowGroupCard extends Component< ShowGroupCardProps,{} > {
     render() {
-        let groupOptions: Array<groupOptionsElem>;
-		groupOptions = this.props.nodeList.map((val: nodeListElem) => {
-			return { label: val.location, value: val.location };
-		});
+		var groups = (this.props.logic_elem.arg as lcGroupArg).group;
+
         return(
-            <div className="card form-group">
+            <div className="card margin-bottom">
 				<div className="card-body row">
 					<div className="col-2 right-divider">
-						<span style={{fontSize:'18pt', fontWeight:500}}>group</span>
+						<span style={{fontSize:'15pt', fontWeight:500}} >group</span>
 					</div>
-					<div className="col-5">
-						<Select 
-							isMulti 
-							name="group" 
-							options={groupOptions} 
-							classNamePrefix="select"
-							onChange={(selectedOptions?: ValueType<groupOptionsElem>)=>(this.handleGroupChange(selectedOptions ))}
-						/>
+					<div className="col-1"></div>
+					<div>
+						{groups.map((group: string, idx: number) => (
+							<div>
+								<span style={{fontSize:'15pt'}}>{group},</span>
+							</div>
+						))}
 					</div>
 				</div>
 			</div>
-        )
+		)
     }
 }
 
-export default ShowInputGroupCard;
+export default ShowGroupCard;

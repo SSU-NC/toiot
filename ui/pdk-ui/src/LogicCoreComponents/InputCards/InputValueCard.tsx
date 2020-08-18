@@ -45,8 +45,8 @@ class InputValueCard extends Component< InputValueCardProps, InputValueCardState
     handleNumChange = (idx: number) => async (e: any) => {
         const new_range_elem = this.state.arg.range.map((rangeElem: numRange, sidx: number) => {
             if (idx !== sidx) return rangeElem;
-            if (e.target.id === "val_min") return { ...rangeElem, min: e.target.value};
-            return { ...rangeElem, max: e.target.value};
+            if (e.target.id === "val_min") return { ...rangeElem, min: parseInt(e.target.value) };
+            return { ...rangeElem, max: parseInt(e.target.value)};
 		});
 		await this.setState({ arg:{value: this.state.arg.value, range: new_range_elem} });
 		this.props.handleInputValueCardChange(this.state);

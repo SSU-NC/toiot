@@ -12,6 +12,26 @@ import { sensorListElem, nodeListElem } from './ElemInterface/ElementsInterface'
 import { SENSOR_URL, NODE_URL } from './defineUrl';
 import { logicCoreElem } from './ElemInterface/LcElementsInterface';
 
+var logicTable_ex: Array<logicCoreElem> = 
+([{sensor_uuid:"bsoiu4r11806ceiloq5g",
+logic_name:"logic 1",
+logic:[
+	{arg:{group:["soongsil"]},elem:"group"},
+	{arg:{range:[{end:"13:00",start:"01:00"},{end:"23:59:59",start:"03:12:12"}]},elem:"time"},
+	{arg:{text:"ringring"},elem:"alarm"},
+	{arg:{range:[{max:10,min:0},{max:255,min:30}],value:"pm10"},elem:"value"},
+	{arg:{range:[{max:200,min:100}],value:"pm2.5"},elem:"value"}
+]},
+{"sensor_uuid":"bsoittb11806ceiloq50",
+"logic_name":"logic 2",
+"logic":[
+	{"arg":{"group":["songpa","soongsil"]},"elem":"group"},
+	{"arg":{"range":[{"end":"23:59:59","start":"00:10:10"},{"end":"12:00","start":"06:12:12"}]},"elem":"time"},
+	{"arg":{"text":"toiot@example.com"},"elem":"email"},
+	{"arg":{"range":[{"max":255,"min":100}],"value":"celsius"},"elem":"value"}
+]}
+]);
+
 interface appState {
 	sensorList: Array<sensorListElem>;
 	nodeList: Array<nodeListElem>;
@@ -29,6 +49,7 @@ class App extends Component<{}, appState> {
 	componentDidMount() {
 		this.getsensorList();
 		this.getnodeList();
+		this.getlogicCore();
 	}
 
 	getsensorList() {
@@ -52,6 +73,10 @@ class App extends Component<{}, appState> {
 			.then((data) => this.setState({ nodeList: data }))
 			// .then(response => console.log('Success:', JSON.stringify(response)))
 			.catch((error) => console.error('Error:', error));
+	}
+
+	getlogicCore() {
+		this.setState({logicCore: logicTable_ex});
 	}
 
 	render() {

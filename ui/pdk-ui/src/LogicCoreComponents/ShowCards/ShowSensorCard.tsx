@@ -1,37 +1,27 @@
 import React, { Component } from 'react';
-import Select from 'react-select';
-import {sensorOptionsElem,sensorListElem} from '../../ElemInterface/ElementsInterface'
 import '../LogicCore.css';
 
-interface ShowInputSensorCardProps{ 
-    sensorList: Array<sensorListElem>;
-	handleShowInputSensorCardChange: (sensor: any) => void;
+interface ShowSesorCardProps{
+	sensor_uuid:string;
 }
 
-class ShowInputSensorCard extends Component< ShowInputSensorCardProps, {} > {
+class ShowSesorCard extends Component< ShowSesorCardProps,{} > {
     render() {
-        let sensorOptions: Array<sensorOptionsElem>;
-		sensorOptions = this.props.sensorList.map((val: sensorListElem) => {
-			return { label: val.name, value: val.name, uuid: val.uuid, value_list: val.value_list};
-		});
         return(
-                <div className="card form-group">
-					<div className="card-body row ">
-						<div className="col-2 right-divider">
-							<span style={{fontSize:'18pt', fontWeight:500}}>sensor</span>
-							</div>
-							<div className="col-5">
-								<Select
-									name="sensor" 
-									options={sensorOptions} 
-									classNamePrefix="select" 
-									onChange={this.props.handleShowInputSensorCardChange}
-								/>
-						</div>
+            <div className="card margin-bottom">
+				<div className="card-body row">
+					<div className="col-2 right-divider">
+						<span style={{fontSize:'15pt', fontWeight:500}} >sensor</span>
 					</div>
-                </div>		
-        )
+					<div className="col-1"></div>
+					<div>
+						<span style={{fontSize:'15pt', fontWeight:450}}>sensor uuid </span>
+						<span style={{fontSize:'15pt'}}>: {this.props.sensor_uuid}</span>
+					</div>
+				</div>
+			</div>
+		)
     }
 }
 
-export default ShowInputSensorCard;
+export default ShowSesorCard;

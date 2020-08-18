@@ -155,7 +155,7 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 						<InputValueCard valueList={this.state.sensor_info.value_list} handleRemoveInputValueCardClick={this.handleRemoveValueCardClick(idx)} handleInputValueCardChange={this.handleValueCardChange(idx)} index={idx}/>
 					))}
 					{this.state.selected_action.map((d: any , idx: number) => (
-					<InputActionCard handleInputActionCardChange={this.handleActionCardChange(idx)} handleRemoveInputActionCardClick={this.handleRemoveActionCardClick(idx)} index={idx}/>
+						<InputActionCard handleInputActionCardChange={this.handleActionCardChange(idx)} handleRemoveInputActionCardClick={this.handleRemoveActionCardClick(idx)} index={idx}/>
 					))}
 					<button type="button" className="btn margin-right" style={{background:'pink'}} onClick={this.handleAddValueCardClick}>Add value</button>
 					<button type="button" className="btn" style={{background:'pink'}} onClick={this.handleAddActionCardClick}>Add action</button>
