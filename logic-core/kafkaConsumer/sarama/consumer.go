@@ -34,7 +34,7 @@ func NewKafkaConsumer() *group {
 
 	cfg := sarama.NewConfig()
 	cfg.Version = sarama.V0_10_2_0
-	cfg.Consumer.Offsets.Initial = sarama.OffsetNewest
+	cfg.Consumer.Offsets.Initial = sarama.OffsetOldest
 
 	kafkaConsumer.client, err = sarama.NewConsumerGroup([]string{setting.KafkaSetting.Broker}, setting.KafkaSetting.GroupID, cfg)
 	if err != nil {

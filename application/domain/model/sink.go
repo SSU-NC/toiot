@@ -10,7 +10,7 @@ type Sink struct {
 	ID       uint   `json:"id" gorm:"primary_key"`
 	Name     string `json:"name" gorm:"type:varchar(32);unique"`
 	Location string `json:"location" gorm:"type:varchar(64)"`
-	IP       string `json:"ip" gorm:"type:char(16);not null"`
+	IP       string `json:"ip" gorm:"type:varchar(16);not null"`
 	Nodes    []Node `json:"nodes" gorm:"foreignkey:SinkID"`
 }
 

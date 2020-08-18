@@ -26,13 +26,15 @@ func ModelsToNodes(n []model.Node) []Node {
 
 func ModelToNode(n *model.Node) Node {
 	return Node{
-		UUID: n.UUID,
-		Name: n.Name,
+		UUID:  n.UUID,
+		Name:  n.Name,
+		Group: n.Group,
 		Location: Loc{
 			Lat: n.LocLat,
 			Lon: n.LocLon,
 		},
-		Sensors: make([]model.Sensor, 0),
+		SinkID:  n.SinkID,
+		Sensors: n.Sensors,
 	}
 }
 
@@ -48,6 +50,7 @@ func NodeToModel(n *Node) model.Node {
 	return model.Node{
 		UUID:    n.UUID,
 		Name:    n.Name,
+		Group:   n.Group,
 		LocLat:  n.Location.Lat,
 		LocLon:  n.Location.Lon,
 		SinkID:  n.SinkID,

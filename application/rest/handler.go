@@ -93,7 +93,8 @@ func (h *Handler) GetNodesInfo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, nodes)
+	ns := adapter.ModelsToNodes(nodes)
+	c.JSON(http.StatusOK, ns)
 }
 
 func (h *Handler) RegisterNode(c *gin.Context) {
@@ -103,14 +104,14 @@ func (h *Handler) RegisterNode(c *gin.Context) {
 		return
 	}
 	n := adapter.NodeToModel(&node)
-	fmt.Printf("node:%v\nn:%v\n", node, n)
 	new, err := h.nu.RegisterNode(&n)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	newNodeRequest(node)
 	c.JSON(http.StatusOK, *new)
+
 }
 
 func (h *Handler) DeleteNode(c *gin.Context) {
@@ -152,7 +153,7 @@ func (h *Handler) RegisterSensor(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	newSensorRequest(sensor)
 	c.JSON(http.StatusOK, *new)
 }
 
