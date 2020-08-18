@@ -12,6 +12,7 @@ import { sensorListElem, nodeListElem } from './ElemInterface/ElementsInterface'
 import { SENSOR_URL, NODE_URL } from './defineUrl';
 import { logicCoreElem } from './ElemInterface/LcElementsInterface';
 
+// 임시 logic core
 var logicTable_ex: Array<logicCoreElem> = 
 ([{sensor_uuid:"bsoiu4r11806ceiloq5g",
 logic_name:"logic 1",
@@ -58,7 +59,6 @@ class App extends Component<{}, appState> {
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) => {
-				console.log(typeof data);
 				this.setState({ sensorList: data });
 			})
 			// .then(response => console.log('Success:', JSON.stringify(response)))
@@ -77,6 +77,15 @@ class App extends Component<{}, appState> {
 
 	getlogicCore() {
 		this.setState({logicCore: logicTable_ex});
+		/*
+		var url = LOGICCORE_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ logicCore: data }))
+			// .then(response => console.log('Success:', JSON.stringify(response)))
+			.catch((error) => console.error('Error:', error));
+		*/
 	}
 
 	render() {
