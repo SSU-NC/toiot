@@ -1,47 +1,59 @@
 package setting
 
 import (
-	"fmt"
 	"log"
-
-	"github.com/pelletier/go-toml"
+	"os"
 )
 
-type Server struct {
-	Address string
-	Port    string
+type App struct {
+	Server string
 }
 
-func (c *Server) MakeAddr() string {
-	return fmt.Sprintf("%s:%s", c.Address, c.Port)
+func (as *App) Getenv() {
+	as.Server = os.Getenv("APP_SERVER")
+	if as.Server == "" {
+		as.Server = "0.0.0.0:8080"
+	}
 }
 
-var Serversetting = &Server{}
+var Appsetting = &App{}
 
 type Database struct {
 	Driver   string `toml:"driver"`
+	Server   string `toml:"tcp"`
 	User     string `toml:"user"`
 	Pass     string `toml:"pass"`
 	Database string `toml:"database"`
 }
 
-func (c *Database) MakeConnection() (string, string) {
-	connection := fmt.Sprintf("%s:%s@/%s?parseTime=true", c.User, c.Pass, c.Database)
-	return c.Driver, connection
+func (ds *Database) Getenv() {
+	ds.Driver = os.Getenv("DB_DRIVER")
+	if ds.Driver == "" {
+		ds.Driver = "mysql"
+	}
+	ds.Server = os.Getenv("DB_SERVER")
+	if ds.Server == "" {
+		ds.Server = "localhost:3306"
+	}
+	ds.User = os.Getenv("DB_USER")
+	if ds.User == "" {
+		ds.User = "pdk"
+	}
+	ds.Pass = os.Getenv("DB_PASS")
+	if ds.Pass == "" {
+		ds.Pass = "pdk1234"
+	}
+	ds.Database = os.Getenv("DB_DATABASE")
+	if ds.Database == "" {
+		ds.Database = "pdk"
+	}
 }
 
 var Databasesetting = &Database{}
 
-func Setup() {
-	tree, err := toml.LoadFile("conf/config.toml")
-	if err != nil {
-		log.Fatalf("setting.Setup, fail to parse 'conf.config.toml': %v", err)
-		return
-	}
+func init() {
+	Appsetting.Getenv()
+	Databasesetting.Getenv()
 
-	serverTree := tree.Get("server").(*toml.Tree)
-	serverTree.Unmarshal(Serversetting)
-
-	dbTree := tree.Get("database").(*toml.Tree)
-	dbTree.Unmarshal(Databasesetting)
+	log.Printf("app : %v\ndb : %v\n", Appsetting, Databasesetting)
 }

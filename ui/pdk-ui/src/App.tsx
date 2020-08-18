@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Nav from './Navigation';
-import Dashboard from './Dashboard';
 import SensorManagement from './SensorManagement';
 import NodeManagement from './NodeManagement';
-import Kibana from './Kibana';
+import Dashboard from './KibanaDashboard';
+import Visualize from './KibanaVisualize';
+import Main from './Main'; 
 import RegisterAlarm from './components/RegisterAlarm';
 import LogicCoreManagement from './LogicCoreManagement';
 import RegisterLogic from './LogicCoreComponents/RegisterLogic'
@@ -95,7 +96,7 @@ class App extends Component<{}, appState> {
 					<div>
 						<Nav></Nav>
 						<div className="container pt-4 mt-4">
-							<Route exact path="/" render={Dashboard} />
+							<Route exact path="/" render={Main} />
 							<Route
 								path="/sensor"
 								render={() => (
@@ -133,6 +134,9 @@ class App extends Component<{}, appState> {
 									<RegisterLogic sensorList={this.state.sensorList} nodeList={this.state.nodeList}/>
 								)}>
 							</Route>
+
+						    <Route path= "/visualize" component={Visualize}/>
+							<Route path= "/dashboard" component={Dashboard}/> 
 						</div>
 					</div>
 				</Router>

@@ -3,7 +3,7 @@ package memory
 import (
 	"github.com/KumKeeHyun/PDK/logic-core/adapter"
 	"github.com/KumKeeHyun/PDK/logic-core/setting"
-	"github.com/go-resty/resty"
+	"github.com/go-resty/resty/v2"
 )
 
 func initMetaRepoRequest(mr *metaRepo) {

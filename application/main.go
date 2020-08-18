@@ -1,8 +1,10 @@
 package main
 
 import (
-	"github.com/KumKeeHyun/PDK/application/interface/db/orm"
-	"github.com/KumKeeHyun/PDK/application/interface/handler"
+	"log"
+
+	"github.com/KumKeeHyun/PDK/application/dataService/sql"
+	"github.com/KumKeeHyun/PDK/application/rest"
 	"github.com/KumKeeHyun/PDK/application/setting"
 	"github.com/KumKeeHyun/PDK/application/usecase/nodeUsecase"
 	"github.com/KumKeeHyun/PDK/application/usecase/sensorUsecase"
@@ -13,16 +15,15 @@ import (
 )
 
 func main() {
-	setting.Setup()
-	orm.Setup()
+	sql.Setup()
 
-	nr := orm.NewNodeRepository()
-	sr := orm.NewSensorRepository()
+	nr := sql.NewNodeRepository()
+	sr := sql.NewSensorRepository()
 
 	nu := nodeUsecase.NewNodeUsecase(nr, sr)
 	su := sensorUsecase.NewSensorUsecase(sr)
 
-	h := handler.NewHandler(nu, su)
+	h := rest.NewHandler(nu, su)
 
 	r := gin.Default()
 	config := cors.DefaultConfig()
@@ -44,6 +45,7 @@ func main() {
 	}
 
 	r.GET("/registerInfo", h.RegisterInfo)
+	r.POST("/logic/new", h.CreateLogic)
 
-	r.Run()
+	log.Fatal(r.Run(setting.Appsetting.Server))
 }

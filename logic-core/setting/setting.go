@@ -19,16 +19,20 @@ func (c *Server) MakeAddr() string {
 var Serversetting = &Server{}
 
 type Kafka struct {
-	Broker         string   `toml:"broker"`
-	GroupID        string   `toml:"group_id"`
-	Topics         []string `toml:"topics"`
-	NumOfConsumers int      `toml:"num_of_consumers"`
+	Broker      string   `toml:"broker"`
+	GroupID     string   `toml:"group_id"`
+	Topics      []string `toml:"topics"`
+	ChanBufSize int      `toml:"chan_buf_size"`
 }
 
 var KafkaSetting = &Kafka{}
 
 type Elastic struct {
-	Addresses []string `toml:"addresses"`
+	Addresses    []string `toml:"addresses"`
+	RequestRetry int      `toml:"request_retry"`
+	ChanBufSize  int      `toml:"chan_buf_size"`
+	BatchTicker  int      `toml:"batch_ticker"`
+	BatchSize    int      `toml:"batch_size"`
 }
 
 var ElasticSetting = &Elastic{}

@@ -1,4 +1,4 @@
-package presenter
+package adapter
 
 import "github.com/KumKeeHyun/PDK/application/domain/model"
 

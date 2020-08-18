@@ -1,10 +1,11 @@
-package handler
+package rest
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/KumKeeHyun/PDK/application/adapter"
 	"github.com/KumKeeHyun/PDK/application/domain/model"
-	"github.com/KumKeeHyun/PDK/application/interface/presenter"
 	"github.com/KumKeeHyun/PDK/application/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -31,7 +32,7 @@ func (h *Handler) GetAllInfo(c *gin.Context) {
 }
 
 func (h *Handler) RegisterNode(c *gin.Context) {
-	var node presenter.Node
+	var node adapter.Node
 
 	if err := c.ShouldBindJSON(&node); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -47,7 +48,7 @@ func (h *Handler) RegisterNode(c *gin.Context) {
 }
 
 func (h *Handler) DeleteNode(c *gin.Context) {
-	var node presenter.Node
+	var node adapter.Node
 	if err := c.ShouldBindJSON(&node); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -111,4 +112,19 @@ func (h *Handler) RegisterInfo(c *gin.Context) {
 		"sensor_info": sensorInfo,
 	}
 	c.JSON(http.StatusOK, msg)
+}
+
+func (h *Handler) CreateLogic(c *gin.Context) {
+	var test struct {
+		SensorUUID string                   `json:"sensor_uuid"`
+		LogicName  string                   `json:"logic_name"`
+		Logics     []map[string]interface{} `json:"logic"`
+	}
+
+	if err := c.ShouldBindJSON(&test); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	fmt.Printf("[new logic chain]\n%v\n", test)
+	c.JSON(http.StatusOK, test)
 }

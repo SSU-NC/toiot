@@ -1,11 +1,16 @@
 package main
 
 import (
+	"fmt"
+	"os"
+	"os/signal"
 	"runtime"
+	"runtime/trace"
+	"syscall"
 
 	"github.com/KumKeeHyun/PDK/logic-core/dataService/memory"
 	"github.com/KumKeeHyun/PDK/logic-core/elasticClient"
-	"github.com/KumKeeHyun/PDK/logic-core/kafkaConsumer"
+	kafkaConsumer "github.com/KumKeeHyun/PDK/logic-core/kafkaConsumer/confluent"
 	"github.com/KumKeeHyun/PDK/logic-core/logicCore"
 	"github.com/KumKeeHyun/PDK/logic-core/rest"
 	_ "github.com/KumKeeHyun/PDK/logic-core/setting"
@@ -16,7 +21,7 @@ import (
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	/* code for tracing goroutine
+	// code for tracing goroutine
 	f, err := os.Create("trace.out")
 	if err != nil {
 		panic(err)
@@ -30,7 +35,6 @@ func main() {
 		fmt.Println("end")
 		trace.Stop()
 	}()
-	*/
 
 	mr := memory.NewMetaRepo()
 	ks := kafkaConsumer.NewKafkaConsumer()
@@ -41,5 +45,9 @@ func main() {
 	lcuc := logicCoreUC.NewLogicCoreUsecase(mr, ks, es, ls)
 
 	h := rest.NewHandler(mduc, lcuc)
-	rest.RunServer(h)
+	go rest.RunServer(h)
+
+	sigterm := make(chan os.Signal, 1)
+	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
+	<-sigterm
 }
