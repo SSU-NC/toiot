@@ -50,8 +50,15 @@ export const NODE_URL = 'http://'
 	.concat(process.env.REACT_APP_DB_PORT)
 	.concat('/node');
 
+export const SINK_URL = 'http://'
+	.concat(process.env.REACT_APP_DB_IP)
+	.concat(':')
+	.concat(process.env.REACT_APP_DB_PORT)
+	.concat('/sink');
+
 export const LOGIC_URL = 'http://'
 	.concat(process.env.REACT_APP_DB_IP)
 	.concat(':')
 	.concat(process.env.REACT_APP_DB_PORT)
 	.concat('/logic/new');
+
