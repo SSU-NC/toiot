@@ -44,6 +44,7 @@ func main() {
 	ng := r.Group("/node")
 	{
 		ng.GET("", h.GetNodesInfo)
+		ng.GET("/select", h.GetNodesByIDs)
 		ng.POST("", h.RegisterNode)
 		ng.DELETE("", h.DeleteNode)
 	}

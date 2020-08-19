@@ -97,6 +97,17 @@ func (h *Handler) GetNodesInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, ns)
 }
 
+func (h *Handler) GetNodesByIDs(c *gin.Context) {
+	ids := c.QueryArray("uuid")
+	nodes, err := h.nu.GetNodesByUUID(ids)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ns := adapter.ModelsToNodes(nodes)
+	c.JSON(http.StatusOK, ns)
+}
+
 func (h *Handler) RegisterNode(c *gin.Context) {
 	var node adapter.Node
 	if err := c.ShouldBindJSON(&node); err != nil {

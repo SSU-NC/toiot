@@ -19,6 +19,11 @@ func (nr *nodeRepository) GetAll() (ns []model.Node, err error) {
 	return ns, nr.db.Find(&ns).Error
 }
 
+func (nr *nodeRepository) GetByUUIDs(ids []string) (ns []model.Node, err error) {
+	ns = make([]model.Node, len(ids))
+	return ns, nr.db.Where("uuid IN (?)", ids).Find(&ns).Error
+}
+
 func (nr *nodeRepository) GetByUUID(nid string) (n *model.Node, err error) {
 	return n, nr.db.Where("uuid=?", nid).Find(n).Error
 }

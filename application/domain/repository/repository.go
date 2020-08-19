@@ -13,6 +13,7 @@ type SinkRepository interface {
 
 type NodeRepository interface {
 	GetAll() ([]model.Node, error)
+	GetByUUIDs([]string) ([]model.Node, error)
 	GetByUUID(string) (*model.Node, error)
 	GetBySinkID(uint) ([]model.Node, error)
 	Create(*model.Node) error

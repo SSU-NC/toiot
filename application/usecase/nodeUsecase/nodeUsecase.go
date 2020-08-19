@@ -53,6 +53,14 @@ func (nu *nodeUsecase) GetAllNodesWithSensorsWithValues() ([]model.Node, error) 
 	return ns, nil
 }
 
+func (nu *nodeUsecase) GetNodesByUUID(ids []string) ([]model.Node, error) {
+	ns, err := nu.nr.GetByUUIDs(ids)
+	if err != nil {
+		return nil, err
+	}
+	return ns, nil
+}
+
 func (nu *nodeUsecase) GetNodeByUUID(uuid string) (*model.Node, error) {
 	n, err := nu.nr.GetByUUID(uuid)
 	if err != nil {

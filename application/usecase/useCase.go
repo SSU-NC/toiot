@@ -17,6 +17,7 @@ type NodeUsecase interface {
 	GetAllNodes() ([]model.Node, error)
 	GetAllNodesWithSensors() ([]model.Node, error)
 	GetAllNodesWithSensorsWithValues() ([]model.Node, error)
+	GetNodesByUUID([]string) ([]model.Node, error)
 	GetNodeByUUID(string) (*model.Node, error)
 	GetNodeByUUIDWithSensors(string) (*model.Node, error)
 	GetNodesBySinkID(uint) ([]model.Node, error)
