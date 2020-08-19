@@ -14,6 +14,7 @@ func RunServer(h *Handler) error {
 	r.DELETE("/metadata/sensor", h.DeleteSensor)
 
 	r.POST("/logiccore", h.NewLogicChain)
+	r.GET("/logiccore", h.GetAllLogic)
 	r.DELETE("/logiccore", h.DeleteLogicChain)
 
 	return r.Run(setting.Serversetting.MakeAddr())

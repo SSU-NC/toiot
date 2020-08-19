@@ -10,6 +10,7 @@ type LogicCoreUsecase interface {
 	SetLogicChain(r *model.RingRequest) error
 	RemoveLogicChain(lname string) error
 	RemoveLogicChainsBySID(sid string) error
+	GetAllLogics() ([]model.Ring, error)
 }
 
 type MetaDataUsecase interface {

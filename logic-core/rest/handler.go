@@ -37,31 +37,40 @@ func (h *Handler) NewLogicChain(c *gin.Context) {
 }
 
 func (h *Handler) DeleteLogicChain(c *gin.Context) {
+	var r struct{Id string `json:"id"`}
+	if err := c.ShouldBindJSON(&r); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	if err := h.lcuc.RemoveLogicChain(r.Id); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, r)
+	}
+}
+
+func (h *Handler) DeleteLogicChains(c *gin.Context) {
 	var rr model.RingRequest
 	if err := c.ShouldBindJSON(&rr); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	
-	if err := h.lcuc.RemoveLogicChain(rr.LogicName); err != nil {
+	if err := h.lcuc.RemoveLogicChainsBySID(rr.Sensor); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
 		c.JSON(http.StatusOK, rr)
 	}
 }
 
-func (h *Handler) DeleteLogicChain(c *gin.Context) {
-	var rr model.RingRequest
-	if err := c.ShouldBindJSON(&rr); err != nil {
+func (h *Handler) GetAllLogic(c *gin.Context) {
+	logics, err := h.lcuc.GetAllLogics()
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	
-	if err := h.lcuc.RemoveLogicChainBySID(rr.Sensor); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	} else {
-		c.JSON(http.StatusOK, rr)
-	}
+	c.JSON(http.StatusOK, logics)
 }
 
 func (h *Handler) NewNode(c *gin.Context) {
