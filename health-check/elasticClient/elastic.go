@@ -53,9 +53,11 @@ func (ec *client) run() {
 	for {
 		select {
 		case doc := <-ec.in:
+			fmt.Println(doc)
 			ec.insertDoc(&doc)
 		case <-ec.ticker.C:
 			ec.bulk()
+
 		}
 	}
 }
@@ -77,18 +79,22 @@ func (ec *client) insertDoc(d *adapter.Document) {
 func (ec *client) bulk() {
 	if len(ec.docBuf) > 0 {
 		bulkStr := strings.Join(docsToSlice(ec.docBuf), "")
-		res, _ := ec.es.Bulk(strings.NewReader(bulkStr))
-		res.Body.Close()
-
 		fmt.Println(bulkStr)
+		res, _ := ec.es.Bulk(strings.NewReader(bulkStr))
+		if res != nil {
+			res.Body.Close()
+		} else {
+			fmt.Println("res nil!")
+		}
+
 		ec.docBuf = make([]*adapter.Document, 0, ec.bufSize)
 	}
 }
 
 func docsToSlice(docs []*adapter.Document) []string {
-	res := make([]string, len(docs))
-	for i, doc := range docs {
-		res[i] = doc.String()
+	res := make([]string, 0, len(docs))
+	for _, doc := range docs {
+		res = append(res, doc.String())
 	}
 	return res
 }

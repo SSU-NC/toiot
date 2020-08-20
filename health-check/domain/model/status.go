@@ -12,6 +12,13 @@ const (
 	GREEN  = 2
 )
 
+// temp code for alarm
+var StateChan chan struct{}
+
+func init() {
+	StateChan = make(chan struct{}, 1)
+}
+
 type Status struct {
 	State       int       `json:"state"`
 	Work        bool      `json:"work"`
@@ -22,6 +29,8 @@ type Status struct {
 func (s *Status) SetState(v int) {
 	s.State = v
 	// TODO : alarm to react app
+	// temp code
+	StateChan <- struct{}{}
 }
 
 func (s *Status) CheckDrop() bool {

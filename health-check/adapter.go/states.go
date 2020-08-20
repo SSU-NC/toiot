@@ -18,6 +18,11 @@ type NodeState struct {
 	State  bool   `json:"state"`
 }
 
+type HealthInfo struct {
+	UUID  string `json:"n_uuid"`
+	State int    `json:"state"`
+}
+
 func (s *States) GetNodeIDs() []string {
 	if s == nil || s.State == nil || len(s.State) == 0 {
 		return nil

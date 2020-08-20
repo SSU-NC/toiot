@@ -5,6 +5,19 @@ import (
 	"strconv"
 )
 
+type App struct {
+	Server string
+}
+
+func (as *App) Getenv() {
+	as.Server = os.Getenv("APP_SERVER")
+	if as.Server == "" {
+		as.Server = "0.0.0.0:8082"
+	}
+}
+
+var Appsetting = &App{}
+
 type Status struct {
 	Count int
 	Tick  int
@@ -95,6 +108,7 @@ func (es *Elastic) Getenv() {
 var ElasticSetting = &Elastic{}
 
 func init() {
+	Appsetting.Getenv()
 	StatusSetting.Getenv()
 	KafkaSetting.Getenv()
 }

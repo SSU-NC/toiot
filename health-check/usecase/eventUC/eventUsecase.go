@@ -4,19 +4,22 @@ import (
 	"strings"
 	"time"
 
+	"github.com/KumKeeHyun/PDK/health-check/domain/model"
+	"github.com/KumKeeHyun/PDK/health-check/setting"
+
 	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
 	"github.com/KumKeeHyun/PDK/health-check/domain/repository"
 	"github.com/KumKeeHyun/PDK/health-check/domain/service"
 )
 
-type eventUcsecase struct {
+type eventUsecase struct {
 	sr repository.StatusRepo
 	ks service.KafkaConsumer
 	es service.ElasticClient
 }
 
-func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es service.ElasticClient) *eventUcsecase {
-	eu := &eventUcsecase{
+func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es service.ElasticClient) *eventUsecase {
+	eu := &eventUsecase{
 		sr: sr,
 		ks: ks,
 		es: es,
@@ -36,12 +39,8 @@ func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es serv
 				continue
 			}
 			for _, n := range ns {
-				s, ok := nm[n.UUID]
-				if !ok {
-					// TODO
-					continue
-				}
-				status, err := eu.sr.Get(n.UUID)
+				s, _ := nm[n.UUID]
+				status, err := eu.GetNodeStatus(s, states.Timestamp)
 				if err != nil {
 					// TODO
 					continue
@@ -64,6 +63,22 @@ func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es serv
 	}()
 
 	return eu
+}
+
+func (eu *eventUsecase) GetNodeStatus(ns adapter.NodeState, t string) (model.Status, error) {
+	res, err := eu.sr.Get(ns.NodeID)
+	if err != nil {
+		res = model.Status{
+			Work:        ns.State,
+			Count:       setting.StatusSetting.Count,
+			LastConnect: StrToTime(t),
+		}
+		res.SetState(model.YELLOW)
+		if err := eu.sr.Create(ns.NodeID, res); err != nil {
+			return model.Status{}, err
+		}
+	}
+	return res, nil
 }
 
 func StrToTime(s string) time.Time {

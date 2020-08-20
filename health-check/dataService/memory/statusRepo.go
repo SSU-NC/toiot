@@ -4,6 +4,7 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
 	"github.com/KumKeeHyun/PDK/health-check/domain/model"
 )
 
@@ -74,4 +75,18 @@ func (sr *statusRepo) Update(key string, value model.Status) error {
 
 	sr.table[key] = value
 	return nil
+}
+
+func (sr *statusRepo) GetHealthInfo() []adapter.HealthInfo {
+	sr.mu.RLock()
+	defer sr.mu.Unlock()
+
+	res := make([]adapter.HealthInfo, 0, len(sr.table))
+	for k, v := range sr.table {
+		res = append(res, adapter.HealthInfo{
+			UUID:  k,
+			State: v.State,
+		})
+	}
+	return res
 }

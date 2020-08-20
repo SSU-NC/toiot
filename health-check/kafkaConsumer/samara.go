@@ -3,7 +3,6 @@ package kafkaConsumer
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
@@ -33,7 +32,7 @@ func NewKafkaConsumer() *group {
 
 	cfg := sarama.NewConfig()
 	cfg.Version = sarama.V0_10_2_0
-	cfg.Consumer.Offsets.Initial = sarama.OffsetOldest
+	cfg.Consumer.Offsets.Initial = sarama.OffsetNewest
 
 	kafkaConsumer.client, err = sarama.NewConsumerGroup([]string{setting.KafkaSetting.Broker}, setting.KafkaSetting.GroupID, cfg)
 	if err != nil {
@@ -84,7 +83,7 @@ func (consumer *consumer) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (consumer *consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
-		fmt.Printf("sarama\nValue : %s\n", string(message.Value))
+		//fmt.Printf("sarama\nValue : %s\n", string(message.Value))
 		d := adapter.States{}
 		if err := json.Unmarshal(message.Value, &d); err != nil {
 			continue
