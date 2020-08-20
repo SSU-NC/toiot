@@ -62,7 +62,7 @@ func (h *Handler) RegisterSink(c *gin.Context) {
 	}
 	new, err := h.siu.RegisterSink(&sink)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
