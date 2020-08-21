@@ -1,12 +1,44 @@
 import React, { Component } from 'react';
-import { nodeListElem } from '../ElemInterface/ElementsInterface';
-import { NODE_URL } from '../defineUrl';
+import {
+	nodeListElem,
+	nodeHealthCheckElem,
+} from '../ElemInterface/ElementsInterface';
+import { NODE_URL, HEALTHCHECK_URL } from '../defineUrl';
+import { w3cwebsocket as W3CWebSocket } from 'websocket';
+
+enum HealthColor {
+	red,
+	yellow,
+	lime,
+}
+
+const client = new W3CWebSocket(HEALTHCHECK_URL);
 
 interface NodeTableProps {
 	nodeList: Array<nodeListElem>;
 }
 
-class NodeTable extends Component<NodeTableProps> {
+interface NodeTableState {
+	nodeState: Array<nodeHealthCheckElem>;
+}
+
+class NodeTable extends Component<NodeTableProps, NodeTableState> {
+	state: NodeTableState = {
+		nodeState: [],
+	};
+
+	componentWillMount() {
+		client.onopen = () => {
+			console.log('WebSocket Client Connected');
+		};
+		client.onmessage = (message: any) => {
+			console.log(message);
+			this.setState({
+				nodeState: JSON.parse(message.data),
+			});
+		};
+	}
+
 	handleRemoveClick = (node_uuid: string) => () => {
 		var url = NODE_URL;
 
@@ -21,6 +53,24 @@ class NodeTable extends Component<NodeTableProps> {
 			.catch((error) => console.error('Error:', error));
 	};
 
+	findNodeState = (uuid: string) => {
+		for (let prop in this.state.nodeState) {
+			if (this.state.nodeState[prop].n_uuid === uuid) {
+				return (
+					<td
+						style={{
+							color: HealthColor[this.state.nodeState[prop].state],
+							fontSize: '8pt',
+						}}
+					>
+						●
+					</td>
+				);
+			}
+		}
+		return <td style={{ color: 'gray', fontSize: '8pt' }}>●</td>;
+	};
+
 	render() {
 		return (
 			<>
@@ -32,6 +82,7 @@ class NodeTable extends Component<NodeTableProps> {
 							<th scope="col">uuid</th>
 							<th scope="col">sensors</th>
 							<th scope="col">group</th>
+							<th scope="col">health</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
@@ -43,6 +94,7 @@ class NodeTable extends Component<NodeTableProps> {
 								<td>{node.uuid}</td>
 								<td>{node.sensors.map((sensor: any) => sensor.name + ', ')}</td>
 								<td>{node.group}</td>
+								{this.findNodeState(node.uuid)}
 								<td>
 									<button
 										className="btn btn-default btn-sm"

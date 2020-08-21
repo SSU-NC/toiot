@@ -86,7 +86,7 @@ class App extends Component<{}, appState> {
 		sensorList: [],
 		nodeList: [],
 		logicCore: [],
-		sinkList: []
+		sinkList: [],
 	};
 
 	componentDidMount() {
@@ -167,11 +167,7 @@ class App extends Component<{}, appState> {
 							/>
 							<Route
 								path="/sink"
-								render={() => (
-									<SinkManagement
-										sinkList={this.state.sinkList}
-									/>
-								)}
+								render={() => <SinkManagement sinkList={this.state.sinkList} />}
 							/>
 							<Route
 								path="/alarm"
