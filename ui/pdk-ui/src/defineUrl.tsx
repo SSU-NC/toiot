@@ -7,6 +7,8 @@ declare global {
 			REACT_APP_KIBANA_PORT: string;
 			REACT_APP_DB_IP: string;
 			REACT_APP_DB_PORT: string;
+			REACT_APP_LOGICCORE_IP: string;
+			REACT_APP_LOGICCORE_PORT: string;
 			REACT_APP_HEALTHCHECK_IP: string;
 			REACT_APP_HEALTHCHECK_PORT: string;
 		}
@@ -58,11 +60,11 @@ export const SINK_URL = 'http://'
 	.concat(process.env.REACT_APP_DB_PORT)
 	.concat('/sink');
 
-export const LOGIC_URL = 'http://'
-	.concat(process.env.REACT_APP_DB_IP)
+export const LOGICCORE_URL = 'http://'
+	.concat(process.env.REACT_APP_LOGICCORE_IP)
 	.concat(':')
-	.concat(process.env.REACT_APP_DB_PORT)
-	.concat('/logic/new');
+	.concat(process.env.REACT_APP_LOGICCORE_PORT)
+	.concat('/logiccore');
 
 export const HEALTHCHECK_URL = 'ws://'
 	.concat(process.env.REACT_APP_HEALTHCHECK_IP)
