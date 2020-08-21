@@ -3,7 +3,7 @@ export interface nodeListElem {
 	uuid: string;
 	name: string;
 	group: string;
-	location: locationElem
+	location: locationElem;
 	sensors: Array<sensorListElem>;
 }
 
@@ -55,4 +55,10 @@ export interface sinkOptionsElem {
 	label: string;
 	value: string;
 	id: number;
+}
+
+// node health check
+export interface nodeHealthCheckElem {
+	n_uuid: string;
+	state: number;
 }
