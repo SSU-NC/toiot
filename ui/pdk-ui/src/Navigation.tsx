@@ -36,6 +36,9 @@ class Navigation extends Component {
 										<Link className="dropdown-item" to="/node">
 											NODE
 										</Link>
+										<Link className="dropdown-item" to="/sink">
+											SINK
+										</Link>
 									</div>
 								</li>
 								<li className="nav-item dropdown">

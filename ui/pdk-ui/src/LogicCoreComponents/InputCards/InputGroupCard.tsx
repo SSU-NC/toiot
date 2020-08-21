@@ -35,7 +35,7 @@ class InputGroupCard extends Component< InputGroupCardProps, InputGroupCardState
     render() {
         let groupOptions: Array<groupOptionsElem>;
 		groupOptions = this.props.nodeList.map((val: nodeListElem) => {
-			return { label: val.location, value: val.location };
+			return { label: val.group, value: val.group };
 		});
         return(
             <div className="card form-group">
