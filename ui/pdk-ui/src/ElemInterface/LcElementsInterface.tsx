@@ -13,9 +13,9 @@ export interface logicElem {
 	arg: lcValueArg | lcTimeArg | lcGroupArg | lcActionArg;
 }
 
-export interface lcValueArg{
+export interface lcValueArg {
 	value: string;
-    range: Array<numRange>;
+	range: Array<numRange>;
 }
 
 export interface lcTimeArg {
@@ -23,17 +23,17 @@ export interface lcTimeArg {
 }
 
 export interface lcGroupArg {
-    group: Array<string>;
+	group: Array<string>;
 }
 
 export interface lcActionArg {
-    text: string;
+	text: string;
 }
 
 export interface logicCoreElem {
-	sensor_uuid: string; 
-	id?: number; // request: undefined, receive: number
-	logic_name: string,
+	sensor_uuid: string;
+	id: string; // request: undefined, receive: number
+	logic_name: string;
 	logic: Array<logicElem>;
 }
 

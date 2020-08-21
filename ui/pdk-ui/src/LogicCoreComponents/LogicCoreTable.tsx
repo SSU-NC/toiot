@@ -1,28 +1,27 @@
 import React, { Component } from 'react';
 import { logicCore, logicCoreElem } from '../ElemInterface/LcElementsInterface';
 import ShowLogic from './ShowLogic';
-import { LOGIC_URL } from '../defineUrl';
+import { LOGICCORE_URL } from '../defineUrl';
 
 interface logicTableProps {
 	logicCore: Array<logicCoreElem>;
 }
 
 class logicTable extends Component<logicTableProps> {
-
-	handleRemoveClick = (logic_name: string) => () => {
-		var url = LOGIC_URL;//logic_URL;
+	handleRemoveClick = (id: string) => () => {
+		var url = LOGICCORE_URL;
 
 		fetch(url, {
 			method: 'DELETE',
-			body: JSON.stringify({ name: logic_name }),
+			body: JSON.stringify({ id: id }),
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		})
 			.then((res) => res.json())
 			.catch((error) => console.error('Error:', error));
-    };
-    
+	};
+
 	render() {
 		return (
 			<>
@@ -41,14 +40,14 @@ class logicTable extends Component<logicTableProps> {
 								<th scope="row">{idx}</th>
 								<td>{logic.logic_name}</td>
 								<td>
-                                    <ShowLogic index={idx} logic={logic}/>
+									<ShowLogic index={idx} logic={logic} />
 								</td>
 								<td>
 									<button
 										className="btn btn-default btn-sm"
 										type="button"
 										id="button-delete"
-										onClick={this.handleRemoveClick(logic.logic_name)}
+										onClick={this.handleRemoveClick(logic.id)}
 									>
 										<svg
 											width="1em"

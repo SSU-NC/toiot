@@ -14,65 +14,9 @@ import {
 	nodeListElem,
 	sinkListElem,
 } from './ElemInterface/ElementsInterface';
-import { SENSOR_URL, NODE_URL, SINK_URL } from './defineUrl';
+import { SENSOR_URL, NODE_URL, SINK_URL, LOGICCORE_URL } from './defineUrl';
 import { logicCoreElem } from './ElemInterface/LcElementsInterface';
 import SinkManagement from './SinkManagement';
-
-// 임시 logic core
-var logicTable_ex: Array<logicCoreElem> = [
-	{
-		sensor_uuid: 'bsoiu4r11806ceiloq5g',
-		logic_name: 'logic 1',
-		logic: [
-			{ arg: { group: ['soongsil'] }, elem: 'group' },
-			{
-				arg: {
-					range: [
-						{ end: '13:00', start: '01:00' },
-						{ end: '23:59:59', start: '03:12:12' },
-					],
-				},
-				elem: 'time',
-			},
-			{ arg: { text: 'ringring' }, elem: 'alarm' },
-			{
-				arg: {
-					range: [
-						{ max: 10, min: 0 },
-						{ max: 255, min: 30 },
-					],
-					value: 'pm10',
-				},
-				elem: 'value',
-			},
-			{
-				arg: { range: [{ max: 200, min: 100 }], value: 'pm2.5' },
-				elem: 'value',
-			},
-		],
-	},
-	{
-		sensor_uuid: 'bsoittb11806ceiloq50',
-		logic_name: 'logic 2',
-		logic: [
-			{ arg: { group: ['songpa', 'soongsil'] }, elem: 'group' },
-			{
-				arg: {
-					range: [
-						{ end: '23:59:59', start: '00:10:10' },
-						{ end: '12:00', start: '06:12:12' },
-					],
-				},
-				elem: 'time',
-			},
-			{ arg: { text: 'toiot@example.com' }, elem: 'email' },
-			{
-				arg: { range: [{ max: 255, min: 100 }], value: 'celsius' },
-				elem: 'value',
-			},
-		],
-	},
-];
 
 interface appState {
 	sensorList: Array<sensorListElem>;
@@ -129,8 +73,8 @@ class App extends Component<{}, appState> {
 	}
 
 	getlogicCore() {
-		this.setState({ logicCore: logicTable_ex });
-		/*
+		//this.setState({ logicCore: logicTable_ex });
+
 		var url = LOGICCORE_URL;
 
 		fetch(url)
@@ -138,7 +82,6 @@ class App extends Component<{}, appState> {
 			.then((data) => this.setState({ logicCore: data }))
 			// .then(response => console.log('Success:', JSON.stringify(response)))
 			.catch((error) => console.error('Error:', error));
-		*/
 	}
 
 	render() {

@@ -6,6 +6,7 @@ import { nodeListElem, groupOptionsElem } from '../../ElemInterface/ElementsInte
 import '../LogicCore.css';
 import { logicElem } from '../../ElemInterface/LcElementsInterface';
 
+
 interface InputGroupCardProps{ 
 	nodeList: Array<nodeListElem>;
     handleInputGroupCardChange: (group: logicElem) => void;
@@ -33,10 +34,18 @@ class InputGroupCard extends Component< InputGroupCardProps, InputGroupCardState
 	}
 	
     render() {
-        let groupOptions: Array<groupOptionsElem>;
+		let groupOptions: Array<groupOptionsElem>;
+		
 		groupOptions = this.props.nodeList.map((val: nodeListElem) => {
 			return { label: val.group, value: val.group };
 		});
+		var uniqueArray = groupOptions.filter((groupOption, index) => {
+			return index === groupOptions.findIndex(groupOption2 => {
+			  	return JSON.stringify(groupOption2) === JSON.stringify(groupOption);
+			});
+		});
+		groupOptions = uniqueArray;
+
         return(
             <div className="card form-group">
 				<div className="card-body row">
