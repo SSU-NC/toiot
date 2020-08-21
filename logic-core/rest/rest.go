@@ -3,10 +3,15 @@ package rest
 import (
 	"github.com/seheee/PDK/logic-core/setting"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 )
 
 func RunServer(h *Handler) error {
 	r := gin.Default()
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+	config.AllowCredentials = true
+	r.Use(cors.New(config))
 
 	r.POST("/metadata/node", h.NewNode)
 	r.POST("/metadata/sensor", h.NewSensor)

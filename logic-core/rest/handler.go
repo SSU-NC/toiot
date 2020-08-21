@@ -2,11 +2,13 @@ package rest
 
 import (
 	"net/http"
-
+	"fmt"
 	"github.com/seheee/PDK/logic-core/domain/model"
 	"github.com/seheee/PDK/logic-core/adapter"
 	"github.com/seheee/PDK/logic-core/usecase"
+	//"github.com/seheee/PDK/logic-core/logicCore"
 	"github.com/gin-gonic/gin"
+	//"github.com/gorilla/websocket"
 )
 
 type Handler struct {
@@ -21,6 +23,7 @@ func NewHandler(mduc usecase.MetaDataUsecase, lcuc usecase.LogicCoreUsecase) *Ha
 		lcuc: lcuc,
 	}
 }
+
 
 func (h *Handler) NewLogicChain(c *gin.Context) {
 	var rr model.RingRequest
@@ -46,6 +49,7 @@ func (h *Handler) DeleteLogicChain(c *gin.Context) {
 	if err := h.lcuc.RemoveLogicChain(r.Id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
+		fmt.Println("ok")
 		c.JSON(http.StatusOK, r)
 	}
 }

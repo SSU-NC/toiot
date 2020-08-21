@@ -50,19 +50,17 @@ func NewLogicCoreUsecase(mr repository.MetaRepo, lr repository.LogicRepo, ks ser
 }
 
 func (lu *logicCoreUsecase) SetLogicChain(r *model.RingRequest) error {
-	// TODO : check chain request validate
-	//_, err := lu.mr.GetSensor(r.Sensor)
-	var id string
-	var err error
-	//if err != nil {
-	//	return errors.New("sensor does not exist")
-	//}
+	/*_, err := lu.mr.GetSensor(r.Sensor)
+	if err != nil {
+		return errors.New("sensor does not exist")
+	}*/
 	chs := lu.ls.GetLogicChans(r.Sensor)
 	_, ok := chs[r.LogicName]
 	if ok {
 		return errors.New("logic name already exists")
 	}
-	if id, err = lu.lr.Create(r); err != nil {
+	id, err := lu.lr.Create(r)
+	if err != nil {
 		return err
 	}
 	go lu.ls.CreateAndStartLogic(r, id)

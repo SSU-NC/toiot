@@ -3,8 +3,9 @@ package logicCore
 import (
 	"fmt"
 	"time"
-	"github.com/seheee/PDK/logic-core/domain/model"
 	"net/smtp"
+
+	"github.com/seheee/PDK/logic-core/domain/model"
 )
 
 type rangeRing struct {
@@ -29,7 +30,6 @@ func (r *rangeRing) exec(d *model.LogicData) {
 	if !ok {
 		return
 	}
-	//d.SName += "[range]"
 	if isRange(v) {
 		r.next.exec(d)
 	} 
@@ -77,29 +77,39 @@ func (r *groupRing) exec(d *model.LogicData) {
 type emailRing struct {
 	baseRing
 	Email string `json:"text"`
+	Time bool
 }
 func (r *emailRing) exec(d *model.LogicData) {
 	
-	from := "sehee4010@gmail.com"
-	pass := ""
-	to := r.Email
+	if r.Time == true {
+		from := "sehee4010@gmail.com"
+		pass := ""
+		to := r.Email
 
-	body := "sensor \"" + d.SName + "\"" +
-			" on node \"" + d.NodeInfo.Name +"\"" 
-	
-	msg := 	"From: " + from + "\n" +
-			"To: " + to + "\n" +
-			"Subject: PDK email\n\n" +
-			body
+		body := "sensor \"" + d.SName + "\"" +
+				" on node \"" + d.NodeInfo.Name +"\"" 
+		
+		msg := 	"From: " + from + "\n" +
+				"To: " + to + "\n" +
+				"Subject: PDK email\n\n" +
+				body
 
-	err := smtp.SendMail("smtp.gmail.com:587",
-			smtp.PlainAuth("", from, pass, "smtp.gmail.com"),
-			from, []string{to}, []byte(msg))
+		err := smtp.SendMail("smtp.gmail.com:587",
+				smtp.PlainAuth("", from, pass, "smtp.gmail.com"),
+				from, []string{to}, []byte(msg))
 
-	if err != nil {
-		fmt.Printf("smtp error: %s", err)
+		if err != nil {
+			fmt.Printf("smtp error: %s", err)
+		}
+		fmt.Printf("[email] send to %s when %s\n", r.Email, d.Timestamp)
+		t1 := time.NewTimer(time.Second * 180)
+		r.Time = false
+		go func() {
+			<- t1.C
+			r.Time = true
+			fmt.Println("email timer expired")
+		}()
 	}
-	fmt.Printf("[email] send to %s when %s\n", r.Email, d.Timestamp)
 	if r.next != nil {
 		r.next.exec(d)
 	}
@@ -107,57 +117,14 @@ func (r *emailRing) exec(d *model.LogicData) {
 
 type alarmRing struct {
 	baseRing
+	//WebSocket
 	Message string `json:"text"`
 }
 func (r *alarmRing) exec(d *model.LogicData) {
 	fmt.Printf("[alarm] %s\n", r.Message)
+	
+
 	if r.next != nil {
 		r.next.exec(d)
 	}
 }
-/*
-type elasticRing struct {
-	chainRingBase
-}
-
-func (r *elasticRing) execute(d *model.LogicData) {
-	fmt.Printf("tempElasticRing: %v\n", *d)
-}
-
-type locFilterRing struct {
-	chainRingBase
-	Loc map[string]bool `json:"loc"`
-}
-
-func (r *locFilterRing) execute(d *model.LogicData) {
-	if _, ok := r.Loc[d.NodeInfo.Group]; ok {
-		d.SName += "[loc]"
-		r.chainRingBase.execute(d)
-	}
-}
-
-type rangeRing struct {
-	chainRingBase
-	Value string  `json:"value"`
-	Min   float64 `json:"min"`
-	Max   float64 `json:"max"`
-}
-
-func (r *rangeRing) execute(d *model.LogicData) {
-	isRange := func(val float64) bool {
-		if val >= r.Min && val < r.Max {
-			return true
-		} else {
-			return false
-		}
-	}
-	v, ok := d.Values[r.Value]
-	if !ok {
-		return
-	}
-	d.SName += "[range]"
-	if isRange(v) {
-		r.chainRingBase.execute(d)
-	}
-}
-*/

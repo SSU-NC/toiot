@@ -3,6 +3,7 @@ package logicCore
 import (
 	"fmt"
 	"errors"
+
 	"github.com/seheee/PDK/logic-core/domain/model"
 )
 
@@ -24,23 +25,6 @@ func NewLogicCore() *logicCore {
 	}
 }
 
-/*
-func (m *mux) CreateAndStartLogic(r *model.ChainRequest) {
-	listen := make(chan model.LogicData, 100)
-	lchs, ok := m.chTable[r.SID]
-	if !ok {
-		m.chTable[r.SID] = make(map[string]chan model.LogicData)
-		lchs, _ = m.chTable[r.SID]
-	}
-	lchs[r.Name] = listen
-
-	chain := chainFactory(r.Rings)
-	for d := range listen {
-		chain.exec(&d)
-	}
-}
-*/
-
 func (m *mux) CreateAndStartLogic(r *model.RingRequest, id string) {
 	fmt.Println("id : ", id)
 	listen := make(chan model.LogicData, 100)
@@ -51,9 +35,7 @@ func (m *mux) CreateAndStartLogic(r *model.RingRequest, id string) {
 	}
 	lchs[id] = listen
 	m.logicTable[id] = r.Sensor
-	/*for r.Logic[0].Elem == "empty" {
-		r.Logic = r.Logic[1:]
-	}*/
+	
 	chain := chainFactory(r)
 	fmt.Println(chain)
 	fmt.Println(chain.next)
@@ -73,11 +55,12 @@ func (m *mux) GetLogicChans(key string) map[string]chan model.LogicData {
 func (m *mux) RemoveLogic(id string) (err error) {
 	sid, ok := m.logicTable[id]
 	if !ok {
-		err = errors.New("cannot find logicChain " + id)
+		err = errors.New("cannot find logicChain " + id )
+		return err
 	}
 	ch, _ := m.chTable[sid][id]
 	close(ch)
-	return err
+	return nil
 }
 
 func (m *mux) RemoveLogicsBySID(sid string) (err error) {

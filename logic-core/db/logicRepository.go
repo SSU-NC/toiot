@@ -1,14 +1,17 @@
 package db
 
 import (
-	"context"
 	"fmt"
+	"context"
 	"reflect"
+	"errors"
+	
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"github.com/seheee/PDK/logic-core/domain/model"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/seheee/PDK/logic-core/setting"
 )
 
 type logicRepository struct {
@@ -17,8 +20,9 @@ type logicRepository struct {
 }
 
 func NewLogicRepository() *logicRepository {
+	uri := "mongodb://"+setting.MongoDbSetting.Address + ":" +setting.MongoDbSetting.Port
 	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI(uri)
 
 	// Connect to MongoDB
 	cli, err := mongo.Connect(context.TODO(), clientOptions)
@@ -45,6 +49,7 @@ func (lr *logicRepository) GetAll() (r []model.Ring, err error) {
 	cur, err := lr.collection.Find(context.TODO(), bson.D{{}})
 	if err != nil {
 		fmt.Println("find error:", err.Error())
+		return nil, err
 	}
 	
 	for cur.Next(context.TODO()) {
@@ -73,10 +78,13 @@ func (lr *logicRepository)Delete(id string) error {
 	if err != nil {
 		return err
 	} 
-	_, err = lr.collection.DeleteOne(context.TODO(), bson.M{"_id": idPrimitive})
+	res, err := lr.collection.DeleteOne(context.TODO(), bson.M{"_id": idPrimitive})
 	if err != nil {
 		fmt.Println("delete error:", err.Error())
 		return err
+	}
+	if res.DeletedCount == 0 {
+		return errors.New("no logic")
 	}
 	return nil
 }

@@ -1,6 +1,9 @@
 package usecase
 
-import "github.com/seheee/PDK/logic-core/domain/model"
+import (
+	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/dustin/go-broadcast"
+)
 
 // type ConsumerManageUsecase interface {
 // 	SetNumOfConsumers(int) (int, error)
@@ -18,4 +21,8 @@ type MetaDataUsecase interface {
 	NewSensor(key string, s *model.Sensor) (*model.Sensor, error)
 	DeleteNode(key string) error
 	DeleteSensor(key string) error
+}
+
+type WebsocketUsecase interface {
+	broadcast.Broadcaster
 }

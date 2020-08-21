@@ -13,17 +13,6 @@ type LogicData struct {
 	Timestamp time.Time          `json:"timestamp"`
 }
 
-type LogicRing struct {
-	Logic string                 `json:"logic"`
-	Arg   map[string]interface{} `json:"arg"`
-}
-
-type ChainRequest struct {
-	SID   string      `json:"s_id"`
-	Name  string      `json:"name"`
-	Rings []LogicRing `json:"rings"`
-}
-
 type RingRequest struct {
 	Sensor string `json:"sensor_uuid"`
 	LogicName string `json:"logic_name"`

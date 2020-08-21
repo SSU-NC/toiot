@@ -3,27 +3,20 @@ package logicCore
 import (
 	"fmt"
 	"encoding/json"
+
 	"github.com/seheee/PDK/logic-core/domain/model"
 )
 
-/*type RingRequest struct {
-	Sensor string `json:"sensor"`
-	Logics []struct {
-		Logic string `json:"logic"`
-		Arg map[string]interface{} `json:"arg"`
-	} `json:"logics"`
-}*/
-
 func getRinger(logic string) Ringer {
 	switch logic {
-	case "range":
+	case "value":
 		return &rangeRing{}
 	case "group":
 		return &groupRing{}
 	case "time":
 		return &timeRing{}
 	case "email":
-		return &emailRing{}
+		return &emailRing{Time:true}
 	case "alarm":
 		return &alarmRing{}
 	default:
@@ -34,6 +27,7 @@ func getRinger(logic string) Ringer {
 func UnmarshalRing(l string, a interface{}) Ringer {
 	var res Ringer
 	if res = getRinger(l); res == nil {
+		fmt.Println(l)
 		fmt.Println("ring not exist")
 		return nil
 	}
@@ -61,9 +55,6 @@ func chainFactory(rr *model.RingRequest) *baseRing {
 	var base baseRing
 	base.setNext(res)
 	for _, logic := range rr.Logic[1:] {
-		/*if logic.Elem == "empty" {
-			continue
-		}*/
 		if chain = UnmarshalRing(logic.Elem, logic.Arg); chain == nil {
 			fmt.Printf("cannot unmarshal ring %s\n", logic.Elem)
 			return nil
@@ -73,7 +64,5 @@ func chainFactory(rr *model.RingRequest) *baseRing {
 		res = chain
 	}
 
-	//in := make(chan Meta, 100)
-	//Mux.AddChan(rr.Sensor, in)
 	return &base
 }
