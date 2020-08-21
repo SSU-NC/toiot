@@ -46,6 +46,7 @@ func NewLogicRepository() *logicRepository {
 }
 
 func (lr *logicRepository) GetAll() (r []model.Ring, err error) {
+	r = make([]model.Ring,0)
 	cur, err := lr.collection.Find(context.TODO(), bson.D{{}})
 	if err != nil {
 		fmt.Println("find error:", err.Error())
