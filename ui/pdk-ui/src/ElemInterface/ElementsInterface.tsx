@@ -63,3 +63,10 @@ export interface nodeHealthCheckElem {
 	n_uuid: string;
 	state: number;
 }
+
+// alarm
+export interface alarmElem {
+	sensor_uuid: string;
+	sensor_name: string;
+	msg: string;
+}

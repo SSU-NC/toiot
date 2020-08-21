@@ -11,6 +11,8 @@ declare global {
 			REACT_APP_LOGICCORE_PORT: string;
 			REACT_APP_HEALTHCHECK_IP: string;
 			REACT_APP_HEALTHCHECK_PORT: string;
+			REACT_APP_ALARM_IP: string;
+			REACT_APP_ALARM_PORT: string;
 		}
 	}
 }
@@ -71,3 +73,9 @@ export const HEALTHCHECK_URL = 'ws://'
 	.concat(':')
 	.concat(process.env.REACT_APP_HEALTHCHECK_PORT)
 	.concat('/health-check');
+
+export const ALARM_URL = 'ws://'
+	.concat(process.env.REACT_APP_ALARM_IP)
+	.concat(':')
+	.concat(process.env.REACT_APP_ALARM_PORT)
+	.concat('/websocket');
