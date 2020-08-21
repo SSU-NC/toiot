@@ -28,8 +28,8 @@ func NewElasticClient() *client {
 	inBufSize := 100
 
 	config := elasticsearch.Config{
-		Addresses:  setting.ElasticSetting.Addresses,
-		MaxRetries: 3,
+		Addresses: setting.ElasticSetting.Addresses,
+		//MaxRetries: 3,
 	}
 	cli, err := elasticsearch.NewClient(config)
 	if err != nil {
@@ -78,11 +78,12 @@ func (ec *client) insertDoc(d *adapter.Document) {
 func (ec *client) bulk() {
 	if len(ec.docBuf) > 0 {
 		bulkStr := strings.Join(docsToSlice(ec.docBuf), "")
-		res, _ := ec.es.Bulk(strings.NewReader(bulkStr))
-		if res != nil {
+		fmt.Printf("bulk\n%s", bulkStr)
+		res, err := ec.es.Bulk(strings.NewReader(bulkStr))
+		if res != nil && err == nil {
 			res.Body.Close()
 		} else {
-			fmt.Println("res nil!")
+			fmt.Printf("bulk error : %s\n", err.Error())
 		}
 
 		ec.docBuf = make([]*adapter.Document, 0, ec.bufSize)

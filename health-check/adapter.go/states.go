@@ -62,5 +62,5 @@ func (d *Document) String() string {
 		return ""
 	}
 	h := fmt.Sprintf(`{"index":{"_index":"%s"}}`, d.Index)
-	return strings.Join([]string{h, string(doc), "\n"}, "")
+	return strings.Join([]string{h, "\n", string(doc), "\n"}, "")
 }

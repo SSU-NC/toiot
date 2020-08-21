@@ -1,6 +1,7 @@
 package setting
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 )
@@ -99,10 +100,11 @@ type Elastic struct {
 }
 
 func (es *Elastic) Getenv() {
-	es.Addresses = []string{os.Getenv("ELASTIC_SERVER")}
-	if es.Addresses[0] == "" {
-		es.Addresses = []string{"http://220.70.2.1:9200/"}
+	esServer := os.Getenv("ELASTIC_SERVER")
+	if esServer == "" {
+		esServer = "http://220.70.2.1:9200"
 	}
+	es.Addresses = []string{esServer}
 }
 
 var ElasticSetting = &Elastic{}
@@ -111,4 +113,7 @@ func init() {
 	Appsetting.Getenv()
 	StatusSetting.Getenv()
 	KafkaSetting.Getenv()
+	ElasticSetting.Getenv()
+
+	fmt.Printf("App : %v\nStatus : %v\nKafka : %v\nElastic : %v\n\n", Appsetting, StatusSetting, KafkaSetting, ElasticSetting)
 }
