@@ -3,8 +3,7 @@ import {
 	nodeListElem,
 	nodeHealthCheckElem,
 } from '../ElemInterface/ElementsInterface';
-import { NODE_URL, HEALTHCHECK_URL } from '../defineUrl';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
+import { NODE_URL } from '../defineUrl';
 
 enum HealthColor {
 	red,
@@ -12,33 +11,13 @@ enum HealthColor {
 	lime,
 }
 
-const client = new W3CWebSocket(HEALTHCHECK_URL);
-
 interface NodeTableProps {
 	nodeList: Array<nodeListElem>;
-}
-
-interface NodeTableState {
 	nodeState: Array<nodeHealthCheckElem>;
 }
 
-class NodeTable extends Component<NodeTableProps, NodeTableState> {
-	state: NodeTableState = {
-		nodeState: [],
-	};
-
-	componentWillMount() {
-		client.onopen = () => {
-			console.log('WebSocket Client Connected');
-		};
-		client.onmessage = (message: any) => {
-			console.log(message);
-			this.setState({
-				nodeState: JSON.parse(message.data),
-			});
-		};
-	}
-
+class NodeTable extends Component<NodeTableProps, {}> {
+	
 	handleRemoveClick = (node_uuid: string) => () => {
 		var url = NODE_URL;
 
@@ -54,12 +33,12 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 	};
 
 	findNodeState = (uuid: string) => {
-		for (let prop in this.state.nodeState) {
-			if (this.state.nodeState[prop].n_uuid === uuid) {
+		for (let prop in this.props.nodeState) {
+			if (this.props.nodeState[prop].n_uuid === uuid) {
 				return (
 					<td
 						style={{
-							color: HealthColor[this.state.nodeState[prop].state],
+							color: HealthColor[this.props.nodeState[prop].state],
 							fontSize: '8pt',
 						}}
 					>

@@ -4,6 +4,7 @@ export interface nodeListElem {
 	name: string;
 	group: string;
 	location: locationElem;
+	sink_id: number;
 	sensors: Array<sensorListElem>;
 }
 
