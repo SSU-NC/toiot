@@ -38,10 +38,10 @@ func (ss *Status) Getenv() {
 
 	tick := os.Getenv("STATUS_TICK")
 	if cnt == "" {
-		ss.Tick = 5
+		ss.Tick = 30
 	} else {
 		if ss.Tick, err = strconv.Atoi(tick); err != nil {
-			ss.Tick = 5
+			ss.Tick = 30
 		}
 	}
 

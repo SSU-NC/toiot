@@ -1,6 +1,8 @@
 package websocketUC
 
 import (
+	"fmt"
+
 	"github.com/KumKeeHyun/PDK/health-check/domain/repository"
 	"github.com/dustin/go-broadcast"
 )
@@ -21,6 +23,7 @@ func NewWebsocketUsecase(sr repository.StatusRepo, e chan struct{}) *websocketUs
 	go func() {
 		for _ = range wu.event {
 			his := wu.sr.GetHealthInfo()
+			fmt.Println("broadcast\n", his)
 			wu.Submit(his)
 		}
 	}()

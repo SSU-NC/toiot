@@ -53,7 +53,6 @@ func (ec *client) run() {
 	for {
 		select {
 		case doc := <-ec.in:
-			fmt.Println(doc)
 			ec.insertDoc(&doc)
 		case <-ec.ticker.C:
 			ec.bulk()
@@ -79,7 +78,6 @@ func (ec *client) insertDoc(d *adapter.Document) {
 func (ec *client) bulk() {
 	if len(ec.docBuf) > 0 {
 		bulkStr := strings.Join(docsToSlice(ec.docBuf), "")
-		fmt.Println(bulkStr)
 		res, _ := ec.es.Bulk(strings.NewReader(bulkStr))
 		if res != nil {
 			res.Body.Close()

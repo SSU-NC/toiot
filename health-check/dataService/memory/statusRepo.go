@@ -78,8 +78,8 @@ func (sr *statusRepo) Update(key string, value model.Status) error {
 }
 
 func (sr *statusRepo) GetHealthInfo() []adapter.HealthInfo {
-	sr.mu.RLock()
-	defer sr.mu.Unlock()
+	// sr.mu.RLock()
+	// defer sr.mu.Unlock()
 
 	res := make([]adapter.HealthInfo, 0, len(sr.table))
 	for k, v := range sr.table {

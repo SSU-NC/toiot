@@ -13,16 +13,18 @@ import (
 )
 
 type eventUsecase struct {
-	sr repository.StatusRepo
-	ks service.KafkaConsumer
-	es service.ElasticClient
+	sr    repository.StatusRepo
+	ks    service.KafkaConsumer
+	es    service.ElasticClient
+	event chan struct{}
 }
 
-func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es service.ElasticClient) *eventUsecase {
+func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es service.ElasticClient, e chan struct{}) *eventUsecase {
 	eu := &eventUsecase{
-		sr: sr,
-		ks: ks,
-		es: es,
+		sr:    sr,
+		ks:    ks,
+		es:    es,
+		event: e,
 	}
 
 	in := eu.ks.GetOutput()
@@ -38,6 +40,8 @@ func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es serv
 				// TODO
 				continue
 			}
+
+			change := false
 			for _, n := range ns {
 				s, _ := nm[n.UUID]
 				status, err := eu.GetNodeStatus(s, states.Timestamp)
@@ -45,7 +49,7 @@ func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es serv
 					// TODO
 					continue
 				}
-				status.Event(s.State, StrToTime(states.Timestamp))
+				change = status.Event(s.State, StrToTime(states.Timestamp))
 				eu.sr.Update(n.UUID, status)
 
 				out <- adapter.Document{
@@ -56,6 +60,9 @@ func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es serv
 						Timestamp: states.Timestamp,
 					},
 				}
+			}
+			if change {
+				eu.event <- struct{}{}
 			}
 
 			eu.sr.EndAtomic()
@@ -74,6 +81,8 @@ func (eu *eventUsecase) GetNodeStatus(ns adapter.NodeState, t string) (model.Sta
 			LastConnect: StrToTime(t),
 		}
 		res.SetState(model.YELLOW)
+		eu.event <- struct{}{}
+
 		if err := eu.sr.Create(ns.NodeID, res); err != nil {
 			return model.Status{}, err
 		}

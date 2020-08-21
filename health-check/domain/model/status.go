@@ -12,13 +12,6 @@ const (
 	GREEN  = 2
 )
 
-// temp code for alarm
-var StateChan chan struct{}
-
-func init() {
-	StateChan = make(chan struct{}, 1)
-}
-
 type Status struct {
 	State       int       `json:"state"`
 	Work        bool      `json:"work"`
@@ -28,9 +21,6 @@ type Status struct {
 
 func (s *Status) SetState(v int) {
 	s.State = v
-	// TODO : alarm to react app
-	// temp code
-	StateChan <- struct{}{}
 }
 
 func (s *Status) CheckDrop() bool {
@@ -39,8 +29,8 @@ func (s *Status) CheckDrop() bool {
 	return now.After(timeout)
 }
 
-func (s *Status) CheckCnt() {
-	if s.Count > 0 {
+func (s *Status) CheckCnt() bool {
+	if s.Count >= 0 {
 		s.Count--
 	}
 
@@ -53,20 +43,23 @@ func (s *Status) CheckCnt() {
 		} else {
 			s.SetState(RED)
 		}
-		//TODO event
+		return true
 	}
+	return false
 }
 
-func (s *Status) Event(work bool, t time.Time) {
+func (s *Status) Event(work bool, t time.Time) bool {
+	// Update time for drop check
+	if work {
+		s.LastConnect = t
+	}
 	// if work state change intermittently
 	// set state : GREEN/RED -> YELLOW
 	if s.Work != work {
 		s.SetState(YELLOW)
 		s.Work = work
 		s.Count = setting.StatusSetting.Count
+		return true
 	}
-	// Update time for drop check
-	if work {
-		s.LastConnect = t
-	}
+	return false
 }
