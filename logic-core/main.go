@@ -10,7 +10,7 @@ import (
 
 	"github.com/KumKeeHyun/PDK/logic-core/dataService/memory"
 	"github.com/KumKeeHyun/PDK/logic-core/elasticClient"
-	kafkaConsumer "github.com/KumKeeHyun/PDK/logic-core/kafkaConsumer/confluent"
+	kafkaConsumer "github.com/KumKeeHyun/PDK/logic-core/kafkaConsumer/sarama"
 	"github.com/KumKeeHyun/PDK/logic-core/logicCore"
 	"github.com/KumKeeHyun/PDK/logic-core/rest"
 	_ "github.com/KumKeeHyun/PDK/logic-core/setting"

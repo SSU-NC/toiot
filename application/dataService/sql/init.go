@@ -33,11 +33,13 @@ func Setup() {
 	}
 
 	dbConn.AutoMigrate(
+		&model.Sink{},
 		&model.Node{},
 		&model.Sensor{},
 		&model.NodeSensor{},
 		&model.SensorValue{},
 	)
+	dbConn.Model(&model.Node{}).AddForeignKey("sink_id", "sinks(id)", "CASCADE", "CASCADE")
 	dbConn.Model(&model.NodeSensor{}).AddForeignKey("node_uuid", "nodes(uuid)", "CASCADE", "CASCADE")
 	dbConn.Model(&model.NodeSensor{}).AddForeignKey("sensor_uuid", "sensors(uuid)", "CASCADE", "CASCADE")
 	dbConn.Model(&model.SensorValue{}).AddForeignKey("sensor_uuid", "sensors(uuid)", "CASCADE", "CASCADE")

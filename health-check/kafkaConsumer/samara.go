@@ -1,14 +1,12 @@
-package sarama
+package kafkaConsumer
 
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 
-	"github.com/KumKeeHyun/PDK/logic-core/adapter"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
+	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
+	"github.com/KumKeeHyun/PDK/health-check/setting"
 	"github.com/Shopify/sarama"
 )
 
@@ -16,7 +14,7 @@ var kafkaConsumer *group
 
 type group struct {
 	client sarama.ConsumerGroup
-	out    chan model.KafkaData
+	out    chan adapter.States
 }
 
 func NewKafkaConsumer() *group {
@@ -29,12 +27,12 @@ func NewKafkaConsumer() *group {
 	outBufSize := setting.KafkaSetting.ChanBufSize
 
 	kafkaConsumer = &group{
-		out: make(chan model.KafkaData, outBufSize),
+		out: make(chan adapter.States, outBufSize),
 	}
 
 	cfg := sarama.NewConfig()
 	cfg.Version = sarama.V0_10_2_0
-	cfg.Consumer.Offsets.Initial = sarama.OffsetOldest
+	cfg.Consumer.Offsets.Initial = sarama.OffsetNewest
 
 	kafkaConsumer.client, err = sarama.NewConsumerGroup([]string{setting.KafkaSetting.Broker}, setting.KafkaSetting.GroupID, cfg)
 	if err != nil {
@@ -62,7 +60,7 @@ func NewKafkaConsumer() *group {
 	return kafkaConsumer
 }
 
-func (g *group) GetOutput() <-chan model.KafkaData {
+func (g *group) GetOutput() <-chan adapter.States {
 	if g != nil {
 		return g.out
 	}
@@ -70,7 +68,7 @@ func (g *group) GetOutput() <-chan model.KafkaData {
 }
 
 type consumer struct {
-	out   chan model.KafkaData
+	out   chan adapter.States
 	ready chan bool
 }
 
@@ -85,14 +83,11 @@ func (consumer *consumer) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (consumer *consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
-		fmt.Printf("sarama\nkey : %s, Value : %s\n", string(message.Key), string(message.Value))
-		ad := adapter.KafkaData{
-			Key: string(message.Key),
-		}
-		if err := json.Unmarshal(message.Value, &ad.Value); err != nil {
+		//fmt.Printf("sarama\nValue : %s\n", string(message.Value))
+		d := adapter.States{}
+		if err := json.Unmarshal(message.Value, &d); err != nil {
 			continue
 		}
-		d := adapter.AppToKafka(&ad)
 		// TODO : check valid
 		consumer.out <- d
 	}

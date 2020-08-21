@@ -5,7 +5,11 @@ import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
 type Node struct {
 	UUID     string `json:"uuid"`
 	Name     string `json:"name"`
-	Location string `json:"location"`
+	Group    string `json:"group"`
+	Location struct {
+		Lat float64 `json:"lat"`
+		Lon float64 `json:"lon"`
+	} `json:"location"`
 }
 
 type Sensor struct {
@@ -22,8 +26,9 @@ type SensorValue struct {
 
 func AppToNode(an *Node) model.Node {
 	return model.Node{
-		Name:  an.Name,
-		Group: an.Location,
+		Name:     an.Name,
+		Group:    an.Group,
+		Location: an.Location,
 	}
 }
 
