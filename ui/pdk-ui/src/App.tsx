@@ -9,6 +9,7 @@ import Main from './Main';
 import RegisterAlarm from './components/RegisterAlarm';
 import LogicCoreManagement from './LogicCoreManagement';
 import RegisterLogic from './LogicCoreComponents/RegisterLogic';
+import AlertAlarm from './components/AlertAlarm';
 import {
 	sensorListElem,
 	nodeListElem,
@@ -143,6 +144,7 @@ class App extends Component<{}, appState> {
 						</div>
 					</div>
 				</Router>
+				<AlertAlarm></AlertAlarm>
 			</div>
 		);
 	}
