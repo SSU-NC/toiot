@@ -2,6 +2,7 @@ package logicCoreUC
 
 import (
 	"errors"
+
 	"github.com/seheee/PDK/logic-core/domain/model"
 	"github.com/seheee/PDK/logic-core/domain/repository"
 	"github.com/seheee/PDK/logic-core/domain/service"
@@ -14,15 +15,17 @@ type logicCoreUsecase struct {
 	ks service.KafkaConsumerGroup
 	es service.ElasticClient
 	ls service.LogicCore
+	event chan interface{}
 }
 
-func NewLogicCoreUsecase(mr repository.MetaRepo, lr repository.LogicRepo, ks service.KafkaConsumerGroup, es service.ElasticClient, ls service.LogicCore) *logicCoreUsecase {
+func NewLogicCoreUsecase(mr repository.MetaRepo, lr repository.LogicRepo, ks service.KafkaConsumerGroup, es service.ElasticClient, ls service.LogicCore, event chan interface{}) *logicCoreUsecase {
 	lcu := &logicCoreUsecase{
 		mr: mr,
 		lr: lr,
 		ks: ks,
 		es: es,
 		ls: ls,
+		event: event,
 	}
 
 	in := lcu.ks.GetOutput()
@@ -63,7 +66,7 @@ func (lu *logicCoreUsecase) SetLogicChain(r *model.RingRequest) error {
 	if err != nil {
 		return err
 	}
-	go lu.ls.CreateAndStartLogic(r, id)
+	go lu.ls.CreateAndStartLogic(r, id, lu.event)
 	return nil
 }
 

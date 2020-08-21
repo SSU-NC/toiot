@@ -22,5 +22,7 @@ func RunServer(h *Handler) error {
 	r.GET("/logiccore", h.GetAllLogic)
 	r.DELETE("/logiccore", h.DeleteLogicChain)
 
+	r.GET("/websocket", h.NewWebSocket)
+
 	return r.Run(setting.Serversetting.MakeAddr())
 }

@@ -25,7 +25,7 @@ func NewLogicCore() *logicCore {
 	}
 }
 
-func (m *mux) CreateAndStartLogic(r *model.RingRequest, id string) {
+func (m *mux) CreateAndStartLogic(r *model.RingRequest, id string, event chan interface{}) {
 	fmt.Println("id : ", id)
 	listen := make(chan model.LogicData, 100)
 	lchs, ok := m.chTable[r.Sensor]
@@ -36,7 +36,7 @@ func (m *mux) CreateAndStartLogic(r *model.RingRequest, id string) {
 	lchs[id] = listen
 	m.logicTable[id] = r.Sensor
 	
-	chain := chainFactory(r)
+	chain := chainFactory(r, event)
 	fmt.Println(chain)
 	fmt.Println(chain.next)
 	for d := range listen {

@@ -7,7 +7,7 @@ import (
 	"github.com/seheee/PDK/logic-core/domain/model"
 )
 
-func getRinger(logic string) Ringer {
+func getRinger(logic string, event chan interface{}) Ringer {
 	switch logic {
 	case "value":
 		return &rangeRing{}
@@ -18,15 +18,15 @@ func getRinger(logic string) Ringer {
 	case "email":
 		return &emailRing{Time:true}
 	case "alarm":
-		return &alarmRing{}
+		return &alarmRing{ch: event}
 	default:
 		return nil
 	}
 }
 
-func UnmarshalRing(l string, a interface{}) Ringer {
+func UnmarshalRing(l string, a interface{}, event chan interface{}) Ringer {
 	var res Ringer
-	if res = getRinger(l); res == nil {
+	if res = getRinger(l, event); res == nil {
 		fmt.Println(l)
 		fmt.Println("ring not exist")
 		return nil
@@ -45,17 +45,17 @@ func UnmarshalRing(l string, a interface{}) Ringer {
 	}
 }
 
-func chainFactory(rr *model.RingRequest) *baseRing {
+func chainFactory(rr *model.RingRequest, event chan interface{}) *baseRing {
 
 	var chain, res Ringer
-	if res = UnmarshalRing(rr.Logic[0].Elem, rr.Logic[0].Arg); res == nil {
+	if res = UnmarshalRing(rr.Logic[0].Elem, rr.Logic[0].Arg, event); res == nil {
 		fmt.Printf("cannot unmarshal ring %s\n", rr.Logic[0].Elem)
 		return nil
 	}
 	var base baseRing
 	base.setNext(res)
 	for _, logic := range rr.Logic[1:] {
-		if chain = UnmarshalRing(logic.Elem, logic.Arg); chain == nil {
+		if chain = UnmarshalRing(logic.Elem, logic.Arg, event); chain == nil {
 			fmt.Printf("cannot unmarshal ring %s\n", logic.Elem)
 			return nil
 		}

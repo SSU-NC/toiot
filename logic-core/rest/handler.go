@@ -8,20 +8,41 @@ import (
 	"github.com/seheee/PDK/logic-core/usecase"
 	//"github.com/seheee/PDK/logic-core/logicCore"
 	"github.com/gin-gonic/gin"
-	//"github.com/gorilla/websocket"
+	"github.com/gorilla/websocket"
 )
 
 type Handler struct {
 	mduc usecase.MetaDataUsecase
 	lcuc usecase.LogicCoreUsecase
+	wuc usecase.WebsocketUsecase
 }
 
 
-func NewHandler(mduc usecase.MetaDataUsecase, lcuc usecase.LogicCoreUsecase) *Handler {
+func NewHandler(mduc usecase.MetaDataUsecase, lcuc usecase.LogicCoreUsecase, wuc usecase.WebsocketUsecase) *Handler {
 	return &Handler{
 		mduc: mduc,
 		lcuc: lcuc,
+		wuc: wuc,
 	}
+}
+
+func (h *Handler) NewWebSocket(c *gin.Context) {
+	listen := make(chan interface{})
+	h.wuc.Register(listen)
+	defer h.wuc.Unregister(listen)
+
+	conn, err := websocket.Upgrade(c.Writer, c.Request, nil, 1024, 1024)
+	if err != nil {
+		fmt.Printf("upgrade: %s", err.Error())
+	}
+	fmt.Println("connect websocket!")
+
+	//conn.WriteJSON(sr.GetHealthInfo())
+
+	for data := range listen {
+		conn.WriteJSON(data)
+	}
+	fmt.Println("disconnect websocket!")
 }
 
 

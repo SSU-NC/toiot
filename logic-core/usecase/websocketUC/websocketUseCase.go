@@ -1,24 +1,25 @@
 package websocketUC
 
 import (
+	"fmt"
 	"github.com/dustin/go-broadcast"
 )
 
 type websocketUsecase struct {
-	event chan struct{}
+	event chan interface{}
 	broadcast.Broadcaster
 }
 
-func NewWebsocketUsecase(e chan struct{}) *websocketUsecase {
+func NewWebsocketUsecase(e chan interface{}) *websocketUsecase {
 	wu := &websocketUsecase{
+		event:       e,
 		Broadcaster: broadcast.NewBroadcaster(10),
 	}
 
 	go func() {
-		for _ = range wu.event {
-			his := wu.sr.GetHealthInfo()
-			fmt.Println("broadcast\n", his)
-			wu.Submit(his)
+		for ev := range wu.event {
+			fmt.Println("broadcast\n", ev)
+			wu.Submit(ev)
 		}
 	}()
 

@@ -2,7 +2,7 @@ package logicCoreUC
 
 import (
 	"strings"
-
+	
 	"github.com/seheee/PDK/logic-core/domain/model"
 )
 

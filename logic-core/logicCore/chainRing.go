@@ -54,7 +54,7 @@ func (r *timeRing) exec(d *model.LogicData) {
 		}
 		return true
 	}
-	
+	fmt.Println("timeRing")
 	ts := d.Timestamp
 	ts, _ = time.Parse("15:04:05", ts.Format("15:04:05"))
 	if isTime(ts) {
@@ -117,12 +117,18 @@ func (r *emailRing) exec(d *model.LogicData) {
 
 type alarmRing struct {
 	baseRing
-	//WebSocket
+	ch chan interface{}
 	Message string `json:"text"`
+}
+type alarmMsg struct {
+	Sensor string `json:"sensor_uuid"`
+	SensorName string `json:"sensor_name"`
+	Message string `json:"msg"`
 }
 func (r *alarmRing) exec(d *model.LogicData) {
 	fmt.Printf("[alarm] %s\n", r.Message)
-	
+
+	r.ch <- alarmMsg{Sensor:d.SID, SensorName:d.SName, Message:r.Message}
 
 	if r.next != nil {
 		r.next.exec(d)

@@ -16,6 +16,9 @@ import (
 	_ "github.com/seheee/PDK/logic-core/setting"
 	"github.com/seheee/PDK/logic-core/usecase/logicCoreUC"
 	"github.com/seheee/PDK/logic-core/usecase/metaDataUC"
+	"github.com/seheee/PDK/logic-core/usecase/websocketUC"
+	"github.com/seheee/PDK/logic-core/db"
+
 )
 
 func main() {
@@ -37,16 +40,19 @@ func main() {
 	}()
 
 	mr := memory.NewMetaRepo()
+	lr := db.NewLogicRepository()
 	ks := kafkaConsumer.NewKafkaConsumer()
 	es := elasticClient.NewElasticClient()
 	ls := logicCore.NewLogicCore()
 
+	event := make(chan interface{}, 2)
 	mduc := metaDataUC.NewMetaDataUsecase(mr, ls)
-	lcuc := logicCoreUC.NewLogicCoreUsecase(mr, ks, es, ls)
-
-	h := rest.NewHandler(mduc, lcuc)
+	lcuc := logicCoreUC.NewLogicCoreUsecase(mr, lr, ks, es, ls, event)
+	wuc := websocketUC.NewWebsocketUsecase(event)
+	
+	h := rest.NewHandler(mduc, lcuc, wuc)
 	go rest.RunServer(h)
-
+	
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
 	<-sigterm
