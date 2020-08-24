@@ -38,10 +38,16 @@ type Elastic struct {
 var ElasticSetting = &Elastic{}
 
 type AppServer struct {
-	Address string `toml:"address`
+	Address string `toml:"address"`
 }
 
 var AppServerSetting = &AppServer{}
+
+type MongoDB struct {
+	Address string `toml:"address"`
+	Port 	string `toml:"port"`
+}
+var MongoDbSetting = &MongoDB{}
 
 func init() {
 	tree, err := toml.LoadFile("conf/config.toml")
@@ -62,5 +68,8 @@ func init() {
 	appSrvTree := tree.Get("appserver").(*toml.Tree)
 	appSrvTree.Unmarshal(AppServerSetting)
 
-	fmt.Println(Serversetting, KafkaSetting, ElasticSetting, AppServerSetting)
+	mongoTree := tree.Get("mongodb").(*toml.Tree)
+	mongoTree.Unmarshal(MongoDbSetting)
+
+	fmt.Println(Serversetting, KafkaSetting, ElasticSetting, AppServerSetting, MongoDbSetting)
 }

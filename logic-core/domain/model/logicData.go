@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"time"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type LogicData struct {
 	SID       string             `json:"s_id"`
@@ -10,13 +13,21 @@ type LogicData struct {
 	Timestamp time.Time          `json:"timestamp"`
 }
 
-type LogicRing struct {
-	Logic string                 `json:"logic"`
-	Arg   map[string]interface{} `json:"arg"`
+type RingRequest struct {
+	Sensor string `json:"sensor_uuid"`
+	LogicName string `json:"logic_name"`
+	Logic []struct {
+		Elem string `json:"elem"`
+		Arg map[string]interface{} `json:"arg"`
+	} `json:"logic"`
 }
 
-type ChainRequest struct {
-	SID   string      `json:"s_id"`
-	Name  string      `json:"name"`
-	Rings []LogicRing `json:"rings"`
+type Ring struct {
+	Id primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Sensor string `json:"sensor_uuid"`
+	LogicName string `json:"logic_name"`
+	Logic []struct {
+		Elem string `json:"elem"`
+		Arg map[string]interface{} `json:"arg"`
+	} `json:"logic"`
 }
