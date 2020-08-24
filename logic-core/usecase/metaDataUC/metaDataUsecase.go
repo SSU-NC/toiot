@@ -1,9 +1,9 @@
 package metaDataUC
 
 import (
-	"github.com/seheee/PDK/logic-core/domain/model"
-	"github.com/seheee/PDK/logic-core/domain/repository"
-	"github.com/seheee/PDK/logic-core/domain/service"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/repository"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/service"
 )
 
 type metaDataUsecase struct {

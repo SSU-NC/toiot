@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/seheee/PDK/logic-core/domain/model"
+import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
 
 type MetaRepo interface {
 	GetNode(key string) (*model.Node, error)

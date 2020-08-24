@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
-	"github.com/seheee/PDK/application/domain/model"
-	"github.com/seheee/PDK/application/interface/presenter"
-	"github.com/seheee/PDK/application/usecase"
+	"github.com/KumKeeHyun/PDK/application/domain/model"
+	"github.com/KumKeeHyun/PDK/application/interface/presenter"
+	"github.com/KumKeeHyun/PDK/application/usecase"
 	"github.com/gin-gonic/gin"
 )
 
