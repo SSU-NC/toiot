@@ -3,9 +3,8 @@ import {
 	sensorListElem,
 	sensorOptionsElem,
 	nodeListElem,
-	value_list_elem,
 } from '../ElemInterface/ElementsInterface';
-import { logicElem, lcValueArg } from '../ElemInterface/LcElementsInterface';
+import { logicElem } from '../ElemInterface/LcElementsInterface';
 import './LogicCore.css';
 import InputSensorCard from './InputCards/InputSensorCard';
 import InputValueCard from './InputCards/InputValueCard';
@@ -141,8 +140,8 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 			this.state.selected_time,
 		];
 		logic_array = logic_array.concat(
-			this.state.selected_action,
-			this.state.selected_value
+			this.state.selected_value,
+			this.state.selected_action
 		);
 
 		// Filter elem: 'empty' field

@@ -4,9 +4,13 @@ import { NavLink, Link } from 'react-router-dom';
 class Navigation extends Component {
 	render() {
 		return (
-			<div>
+			<>
 				<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-					<Link className="navbar-brand" style={{ color: 'pink' }} to="#">
+					<Link
+						className="navbar-brand"
+						style={{ fontSize: '20pt', fontWeight: 'bold', color: 'pink' }}
+						to="/"
+					>
 						ToIoT
 					</Link>
 					<div className="container">
@@ -29,15 +33,28 @@ class Navigation extends Component {
 									<div
 										className="dropdown-menu"
 										aria-labelledby="navbarDropdown"
+										style={{ background: 'pink' }}
 									>
-										<Link className="dropdown-item" to="/sensor">
-											SENSOR
+										<Link
+											className="dropdown-item"
+											to="/sensor"
+											style={{ background: 'pink' }}
+										>
+											Sensor
 										</Link>
-										<Link className="dropdown-item" to="/node">
-											NODE
+										<Link
+											className="dropdown-item"
+											to="/node"
+											style={{ background: 'pink' }}
+										>
+											Node
 										</Link>
-										<Link className="dropdown-item" to="/sink">
-											SINK
+										<Link
+											className="dropdown-item"
+											to="/sink"
+											style={{ background: 'pink' }}
+										>
+											Sink
 										</Link>
 									</div>
 								</li>
@@ -53,30 +70,53 @@ class Navigation extends Component {
 									<div
 										className="dropdown-menu"
 										aria-labelledby="navbarDropdown"
+										style={{ background: 'pink' }}
 									>
-										<Link className="dropdown-item" to="/alarm">
-											ALARM
-										</Link>
-										<Link className="dropdown-item" to="/logicCore">
-											LOGIC CORE
+										<Link
+											className="dropdown-item"
+											to="/logicCore"
+											style={{ background: 'pink' }}
+										>
+											Logic core
 										</Link>
 									</div>
 								</li>
 								<li className="nav-item dropdown">
-									<NavLink className="nav-item nav-link dropdown-toggle" role="button" data-toggle="dropdown" to="/kibana">
+									<NavLink
+										className="nav-item nav-link dropdown-toggle"
+										role="button"
+										data-toggle="dropdown"
+										to="/kibana"
+									>
 										KIBANA
 									</NavLink>
-									<div className="dropdown-menu" aria-labelledby="navbarDropdown">
-										<Link className="dropdown-item" to="/visualize">visualize</Link>
+									<div
+										className="dropdown-menu"
+										aria-labelledby="navbarDropdown"
+										style={{ background: 'pink' }}
+									>
+										<Link
+											className="dropdown-item"
+											to="/visualize"
+											style={{ background: 'pink' }}
+										>
+											Visualize
+										</Link>
 
-										<Link className="dropdown-item" to="/dashboard">dashboard</Link>
+										<Link
+											className="dropdown-item"
+											to="/dashboard"
+											style={{ background: 'pink' }}
+										>
+											Dashboard
+										</Link>
 									</div>
 								</li>
 							</ul>
 						</div>
 					</div>
 				</nav>
-			</div>
+			</>
 		);
 	}
 }
