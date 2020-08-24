@@ -126,9 +126,10 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			<>
 				<button
 					type="button"
-					className="btn btn-primary"
+					className="btn"
 					data-toggle="modal"
 					data-target="#register-node"
+					style={{ background: 'pink' }}
 				>
 					register node
 				</button>

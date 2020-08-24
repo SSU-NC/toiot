@@ -75,9 +75,10 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 			<>
 				<button
 					type="button"
-					className="btn btn-primary"
+					className="btn"
 					data-toggle="modal"
 					data-target="#register-sensor-modal"
+					style={{ background: 'pink' }}
 				>
 					register sensor
 				</button>

@@ -57,9 +57,10 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 			<>
 				<button
 					type="button"
-					className="btn btn-primary"
+					className="btn"
 					data-toggle="modal"
 					data-target="#register-sink-modal"
+					style={{ background: 'pink' }}
 				>
 					register sink
 				</button>
