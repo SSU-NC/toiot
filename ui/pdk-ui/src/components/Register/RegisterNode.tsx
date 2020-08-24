@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { sensorListElem, sensorOptionsElem, sinkListElem, locationElem, sinkOptionsElem } from '../ElemInterface/ElementsInterface';
-import { NODE_URL } from '../defineUrl';
+import {
+	sensorListElem,
+	sensorOptionsElem,
+	sinkListElem,
+	locationElem,
+	sinkOptionsElem,
+} from '../../ElemInterface/ElementsInterface';
+import { NODE_URL } from '../../defineUrl';
 // react-select : https://github.com/JedWatson/react-select
 
 interface RegisterNodeState {
@@ -23,7 +29,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		group: '',
 		location: {
 			lon: 0,
-			lat: 0
+			lat: 0,
 		},
 		sink_id: 0,
 		sensors: [],
@@ -41,12 +47,12 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 	handleLatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({
 			location: { ...this.state.location, lat: parseFloat(e.target.value) },
-		})
+		});
 	};
 	handleLonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({
 			location: { ...this.state.location, lon: parseFloat(e.target.value) },
-		})
+		});
 	};
 	handleSensorsChange = (sensors: any) => {
 		//sensors: Array<sensorOptionsElem> ?? ?? ??..
@@ -75,7 +81,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 				group: data.group,
 				location: {
 					lat: data.location.lat,
-					lon: data.location.lon
+					lon: data.location.lon,
 				},
 				sensors: sensor_uuid,
 			})
@@ -88,7 +94,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 				group: data.group,
 				location: {
 					lat: data.location.lat,
-					lon: data.location.lon
+					lon: data.location.lon,
 				},
 				sink_id: data.sink_id,
 				sensors: sensor_uuid,
@@ -105,7 +111,12 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 	render() {
 		let sensorOptions: Array<sensorOptionsElem>;
 		sensorOptions = this.props.sensorList.map((val: sensorListElem) => {
-			return { label: val.name, value: val.name, uuid: val.uuid, value_list:val.value_list };
+			return {
+				label: val.name,
+				value: val.name,
+				uuid: val.uuid,
+				value_list: val.value_list,
+			};
 		});
 		let sinkOptions: Array<sinkOptionsElem>;
 		sinkOptions = this.props.sinkList.map((val: sinkListElem) => {
@@ -177,7 +188,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 											onChange={this.handleLatChange}
 										/>
 									</div>
-										<div className="form-group">
+									<div className="form-group">
 										<label>location - longitude</label>
 										<input
 											type="number"
@@ -185,7 +196,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 											name="lon"
 											value={this.state.location.lon}
 											onChange={this.handleLonChange}
-										/>						
+										/>
 									</div>
 									<div className="form-group">
 										<label>Select sensors</label>

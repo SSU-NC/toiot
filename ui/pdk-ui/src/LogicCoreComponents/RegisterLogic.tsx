@@ -3,9 +3,8 @@ import {
 	sensorListElem,
 	sensorOptionsElem,
 	nodeListElem,
-	value_list_elem,
 } from '../ElemInterface/ElementsInterface';
-import { logicElem, lcValueArg } from '../ElemInterface/LcElementsInterface';
+import { logicElem } from '../ElemInterface/LcElementsInterface';
 import './LogicCore.css';
 import InputSensorCard from './InputCards/InputSensorCard';
 import InputValueCard from './InputCards/InputValueCard';

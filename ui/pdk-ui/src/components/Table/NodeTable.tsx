@@ -1,27 +1,52 @@
 import React, { Component } from 'react';
-import { sensorListElem, value_list_elem } from '../ElemInterface/ElementsInterface';
-import { SENSOR_URL } from '../defineUrl';
+import {
+	nodeListElem,
+	nodeHealthCheckElem,
+} from '../../ElemInterface/ElementsInterface';
+import { NODE_URL } from '../../defineUrl';
 
-
-//import DeleteRequest from './DeleteRequest'
-
-interface SensorTableProps {
-	sensorList: Array<sensorListElem>;
+enum HealthColor {
+	red,
+	yellow,
+	lime,
 }
 
-class SensorTable extends Component<SensorTableProps> {
-	handleRemoveClick = (sensor_uuid: string) => () => {
-		var url = SENSOR_URL;
+interface NodeTableProps {
+	nodeList: Array<nodeListElem>;
+	nodeState: Array<nodeHealthCheckElem>;
+}
+
+class NodeTable extends Component<NodeTableProps, {}> {
+	handleRemoveClick = (node_uuid: string) => () => {
+		var url = NODE_URL;
 
 		fetch(url, {
 			method: 'DELETE',
-			body: JSON.stringify({ uuid: sensor_uuid }),
+			body: JSON.stringify({ uuid: node_uuid }),
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		})
 			.then((res) => res.json())
 			.catch((error) => console.error('Error:', error));
+	};
+
+	findNodeState = (uuid: string) => {
+		for (let prop in this.props.nodeState) {
+			if (this.props.nodeState[prop].n_uuid === uuid) {
+				return (
+					<td
+						style={{
+							color: HealthColor[this.props.nodeState[prop].state],
+							fontSize: '8pt',
+						}}
+					>
+						●
+					</td>
+				);
+			}
+		}
+		return <td style={{ color: 'gray', fontSize: '8pt' }}>●</td>;
 	};
 
 	render() {
@@ -33,27 +58,27 @@ class SensorTable extends Component<SensorTableProps> {
 							<th scope="col">#</th>
 							<th scope="col">name</th>
 							<th scope="col">uuid</th>
-							<th scope="col">values</th>
+							<th scope="col">sensors</th>
+							<th scope="col">group</th>
+							<th scope="col">health</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.sensorList.map((sensor: sensorListElem, idx: number) => (
+						{this.props.nodeList.map((node: nodeListElem, idx: number) => (
 							<tr>
 								<th scope="row">{idx}</th>
-								<td>{sensor.name}</td>
-								<td>{sensor.uuid}</td>
-								<td>
-									{sensor.value_list.map(
-										(value: value_list_elem) => value.value_name + ', '
-									)}
-								</td>
+								<td>{node.name}</td>
+								<td>{node.uuid}</td>
+								<td>{node.sensors.map((sensor: any) => sensor.name + ', ')}</td>
+								<td>{node.group}</td>
+								{this.findNodeState(node.uuid)}
 								<td>
 									<button
 										className="btn btn-default btn-sm"
 										type="button"
 										id="button-delete"
-										onClick={this.handleRemoveClick(sensor.uuid)}
+										onClick={this.handleRemoveClick(node.uuid)}
 									>
 										<svg
 											width="1em"
@@ -79,4 +104,4 @@ class SensorTable extends Component<SensorTableProps> {
 	}
 }
 
-export default SensorTable;
+export default NodeTable;

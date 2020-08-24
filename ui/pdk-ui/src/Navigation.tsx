@@ -54,22 +54,31 @@ class Navigation extends Component {
 										className="dropdown-menu"
 										aria-labelledby="navbarDropdown"
 									>
-										<Link className="dropdown-item" to="/alarm">
-											ALARM
-										</Link>
 										<Link className="dropdown-item" to="/logicCore">
 											LOGIC CORE
 										</Link>
 									</div>
 								</li>
 								<li className="nav-item dropdown">
-									<NavLink className="nav-item nav-link dropdown-toggle" role="button" data-toggle="dropdown" to="/kibana">
+									<NavLink
+										className="nav-item nav-link dropdown-toggle"
+										role="button"
+										data-toggle="dropdown"
+										to="/kibana"
+									>
 										KIBANA
 									</NavLink>
-									<div className="dropdown-menu" aria-labelledby="navbarDropdown">
-										<Link className="dropdown-item" to="/visualize">visualize</Link>
+									<div
+										className="dropdown-menu"
+										aria-labelledby="navbarDropdown"
+									>
+										<Link className="dropdown-item" to="/visualize">
+											visualize
+										</Link>
 
-										<Link className="dropdown-item" to="/dashboard">dashboard</Link>
+										<Link className="dropdown-item" to="/dashboard">
+											dashboard
+										</Link>
 									</div>
 								</li>
 							</ul>

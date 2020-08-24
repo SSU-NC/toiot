@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { logicCore, logicCoreElem } from '../ElemInterface/LcElementsInterface';
+import { logicCoreElem } from '../ElemInterface/LcElementsInterface';
 import ShowLogic from './ShowLogic';
 import { LOGICCORE_URL } from '../defineUrl';
 
