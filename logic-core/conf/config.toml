@@ -1,5 +1,5 @@
 [server]
-address = "127.0.0.1"
+address = "10.27.24.2"
 port = "8090"
 
 [kafka]
@@ -16,4 +16,8 @@ batch_ticker = 2
 batch_size = 200
 
 [appserver]
-address = "http://220.70.2.1:8080"
+address = "http://220.70.2.160:8081"
+
+[mongodb]
+address = "127.0.0.1"
+port = "27017"

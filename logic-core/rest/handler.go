@@ -37,8 +37,6 @@ func (h *Handler) NewWebSocket(c *gin.Context) {
 	}
 	fmt.Println("connect websocket!")
 
-	//conn.WriteJSON(sr.GetHealthInfo())
-
 	for data := range listen {
 		conn.WriteJSON(data)
 	}
@@ -70,7 +68,6 @@ func (h *Handler) DeleteLogicChain(c *gin.Context) {
 	if err := h.lcuc.RemoveLogicChain(r.Id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
-		fmt.Println("ok")
 		c.JSON(http.StatusOK, r)
 	}
 }

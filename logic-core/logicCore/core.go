@@ -37,8 +37,6 @@ func (m *mux) CreateAndStartLogic(r *model.RingRequest, id string, event chan in
 	m.logicTable[id] = r.Sensor
 	
 	chain := chainFactory(r, event)
-	fmt.Println(chain)
-	fmt.Println(chain.next)
 	for d := range listen {
 		chain.exec(&d)
 	}
@@ -60,6 +58,9 @@ func (m *mux) RemoveLogic(id string) (err error) {
 	}
 	ch, _ := m.chTable[sid][id]
 	close(ch)
+	
+	delete(m.chTable[sid], id)
+	delete(m.logicTable, id)
 	return nil
 }
 

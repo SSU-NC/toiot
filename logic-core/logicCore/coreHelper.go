@@ -59,8 +59,8 @@ func chainFactory(rr *model.RingRequest, event chan interface{}) *baseRing {
 			fmt.Printf("cannot unmarshal ring %s\n", logic.Elem)
 			return nil
 		}
-		fmt.Println(chain)
 		res.setNext(chain)
+		fmt.Printf("%+v\n", chain)
 		res = chain
 	}
 

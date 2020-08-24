@@ -2,8 +2,10 @@ package elasticClient
 
 import (
 	"fmt"
-	"bytes"
-	"encoding/json"
+	//"bytes"
+	//"encoding/json"
+	"strings"
+	"time"
 
 	"github.com/seheee/PDK/logic-core/domain/model"
 	"github.com/seheee/PDK/logic-core/setting"
@@ -12,7 +14,7 @@ import (
 
 var elasticClient *client
 
-/*
+
 type client struct {
 	es *elasticsearch.Client
 	in chan model.Document
@@ -60,8 +62,8 @@ func (ec *client) run() {
 		}
 	}
 }
-*/
 
+/*
 type client struct {
 	es *elasticsearch.Client
 	in chan model.Document
@@ -105,7 +107,7 @@ func (ec *client) run() {
 		)
 	}
 }
-
+*/
 func (ec *client) GetInput() chan<- model.Document {
 	if ec != nil {
 		return ec.in
@@ -113,7 +115,7 @@ func (ec *client) GetInput() chan<- model.Document {
 	return nil
 }
 
-/*
+
 func (ec *client) insertDoc(d *model.Document) {
 	ec.docBuf = append(ec.docBuf, d)
 	if len(ec.docBuf) >= (ec.bufSize - 10) {
@@ -130,7 +132,7 @@ func (ec *client) bulk() {
 		fmt.Println(bulkStr)
 		ec.docBuf = make([]*model.Document, 0, ec.bufSize)
 	}
-}*/
+}
 
 func docsToSlice(docs []*model.Document) []string {
 	res := make([]string, len(docs))

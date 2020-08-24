@@ -44,7 +44,6 @@ func NewLogicCoreUsecase(mr repository.MetaRepo, lr repository.LogicRepo, ks ser
 					ch <- ld
 				}
 			}
-
 			out <- lcu.ToDocument(&ld)
 		}
 	}()
@@ -53,14 +52,9 @@ func NewLogicCoreUsecase(mr repository.MetaRepo, lr repository.LogicRepo, ks ser
 }
 
 func (lu *logicCoreUsecase) SetLogicChain(r *model.RingRequest) error {
-	/*_, err := lu.mr.GetSensor(r.Sensor)
+	_, err := lu.mr.GetSensor(r.Sensor)
 	if err != nil {
 		return errors.New("sensor does not exist")
-	}*/
-	chs := lu.ls.GetLogicChans(r.Sensor)
-	_, ok := chs[r.LogicName]
-	if ok {
-		return errors.New("logic name already exists")
 	}
 	id, err := lu.lr.Create(r)
 	if err != nil {

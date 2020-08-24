@@ -1,7 +1,6 @@
 package websocketUC
 
 import (
-	"fmt"
 	"github.com/dustin/go-broadcast"
 )
 
@@ -18,7 +17,6 @@ func NewWebsocketUsecase(e chan interface{}) *websocketUsecase {
 
 	go func() {
 		for ev := range wu.event {
-			fmt.Println("broadcast\n", ev)
 			wu.Submit(ev)
 		}
 	}()

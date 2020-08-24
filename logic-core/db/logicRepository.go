@@ -21,17 +21,14 @@ type logicRepository struct {
 
 func NewLogicRepository() *logicRepository {
 	uri := "mongodb://"+setting.MongoDbSetting.Address + ":" +setting.MongoDbSetting.Port
-	// Set client options
 	clientOptions := options.Client().ApplyURI(uri)
 
-	// Connect to MongoDB
 	cli, err := mongo.Connect(context.TODO(), clientOptions)
 	fmt.Println("\nresult type:", reflect.TypeOf(cli))
 	if err != nil {
 		fmt.Println("connect error: ", err.Error())
 	}
 
-	// Check the connection
 	err = cli.Ping(context.TODO(), nil)
 
 	if err != nil {
@@ -39,9 +36,18 @@ func NewLogicRepository() *logicRepository {
 	}
 
 	fmt.Println("Connected to MongoDB!")
+	col := cli.Database("test").Collection("logics")
+
+	opt := options.Index()
+	opt.SetUnique(true)
+	index := mongo.IndexModel{Keys: bson.M{"logicname": 1}, Options: opt}
+	if _, err := col.Indexes().CreateOne(context.TODO(), index); err != nil {
+		fmt.Println("Could not create index:", err)
+	}
+
 	return &logicRepository{
 		client: cli,
-		collection: cli.Database("test").Collection("logics"),
+		collection: col,
 	}
 }
 
@@ -68,8 +74,7 @@ func (lr *logicRepository) GetAll() (r []model.Ring, err error) {
 func (lr *logicRepository) Create(r *model.RingRequest) (string, error) {
 	result, err := lr.collection.InsertOne(context.TODO(),r)
 	if err != nil {
-		fmt.Println("insert error:", err.Error())
-		return "", err
+		return "", errors.New("duplicate logic name")
 	}
 	return result.InsertedID.(primitive.ObjectID).Hex(), nil
 } 
