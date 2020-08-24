@@ -51,32 +51,35 @@ class AlertAlarm extends Component<{}, AlertAlarmState> {
 
 	render() {
 		return (
-			<div>
+			<>
 				{this.state.alarmList.map((alarm: alarmListElem, idx: number) =>
 					alarm.alarm_state ? (
-						<Alert color="danger">
-							<button
-								type="button"
-								className="close"
-								data-dismiss="alert"
-								aria-label="Close"
-								onClick={() => {
-									this.handleCloseAlert(idx);
-								}}
-							>
-								×
-							</button>
-							<h3 className="alert-heading">
-								{alarm.alarm.sensor_name} - {alarm.alarm.sensor_uuid}
-							</h3>
-							<hr />
-							<p>{alarm.alarm.msg}</p>
-						</Alert>
+						<div className="row">
+							<div className="col-3"></div>
+							<Alert className="col-6" color="danger">
+								<button
+									type="button"
+									className="close"
+									data-dismiss="alert"
+									aria-label="Close"
+									onClick={() => {
+										this.handleCloseAlert(idx);
+									}}
+								>
+									×
+								</button>
+								<h3 className="alert-heading">
+									{alarm.alarm.sensor_name} - {alarm.alarm.sensor_uuid}
+								</h3>
+								<hr />
+								<p>{alarm.alarm.msg}</p>
+							</Alert>
+						</div>
 					) : (
 						<></>
 					)
 				)}
-			</div>
+			</>
 		);
 	}
 }

@@ -140,8 +140,8 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 			this.state.selected_time,
 		];
 		logic_array = logic_array.concat(
-			this.state.selected_action,
-			this.state.selected_value
+			this.state.selected_value,
+			this.state.selected_action
 		);
 
 		// Filter elem: 'empty' field

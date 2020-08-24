@@ -79,7 +79,7 @@ class NodeManagement extends Component<
 				</div>
 				<div>
 					<h3>Node</h3>
-					<br />
+					<hr />
 					{groupedNodeList.map((group: GroupedNodeListElem, idx: number) => (
 						<div>
 							<h4>Sink {group.sink_id}</h4>
