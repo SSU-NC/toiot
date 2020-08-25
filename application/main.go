@@ -39,7 +39,7 @@ func main() {
 		sig.GET("", h.GetSinkInfo)
 		sig.GET("/:id", h.GetSinkByID)
 		sig.POST("", h.RegisterSink)
-		sig.DELETE("", h.DeleteSink)
+		sig.DELETE("/:id", h.DeleteSink)
 	}
 	ng := r.Group("/node")
 	{

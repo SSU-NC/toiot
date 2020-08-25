@@ -185,8 +185,10 @@ func (h *Handler) DeleteSensor(c *gin.Context) {
 }
 
 func (h *Handler) RegisterInfo(c *gin.Context) {
-	nodeInfo, _ := h.nu.GetAllNodes()
+	ni, _ := h.nu.GetAllNodes()
 	sensorInfo, _ := h.su.GetAllSensorsWithValues()
+	nodeInfo := adapter.ModelsToNodes(ni)
+
 	msg := map[string]interface{}{
 		"node_info":   nodeInfo,
 		"sensor_info": sensorInfo,

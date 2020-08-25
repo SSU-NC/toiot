@@ -12,7 +12,7 @@ type App struct {
 func (as *App) Getenv() {
 	as.Server = os.Getenv("APP_SERVER")
 	if as.Server == "" {
-		as.Server = "0.0.0.0:8080"
+		as.Server = "0.0.0.0:8081"
 	}
 }
 
