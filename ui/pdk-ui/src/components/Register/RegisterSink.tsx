@@ -49,7 +49,8 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 		})
 			.then((res) => res.json())
 			.then((response) => console.log('Success:', JSON.stringify(response)))
-			.catch((error) => console.error('Error:', error));
+			.catch((error) => console.error('Error:', error))
+			.then(() => window.location.reload(false));
 	};
 
 	render() {

@@ -105,16 +105,19 @@ If you use docker, follow this solution.
 
 # Execute
 
-If you want to start react, execute this instruction at `/ui/pdk-ui`. When you execute instruction, enter `localhost://3000` in address bar.
+If you want to start react, execute this instruction at `/ui/pdk-ui`. After you execute instruction, enter `localhost://3000` in address.
 
 ```shell
-npm run start
+npm install    // install dependency modules
+npm run start  // start react
 ```
 
 # Structure
 
 All components are routed at `src/App.tsx`.  
 `App.tsx` request nodeList, sensorList, sinkList and logicCore to backend, and pass on to lower components by props.
+
+![components_structure](./img/components_structure.png)
 
 ## 1. Navigation bar
 
