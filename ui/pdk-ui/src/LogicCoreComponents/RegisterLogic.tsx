@@ -12,7 +12,7 @@ import InputGroupCard from './InputCards/InputGroupCard';
 import InputTimeCard from './InputCards/InputTimeCard';
 import InputActionCard from './InputCards/InputActionCard';
 import { LOGICCORE_URL } from '../defineUrl';
-
+import { Link } from 'react-router-dom';
 interface RegisterLogicProps {
 	sensorList: Array<sensorListElem>;
 	nodeList: Array<nodeListElem>;
@@ -25,6 +25,9 @@ interface RegisterLogicState {
 	selected_time: logicElem;
 	selected_action: Array<logicElem>;
 	selected_group: logicElem;
+	nameValid: boolean;
+	sensorValid: boolean;
+	actionValid: boolean;
 }
 
 class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
@@ -40,18 +43,38 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 		selected_group: { elem: 'empty', arg: { group: [] } },
 		selected_time: { elem: 'empty', arg: { range: [] } },
 		selected_action: [],
+
+		nameValid: false,
+		sensorValid: false,
+		actionValid: false,
 	};
 	handleLogicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			logic_name: e.target.value,
-		});
+		if (e.target.value.length > 0) {
+			this.setState({
+				logic_name: e.target.value,
+				nameValid: true,
+			});
+		} else {
+			this.setState({
+				logic_name: e.target.value,
+				nameValid: false,
+			});
+		}
 	};
 
 	// handle each card change
 	handleSensorCardChange = (sensor_info: sensorOptionsElem) => {
-		this.setState({
-			sensor_info,
-		});
+		if (sensor_info !== null) {
+			this.setState({
+				sensor_info,
+				sensorValid: true,
+			});
+		} else {
+			this.setState({
+				sensor_info,
+				sensorValid: false,
+			});
+		}
 	};
 	handleGroupCardChange = (selected_group: logicElem) => {
 		this.setState({
@@ -80,7 +103,21 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 				return selectedAction;
 			}
 		);
-		this.setState({ selected_action: new_selected_action });
+		if (
+			new_selected_action !== null &&
+			new_selected_action !== [] &&
+			!new_selected_action.some((value) => value.elem === 'empty')
+		) {
+			this.setState({
+				selected_action: new_selected_action,
+				actionValid: true,
+			});
+		} else {
+			this.setState({
+				selected_action: new_selected_action,
+				actionValid: false,
+			});
+		}
 	};
 
 	// handle add card button click event
@@ -155,6 +192,26 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 			logic: logic_array,
 		};
 		var url = LOGICCORE_URL;
+
+		if (!this.state.nameValid) {
+			alert('Please enter logic name.');
+			return;
+		}
+		if (!this.state.sensorValid) {
+			alert('Please select a sensor.');
+			return;
+		}
+
+		if (!this.state.actionValid) {
+			alert('Please set more than a action.');
+			return;
+		}
+
+		var submitValid: boolean;
+		submitValid = window.confirm('Are you sure to register this logic?');
+		if (!submitValid) {
+			return;
+		}
 
 		fetch(url, {
 			method: 'POST',
@@ -237,6 +294,11 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 						Add action
 					</button>
 					<p></p>
+					<Link to="/logicCore">
+						<button type="button" className="btn btn-default float-right">
+							Cancel
+						</button>
+					</Link>
 					<button
 						//type="submit"
 						type="button"

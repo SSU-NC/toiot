@@ -7,6 +7,8 @@ interface RegisterSinkState {
 	name: string;
 	location: string;
 	ip: string;
+	nameValid: boolean;
+	ipValid: boolean;
 }
 
 class RegisterSink extends Component<{}, RegisterSinkState> {
@@ -14,12 +16,22 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 		name: '',
 		location: '',
 		ip: '',
+		nameValid: false,
+		ipValid: false,
 	};
 
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			name: e.target.value,
-		});
+		if (e.target.value.length > 0) {
+			this.setState({
+				name: e.target.value,
+				nameValid: true,
+			});
+		} else {
+			this.setState({
+				name: e.target.value,
+				nameValid: false,
+			});
+		}
 	};
 
 	handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,9 +41,19 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 	};
 
 	handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			ip: e.target.value,
-		});
+		const ipportRegExp = /^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{4,5}/;
+
+		if (e.target.value.match(ipportRegExp)) {
+			this.setState({
+				ip: e.target.value,
+				ipValid: true,
+			});
+		} else {
+			this.setState({
+				ip: e.target.value,
+				ipValid: false,
+			});
+		}
 	};
 
 	handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,6 +61,21 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 
 		var url = SINK_URL;
 		var data = this.state;
+
+		if (!this.state.nameValid) {
+			alert('Please enter sink.');
+			return;
+		}
+		if (!this.state.ipValid) {
+			alert('Please enter valid type of ip:port.');
+			return;
+		}
+
+		var submitValid: boolean;
+		submitValid = window.confirm('Are you sure to register this sink?');
+		if (!submitValid) {
+			return;
+		}
 
 		fetch(url, {
 			method: 'POST', // or 'PUT'
@@ -98,9 +135,6 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 											value={this.state.name}
 											onChange={this.handleNameChange}
 										/>
-										<div className="invalid-feedback">
-											This sink name is already exist.
-										</div>
 									</div>
 									<div className="form-group">
 										<label>location</label>
@@ -129,7 +163,6 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 									<button
 										type="submit"
 										className="btn"
-										data-dismiss="modal"
 										onClick={this.handleSubmit}
 										style={{ background: 'pink' }}
 									>

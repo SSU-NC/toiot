@@ -116,11 +116,7 @@ class App extends Component<{}, AppState> {
 							<Route
 								path="/logicCore"
 								render={() => (
-									<LogicCoreManagement
-										sensorList={this.state.sensorList}
-										nodeList={this.state.nodeList}
-										logicCore={this.state.logicCore}
-									/>
+									<LogicCoreManagement logicCore={this.state.logicCore} />
 								)}
 							/>
 							<Route
