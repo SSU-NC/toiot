@@ -7,12 +7,18 @@ import (
 
 type App struct {
 	Server string
+	React  string
 }
 
 func (as *App) Getenv() {
 	as.Server = os.Getenv("APP_SERVER")
 	if as.Server == "" {
 		as.Server = "0.0.0.0:8081"
+	}
+
+	as.React = os.Getenv("REACT_SERVER")
+	if as.React == "" {
+		as.React = "220.70.2.171:3000"
 	}
 }
 

@@ -56,7 +56,10 @@ func main() {
 	}
 
 	r.GET("/registerInfo", h.RegisterInfo)
-	r.POST("/logic/new", h.CreateLogic)
+
+	r.GET("/", func(c *gin.Context) {
+		c.Redirect(302, setting.Appsetting.React)
+	})
 
 	log.Fatal(r.Run(setting.Appsetting.Server))
 }
