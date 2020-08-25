@@ -137,10 +137,11 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 													/>
 													<div className="input-group-append">
 														<button
-															className="btn btn-primary btn-sm"
+															className="btn btn-sm"
 															type="button"
 															id="button-addon2"
 															onClick={this.handleRemoveClick(idx)}
+															style={{ background: 'pink' }}
 														>
 															<svg
 																width="1em"
@@ -163,8 +164,9 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 									</div>
 									<button
 										type="button"
-										className="btn btn-primary"
+										className="btn"
 										onClick={this.handleAddClick}
+										style={{ background: 'pink' }}
 									>
 										Add value
 									</button>
@@ -172,9 +174,10 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 								<div className="modal-footer">
 									<button
 										type="submit"
-										className="btn btn-primary"
+										className="btn"
 										data-dismiss="modal"
 										onClick={this.handleSubmit}
+										style={{ background: 'pink' }}
 									>
 										Submit
 									</button>
