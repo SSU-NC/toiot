@@ -23,7 +23,8 @@ class SensorTable extends Component<SensorTableProps> {
 			},
 		})
 			.then((res) => res.json())
-			.catch((error) => console.error('Error:', error));
+			.catch((error) => console.error('Error:', error))
+			.then(() => window.location.reload(false));
 	};
 
 	render() {

@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
-import RegisterLogic from './RegisterLogic';
-import {
-	sensorListElem,
-	nodeListElem,
-} from '../ElemInterface/ElementsInterface';
 import { Link } from 'react-router-dom';
 import { logicCoreElem } from '../ElemInterface/LcElementsInterface';
 import LogicCoreTable from './LogicCoreTable';
 
 interface LogicCoreManagementProps {
-	sensorList: Array<sensorListElem>;
-	nodeList: Array<nodeListElem>;
 	logicCore: Array<logicCoreElem>;
 }
 

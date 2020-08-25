@@ -6,6 +6,8 @@ import { SENSOR_URL } from '../../defineUrl';
 interface RegisterSensorState {
 	value_list: Array<value_list_elem>;
 	name: string;
+	nameValid: boolean;
+	valueValid: boolean;
 }
 
 interface value_list_elem {
@@ -16,12 +18,22 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 	state: RegisterSensorState = {
 		value_list: [{ value_name: '' }],
 		name: '',
+		nameValid: false,
+		valueValid: false,
 	};
 
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			name: e.target.value,
-		});
+		if (e.target.value.length > 0) {
+			this.setState({
+				name: e.target.value,
+				nameValid: true,
+			});
+		} else {
+			this.setState({
+				name: e.target.value,
+				nameValid: false,
+			});
+		}
 	};
 
 	handleValueChange = (idx: number) => (
@@ -33,7 +45,15 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 				return { ...value, value_name: e.target.value };
 			}
 		);
-		this.setState({ value_list: newvalue_list });
+		if (
+			newvalue_list !== null &&
+			!newvalue_list.some((value) => value.value_name === '') &&
+			newvalue_list[idx].value_name.length > 0
+		) {
+			this.setState({ value_list: newvalue_list, valueValid: true });
+		} else {
+			this.setState({ value_list: newvalue_list, valueValid: false });
+		}
 	};
 
 	// handle click event of the Add button
@@ -58,6 +78,20 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 		var url = SENSOR_URL;
 		var data = this.state;
 
+		if (!this.state.nameValid) {
+			alert('Please enter sensor name.');
+			return;
+		}
+		if (!this.state.valueValid) {
+			alert('Please enter value name.');
+			return;
+		}
+		var submitValid: boolean;
+		submitValid = window.confirm('Are you sure to register this sensor?');
+		if (!submitValid) {
+			return;
+		}
+
 		fetch(url, {
 			method: 'POST', // or 'PUT'
 			body: JSON.stringify(data),
@@ -67,7 +101,8 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 		})
 			.then((res) => res.json())
 			.then((response) => console.log('Success:', JSON.stringify(response)))
-			.catch((error) => console.error('Error:', error));
+			.catch((error) => console.error('Error:', error))
+			.then(() => window.location.reload(false));
 	};
 
 	render() {
@@ -115,9 +150,6 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 											value={this.state.name}
 											onChange={this.handleNameChange}
 										/>
-										<div className="invalid-feedback">
-											This sensor name is already exist.
-										</div>
 									</div>
 									<div className="form-group">
 										<label>Value name</label>
@@ -137,10 +169,11 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 													/>
 													<div className="input-group-append">
 														<button
-															className="btn btn-primary btn-sm"
+															className="btn btn-sm"
 															type="button"
 															id="button-addon2"
 															onClick={this.handleRemoveClick(idx)}
+															style={{ background: 'pink' }}
 														>
 															<svg
 																width="1em"
@@ -163,8 +196,9 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 									</div>
 									<button
 										type="button"
-										className="btn btn-primary"
+										className="btn"
 										onClick={this.handleAddClick}
+										style={{ background: 'pink' }}
 									>
 										Add value
 									</button>
@@ -172,9 +206,9 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 								<div className="modal-footer">
 									<button
 										type="submit"
-										className="btn btn-primary"
-										data-dismiss="modal"
+										className="btn"
 										onClick={this.handleSubmit}
+										style={{ background: 'pink' }}
 									>
 										Submit
 									</button>

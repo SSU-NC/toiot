@@ -16,6 +16,10 @@ interface RegisterNodeState {
 	location: locationElem;
 	sink_id: number;
 	sensors: Array<sensorOptionsElem>;
+	nameValid: boolean;
+	groupValid: boolean;
+	sensorValid: boolean;
+	sinkValid: boolean;
 }
 
 interface RegisterNodeProps {
@@ -33,16 +37,37 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		},
 		sink_id: 0,
 		sensors: [],
+
+		nameValid: false,
+		groupValid: false,
+		sensorValid: false,
+		sinkValid: false,
 	};
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			node_name: e.target.value,
-		});
+		if (e.target.value.length > 0) {
+			this.setState({
+				node_name: e.target.value,
+				nameValid: true,
+			});
+		} else {
+			this.setState({
+				node_name: e.target.value,
+				nameValid: false,
+			});
+		}
 	};
 	handleGroupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			group: e.target.value,
-		});
+		if (e.target.value.length > 0) {
+			this.setState({
+				group: e.target.value,
+				groupValid: true,
+			});
+		} else {
+			this.setState({
+				group: e.target.value,
+				groupValid: false,
+			});
+		}
 	};
 	handleLatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({
@@ -56,15 +81,31 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 	};
 	handleSensorsChange = (sensors: any) => {
 		//sensors: Array<sensorOptionsElem> ?? ?? ??..
-		this.setState({
-			sensors,
-		});
+		if (sensors !== null || sensors !== []) {
+			this.setState({
+				sensors,
+				sensorValid: true,
+			});
+		} else {
+			this.setState({
+				sensors,
+				sensorValid: false,
+			});
+		}
 	};
 	handleSinkChange = (sink: any) => {
 		//sensors: Array<sensorOptionsElem> ?? ?? ??..
-		this.setState({
-			sink_id: sink.id,
-		});
+		if (sink !== null) {
+			this.setState({
+				sink_id: sink.id,
+				sinkValid: true,
+			});
+		} else {
+			this.setState({
+				sink_id: sink.id,
+				sinkValid: false,
+			});
+		}
 	};
 	handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
@@ -74,6 +115,29 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		var sensor_uuid = data.sensors.map((val: sensorOptionsElem) => {
 			return { uuid: val.uuid };
 		});
+
+		if (!this.state.nameValid) {
+			alert('Please enter node name.');
+			return;
+		}
+		if (!this.state.groupValid) {
+			alert('Please enter group.');
+			return;
+		}
+		if (!this.state.sensorValid) {
+			alert('Please select more than a sensor.');
+			return;
+		}
+		if (!this.state.sinkValid) {
+			alert('Please enter sink.');
+			return;
+		}
+
+		var submitValid: boolean;
+		submitValid = window.confirm('Are you sure to register this node?');
+		if (!submitValid) {
+			return;
+		}
 
 		console.log(
 			JSON.stringify({
@@ -105,7 +169,8 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		})
 			.then((res) => res.json())
 			.then((response) => console.log('Success:', JSON.stringify(response)))
-			.catch((error) => console.error('Error:', error));
+			.catch((error) => console.error('Error:', error))
+			.then(() => window.location.reload(false));
 	};
 
 	render() {
@@ -224,9 +289,9 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 									<div className="modal-footer">
 										<button
 											type="submit"
-											className="btn btn-primary"
-											data-dismiss="modal"
+											className="btn"
 											onClick={this.handleSubmit}
+											style={{ background: 'pink' }}
 										>
 											Submit
 										</button>
