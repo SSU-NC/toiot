@@ -3,7 +3,6 @@ package db
 import (
 	"fmt"
 	"context"
-	"reflect"
 	"errors"
 	
 	"go.mongodb.org/mongo-driver/bson"
@@ -24,7 +23,6 @@ func NewLogicRepository() *logicRepository {
 	clientOptions := options.Client().ApplyURI(uri)
 
 	cli, err := mongo.Connect(context.TODO(), clientOptions)
-	fmt.Println("\nresult type:", reflect.TypeOf(cli))
 	if err != nil {
 		fmt.Println("connect error: ", err.Error())
 	}
@@ -35,15 +33,12 @@ func NewLogicRepository() *logicRepository {
 		fmt.Println("connect error: ", err.Error())
 	}
 
-	fmt.Println("Connected to MongoDB!")
-	col := cli.Database("test").Collection("logics")
+	col := cli.Database("logic-core").Collection("logics")
 
 	opt := options.Index()
 	opt.SetUnique(true)
 	index := mongo.IndexModel{Keys: bson.M{"logicname": 1}, Options: opt}
-	if _, err := col.Indexes().CreateOne(context.TODO(), index); err != nil {
-		fmt.Println("Could not create index:", err)
-	}
+	col.Indexes().CreateOne(context.TODO(), index)
 
 	return &logicRepository{
 		client: cli,
@@ -55,19 +50,16 @@ func (lr *logicRepository) GetAll() (r []model.Ring, err error) {
 	r = make([]model.Ring,0)
 	cur, err := lr.collection.Find(context.TODO(), bson.D{{}})
 	if err != nil {
-		fmt.Println("find error:", err.Error())
 		return nil, err
 	}
-	
 	for cur.Next(context.TODO()) {
 		var elem model.Ring
 		err := cur.Decode(&elem)
 		if err != nil {
-			fmt.Println("decode error: ", err.Error())
+			return nil, err
 		}
 		r = append(r, elem)
 	}
-
 	return r, err
 }
 
@@ -86,7 +78,6 @@ func (lr *logicRepository)Delete(id string) error {
 	} 
 	res, err := lr.collection.DeleteOne(context.TODO(), bson.M{"_id": idPrimitive})
 	if err != nil {
-		fmt.Println("delete error:", err.Error())
 		return err
 	}
 	if res.DeletedCount == 0 {

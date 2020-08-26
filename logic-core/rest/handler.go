@@ -3,10 +3,10 @@ package rest
 import (
 	"net/http"
 	"fmt"
+	
 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 	"github.com/KumKeeHyun/PDK/logic-core/adapter"
 	"github.com/KumKeeHyun/PDK/logic-core/usecase"
-	//"github.com/KumKeeHyun/PDK/logic-core/logicCore"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -40,7 +40,6 @@ func (h *Handler) NewWebSocket(c *gin.Context) {
 	for data := range listen {
 		conn.WriteJSON(data)
 	}
-	fmt.Println("disconnect websocket!")
 }
 
 

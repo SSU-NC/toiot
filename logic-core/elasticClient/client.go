@@ -1,9 +1,6 @@
 package elasticClient
 
 import (
-	"fmt"
-	//"bytes"
-	//"encoding/json"
 	"strings"
 	"time"
 
@@ -129,7 +126,7 @@ func (ec *client) bulk() {
 		res, _ := ec.es.Bulk(strings.NewReader(bulkStr))
 		res.Body.Close()
 
-		fmt.Println(bulkStr)
+		//fmt.Println(bulkStr)
 		ec.docBuf = make([]*model.Document, 0, ec.bufSize)
 	}
 }

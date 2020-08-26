@@ -26,7 +26,6 @@ func (r *rangeRing) exec(d *model.LogicData) {
 			if val < rg.Min || val > rg.Max {
 				return false
 			}
-
 		}
 		return true
 	}
@@ -35,7 +34,9 @@ func (r *rangeRing) exec(d *model.LogicData) {
 		return
 	}
 	if isRange(v) {
-		r.next.exec(d)
+		if r.next != nil {
+			r.next.exec(d)
+		}
 	} 
 }
 
@@ -50,6 +51,9 @@ type timeRing struct {
 func (r *timeRing) exec(d *model.LogicData) {
 	isTime := func(ts time.Time) bool {
 		for _, rg := range r.Range{
+			if rg.Start == "" && rg.End == ""{
+				continue
+			} 
 			st, _ := time.Parse("15:04:05", rg.Start)
 			et, _ := time.Parse("15:04:05", rg.End)
 			if !(ts.After(st) && ts.Before(et)) {
@@ -61,7 +65,9 @@ func (r *timeRing) exec(d *model.LogicData) {
 	ts := d.Timestamp
 	ts, _ = time.Parse("15:04:05", ts.Format("15:04:05"))
 	if isTime(ts) {
-		r.next.exec(d)
+		if r.next != nil {
+			r.next.exec(d)
+		}
 	}
 }
 
@@ -72,7 +78,9 @@ type groupRing struct {
 func (r *groupRing) exec(d *model.LogicData) {
 	for _, group := range r.Group {
 		if group == d.NodeInfo.Group {
-			r.next.exec(d)
+			if r.next != nil {
+				r.next.exec(d)
+			}
 		}
 	}
 }
@@ -86,7 +94,6 @@ func (r *emailRing) exec(d *model.LogicData) {
 	
 	if r.Time == true {
 		from := "toiotpdk@gmail.com"
-		// app password
 		pass := "ndsprnlulncwgdvo"
 		to := r.Email
 
@@ -105,7 +112,7 @@ func (r *emailRing) exec(d *model.LogicData) {
 		if err != nil {
 			fmt.Printf("smtp error: %s", err)
 		}
-		fmt.Printf("[email] send to %s when %s\n", r.Email, d.Timestamp)
+		
 		t1 := time.NewTimer(time.Second * 180)
 		r.Time = false
 		go func() {
@@ -114,6 +121,7 @@ func (r *emailRing) exec(d *model.LogicData) {
 			fmt.Println("email timer expired")
 		}()
 	}
+
 	if r.next != nil {
 		r.next.exec(d)
 	}

@@ -24,6 +24,7 @@ func initMetaRepoRequest(mr *metaRepo) {
 	for _, n := range temp.NInfo {
 		mn := adapter.AppToNode(&n)
 		mr.NewNode(n.UUID, &mn)
+	
 	}
 	for _, s := range temp.SInfo {
 		ms := adapter.AppToSensor(&s)

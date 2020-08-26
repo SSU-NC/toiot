@@ -16,7 +16,7 @@ batch_ticker = 2
 batch_size = 200
 
 [appserver]
-address = "http://220.70.2.160:8081"
+address = "http://220.70.2.5:80"
 
 [mongodb]
 address = "127.0.0.1"

@@ -3,7 +3,7 @@ package sarama
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	//"fmt"
 	"log"
 
 	"github.com/KumKeeHyun/PDK/logic-core/adapter"
@@ -85,7 +85,7 @@ func (consumer *consumer) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (consumer *consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
-		fmt.Printf("sarama\nkey : %s, Value : %s\n", string(message.Key), string(message.Value))
+		//fmt.Printf("sarama\nkey : %s, Value : %s\n", string(message.Key), string(message.Value))
 		ad := adapter.KafkaData{
 			Key: string(message.Key),
 		}
