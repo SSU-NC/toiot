@@ -1,6 +1,6 @@
 package service
 
-import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
+import "github.com/seheee/PDK/logic-core/domain/model"
 
 type LogicCore interface {
 	CreateAndStartLogic(r *model.RingRequest, id string, event chan interface{})

@@ -1,7 +1,7 @@
 package rest
 
 import (
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
+	"github.com/seheee/PDK/logic-core/setting"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
 )

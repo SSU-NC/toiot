@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 
-	"github.com/KumKeeHyun/PDK/application/dataService/sql"
-	"github.com/KumKeeHyun/PDK/application/rest"
-	"github.com/KumKeeHyun/PDK/application/setting"
-	"github.com/KumKeeHyun/PDK/application/usecase/nodeUsecase"
-	"github.com/KumKeeHyun/PDK/application/usecase/sensorUsecase"
-	"github.com/KumKeeHyun/PDK/application/usecase/sinkUsecase"
+	"github.com/seheee/PDK/application/dataService/sql"
+	"github.com/seheee/PDK/application/rest"
+	"github.com/seheee/PDK/application/setting"
+	"github.com/seheee/PDK/application/usecase/nodeUsecase"
+	"github.com/seheee/PDK/application/usecase/sensorUsecase"
+	"github.com/seheee/PDK/application/usecase/sinkUsecase"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 

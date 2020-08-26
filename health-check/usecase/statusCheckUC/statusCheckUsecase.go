@@ -3,8 +3,8 @@ package statusCheckUC
 import (
 	"time"
 
-	"github.com/KumKeeHyun/PDK/health-check/domain/repository"
-	"github.com/KumKeeHyun/PDK/health-check/setting"
+	"github.com/seheee/PDK/health-check/domain/repository"
+	"github.com/seheee/PDK/health-check/setting"
 )
 
 type statusCheckUsecase struct {

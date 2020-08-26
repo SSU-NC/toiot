@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
-	"github.com/KumKeeHyun/PDK/health-check/setting"
+	"github.com/seheee/PDK/health-check/adapter.go"
+	"github.com/seheee/PDK/health-check/setting"
 	"github.com/elastic/go-elasticsearch/v8"
 )
 

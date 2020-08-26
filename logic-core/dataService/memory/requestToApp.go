@@ -1,8 +1,8 @@
 package memory
 
 import (
-	"github.com/KumKeeHyun/PDK/logic-core/adapter"
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
+	"github.com/seheee/PDK/logic-core/adapter"
+	"github.com/seheee/PDK/logic-core/setting"
 	"github.com/go-resty/resty/v2"
 )
 
@@ -24,6 +24,7 @@ func initMetaRepoRequest(mr *metaRepo) {
 	for _, n := range temp.NInfo {
 		mn := adapter.AppToNode(&n)
 		mr.NewNode(n.UUID, &mn)
+	
 	}
 	for _, s := range temp.SInfo {
 		ms := adapter.AppToSensor(&s)

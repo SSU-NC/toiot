@@ -3,7 +3,7 @@ package logicCoreUC
 import (
 	"strings"
 
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/domain/model"
 )
 
 func (lcuc *logicCoreUsecase) ToLogicData(kd *model.KafkaData) (model.LogicData, error) {
@@ -20,7 +20,6 @@ func (lcuc *logicCoreUsecase) ToLogicData(kd *model.KafkaData) (model.LogicData,
 	for i, vn := range s.ValueNames {
 		v[vn] = kd.Value.Values[i]
 	}
-
 	return model.LogicData{
 		SID:       kd.Key,
 		SName:     s.Name,

@@ -7,14 +7,14 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/KumKeeHyun/PDK/health-check/setting"
-	"github.com/KumKeeHyun/PDK/health-check/usecase/websocketUC"
+	"github.com/seheee/PDK/health-check/setting"
+	"github.com/seheee/PDK/health-check/usecase/websocketUC"
 
-	"github.com/KumKeeHyun/PDK/health-check/dataService/memory"
-	"github.com/KumKeeHyun/PDK/health-check/elasticClient"
-	"github.com/KumKeeHyun/PDK/health-check/kafkaConsumer"
-	"github.com/KumKeeHyun/PDK/health-check/usecase/eventUC"
-	"github.com/KumKeeHyun/PDK/health-check/usecase/statusCheckUC"
+	"github.com/seheee/PDK/health-check/dataService/memory"
+	"github.com/seheee/PDK/health-check/elasticClient"
+	"github.com/seheee/PDK/health-check/kafkaConsumer"
+	"github.com/seheee/PDK/health-check/usecase/eventUC"
+	"github.com/seheee/PDK/health-check/usecase/statusCheckUC"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"

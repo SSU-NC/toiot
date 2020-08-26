@@ -1,6 +1,6 @@
 package service
 
-import "github.com/KumKeeHyun/PDK/health-check/adapter.go"
+import "github.com/seheee/PDK/health-check/adapter.go"
 
 type ElasticClient interface {
 	GetInput() chan<- adapter.Document

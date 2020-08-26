@@ -1,10 +1,9 @@
 package logicCore
 
 import (
-	"fmt"
 	"errors"
 
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/domain/model"
 )
 
 type logicCore struct {
@@ -26,7 +25,6 @@ func NewLogicCore() *logicCore {
 }
 
 func (m *mux) CreateAndStartLogic(r *model.RingRequest, id string, event chan interface{}) {
-	fmt.Println("id : ", id)
 	listen := make(chan model.LogicData, 100)
 	lchs, ok := m.chTable[r.Sensor]
 	if !ok {

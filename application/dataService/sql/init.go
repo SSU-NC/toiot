@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/KumKeeHyun/PDK/application/domain/model"
-	"github.com/KumKeeHyun/PDK/application/setting"
+	"github.com/seheee/PDK/application/domain/model"
+	"github.com/seheee/PDK/application/setting"
 	"github.com/jinzhu/gorm"
 )
 

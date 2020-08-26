@@ -1,14 +1,11 @@
 package elasticClient
 
 import (
-	"fmt"
-	//"bytes"
-	//"encoding/json"
 	"strings"
 	"time"
 
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
+	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/setting"
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
@@ -129,7 +126,7 @@ func (ec *client) bulk() {
 		res, _ := ec.es.Bulk(strings.NewReader(bulkStr))
 		res.Body.Close()
 
-		fmt.Println(bulkStr)
+		//fmt.Println(bulkStr)
 		ec.docBuf = make([]*model.Document, 0, ec.bufSize)
 	}
 }

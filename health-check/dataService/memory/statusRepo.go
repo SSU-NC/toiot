@@ -4,8 +4,8 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
-	"github.com/KumKeeHyun/PDK/health-check/domain/model"
+	"github.com/seheee/PDK/health-check/adapter.go"
+	"github.com/seheee/PDK/health-check/domain/model"
 )
 
 type statusRepo struct {

@@ -5,7 +5,7 @@ TODO : ring(node) chain
 package logicCore
 
 import (
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/domain/model"
 )
 
 type Ringer interface {

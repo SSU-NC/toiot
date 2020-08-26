@@ -1,4 +1,4 @@
-module github.com/KumKeeHyun/PDK/health-check
+module github.com/seheee/PDK/health-check
 
 go 1.13
 

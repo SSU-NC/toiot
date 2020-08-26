@@ -3,9 +3,9 @@ package logicCoreUC
 import (
 	"errors"
 
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/repository"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/service"
+	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/domain/repository"
+	"github.com/seheee/PDK/logic-core/domain/service"
 	
 )
 
@@ -56,10 +56,14 @@ func (lu *logicCoreUsecase) SetLogicChain(r *model.RingRequest) error {
 	if err != nil {
 		return errors.New("sensor does not exist")
 	}
+	if len(r.Logic) == 0 {
+		return errors.New("Need more than one logic")
+	}
 	id, err := lu.lr.Create(r)
 	if err != nil {
 		return err
 	}
+
 	go lu.ls.CreateAndStartLogic(r, id, lu.event)
 	return nil
 }

@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/KumKeeHyun/PDK/logic-core/adapter"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
+	"github.com/seheee/PDK/logic-core/adapter"
+	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/seheee/PDK/logic-core/setting"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
