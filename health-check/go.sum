@@ -1,7 +1,7 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/seheee/PDK v0.0.0-20200806060315-62c1b737c46b h1:LFNQMLYg/8i7L0ettHDMpVEQ/uZplwrS9pQ52MWEzSg=
-github.com/seheee/PDK/logic-core v0.0.0-20200806060315-62c1b737c46b h1:ru4q9zq6NyqNScCr22Z5UlPj3R5yMpJiVx2PENT3HCE=
-github.com/seheee/PDK/logic-core v0.0.0-20200806060315-62c1b737c46b/go.mod h1:7Tk/Op6Jztgd3HFecZQK1CUhC5uJmD7nq6f8N7CVdUM=
+github.com/KumKeeHyun/PDK v0.0.0-20200806060315-62c1b737c46b h1:LFNQMLYg/8i7L0ettHDMpVEQ/uZplwrS9pQ52MWEzSg=
+github.com/KumKeeHyun/PDK/logic-core v0.0.0-20200806060315-62c1b737c46b h1:ru4q9zq6NyqNScCr22Z5UlPj3R5yMpJiVx2PENT3HCE=
+github.com/KumKeeHyun/PDK/logic-core v0.0.0-20200806060315-62c1b737c46b/go.mod h1:7Tk/Op6Jztgd3HFecZQK1CUhC5uJmD7nq6f8N7CVdUM=
 github.com/Shopify/sarama v1.26.4/go.mod h1:NbSGBSSndYaIhRcBtY9V0U7AyH+x71bG668AuWys/yU=
 github.com/Shopify/sarama v1.27.0 h1:tqo2zmyzPf1+gwTTwhI6W+EXDw4PVSczynpHKFtVAmo=
 github.com/Shopify/sarama v1.27.0/go.mod h1:aCdj6ymI8uyPEux1JJ9gcaDT6cinjGhNCAhs54taSUo=

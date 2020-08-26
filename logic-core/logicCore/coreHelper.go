@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"encoding/json"
 
-	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 )
 
 func getRinger(logic string, event chan interface{}) Ringer {

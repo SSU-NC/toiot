@@ -3,7 +3,7 @@ package adapter
 import (
 	"time"
 
-	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 )
 
 type SensorData struct {

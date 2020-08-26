@@ -3,8 +3,8 @@ package rest
 import (
 	"time"
 
-	"github.com/seheee/PDK/application/adapter"
-	"github.com/seheee/PDK/application/domain/model"
+	"github.com/KumKeeHyun/PDK/application/adapter"
+	"github.com/KumKeeHyun/PDK/application/domain/model"
 	"github.com/go-resty/resty/v2"
 )
 

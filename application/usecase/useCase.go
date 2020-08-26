@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/seheee/PDK/application/domain/model"
+	"github.com/KumKeeHyun/PDK/application/domain/model"
 )
 
 type SinkUsecase interface {

@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/seheee/PDK/application/adapter"
-	"github.com/seheee/PDK/application/domain/model"
-	"github.com/seheee/PDK/application/usecase"
+	"github.com/KumKeeHyun/PDK/application/adapter"
+	"github.com/KumKeeHyun/PDK/application/domain/model"
+	"github.com/KumKeeHyun/PDK/application/usecase"
 	"github.com/gin-gonic/gin"
 )
 

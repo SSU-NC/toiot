@@ -7,10 +7,10 @@ import (
 	
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"github.com/seheee/PDK/logic-core/setting"
+	"github.com/KumKeeHyun/PDK/logic-core/setting"
 )
 
 type logicRepository struct {

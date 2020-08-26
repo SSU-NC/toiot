@@ -1,8 +1,8 @@
 package sinkUsecase
 
 import (
-	"github.com/seheee/PDK/application/domain/model"
-	"github.com/seheee/PDK/application/domain/repository"
+	"github.com/KumKeeHyun/PDK/application/domain/model"
+	"github.com/KumKeeHyun/PDK/application/domain/repository"
 )
 
 type sinkUsecase struct {

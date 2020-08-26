@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/seheee/PDK/health-check/setting"
+	"github.com/KumKeeHyun/PDK/health-check/setting"
 )
 
 const (

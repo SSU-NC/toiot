@@ -3,7 +3,7 @@ package websocketUC
 import (
 	"fmt"
 
-	"github.com/seheee/PDK/health-check/domain/repository"
+	"github.com/KumKeeHyun/PDK/health-check/domain/repository"
 	"github.com/dustin/go-broadcast"
 )
 

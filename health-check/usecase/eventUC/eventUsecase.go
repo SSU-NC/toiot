@@ -4,12 +4,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/seheee/PDK/health-check/domain/model"
-	"github.com/seheee/PDK/health-check/setting"
+	"github.com/KumKeeHyun/PDK/health-check/domain/model"
+	"github.com/KumKeeHyun/PDK/health-check/setting"
 
-	"github.com/seheee/PDK/health-check/adapter.go"
-	"github.com/seheee/PDK/health-check/domain/repository"
-	"github.com/seheee/PDK/health-check/domain/service"
+	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
+	"github.com/KumKeeHyun/PDK/health-check/domain/repository"
+	"github.com/KumKeeHyun/PDK/health-check/domain/service"
 )
 
 type eventUsecase struct {

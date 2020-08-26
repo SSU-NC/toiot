@@ -1,4 +1,4 @@
-module github.com/seheee/PDK/application
+module github.com/KumKeeHyun/PDK/application
 
 go 1.13
 

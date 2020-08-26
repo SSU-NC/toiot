@@ -3,7 +3,7 @@ package logicCoreUC
 import (
 	"strings"
 
-	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 )
 
 func (lcuc *logicCoreUsecase) ToLogicData(kd *model.KafkaData) (model.LogicData, error) {

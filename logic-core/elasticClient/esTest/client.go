@@ -3,7 +3,7 @@ package esTest
 import (
 	"fmt"
 
-	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 )
 
 var elasticClient *client

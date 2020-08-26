@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/seheee/PDK/application/domain/model"
+import "github.com/KumKeeHyun/PDK/application/domain/model"
 
 type SinkRepository interface {
 	GetAll() ([]model.Sink, error)

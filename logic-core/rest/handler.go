@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"fmt"
 	
-	"github.com/seheee/PDK/logic-core/domain/model"
-	"github.com/seheee/PDK/logic-core/adapter"
-	"github.com/seheee/PDK/logic-core/usecase"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/adapter"
+	"github.com/KumKeeHyun/PDK/logic-core/usecase"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )

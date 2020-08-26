@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/seheee/PDK/health-check/domain/model"
+	"github.com/KumKeeHyun/PDK/health-check/domain/model"
 )
 
 type States struct {

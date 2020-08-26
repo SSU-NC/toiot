@@ -4,8 +4,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/seheee/PDK/logic-core/domain/model"
-	"github.com/seheee/PDK/logic-core/setting"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/setting"
 	"github.com/elastic/go-elasticsearch/v8"
 )
 

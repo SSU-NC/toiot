@@ -5,8 +5,8 @@ TODO : change kafka module confluent to sarama
 package confluent
 
 import (
-	"github.com/seheee/PDK/logic-core/domain/model"
-	"github.com/seheee/PDK/logic-core/setting"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/setting"
 )
 
 var kafkaConsumer *group

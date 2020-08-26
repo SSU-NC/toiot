@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/seheee/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 	"github.com/dustin/go-broadcast"
 )
 
