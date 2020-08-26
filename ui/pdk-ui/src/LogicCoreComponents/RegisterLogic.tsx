@@ -230,8 +230,19 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 		return (
 			<div>
 				<form>
-					<h3>Register Logic</h3>
-					<p>A logic is registered at Logic Core</p>
+					<h2>Register Logic (Rule)</h2>
+					<p style={{ fontSize: '14pt' }}>
+						A logic is registered at Logic Core. A logic consists of
+						elements(sensor, group, time, value, action). This is a kind of rule
+						chain. You can build logic about a sensor, and that logic's elements
+						would be 'rule' for action event(e.g. sending email, alert massage).
+					</p>
+					<p style={{ fontSize: '14pt' }}>
+						For example, if you want to get email when 'sensor 1's 'value 1's
+						scope is `0 ~ 15`, you should build logic just like you want. Select
+						sensor 'sensor 1', select value 'value 1', and set action to send an
+						email.
+					</p>
 					<br />
 					<div>
 						<h5>Logic name</h5>

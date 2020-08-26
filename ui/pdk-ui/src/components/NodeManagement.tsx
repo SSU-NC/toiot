@@ -80,6 +80,12 @@ class NodeManagement extends Component<
 				<div>
 					<h3>Node</h3>
 					<hr />
+					<div style={{ float: 'right' }}>
+						<span style={{ color: 'gray' }}>● : don't know </span>
+						<span style={{ color: 'lime' }}>● : stable </span>
+						<span style={{ color: '#FACC2E' }}>● : unstable </span>
+						<span style={{ color: 'red' }}>● : disconnect </span>
+					</div>
 					<div>
 						{groupedNodeList.map((group: GroupedNodeListElem, idx: number) => (
 							<div>
