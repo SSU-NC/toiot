@@ -6,7 +6,7 @@ services:
     build:
       context: ./pdk-ui # pdk-ui DIR 하위에 있는 Dockerfile을 사용
       dockerfile: Dockerfile
-    image: iamhge/pdk-ui:0.1.1
+    image: iamhge/pdk-ui:0.1.2
     volumes: # if you only download docker image, you should remove volumes field
       - "./pdk-ui:/app" # 소스 디렉토리 공유
       - "/app/node_modules"

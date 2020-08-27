@@ -72,6 +72,15 @@ class NodeManagement extends Component<
 		return (
 			<>
 				<div style={{ float: 'right' }}>
+					<button
+						type="button"
+						className="btn"
+						data-toggle="modal"
+						data-target="#register-node"
+						style={{ background: 'pink' }}
+					>
+						register node
+					</button>
 					<RegisterNode
 						sensorList={this.props.sensorList}
 						sinkList={this.props.sinkList}
@@ -80,35 +89,42 @@ class NodeManagement extends Component<
 				<div>
 					<h3>Node</h3>
 					<hr />
-					{groupedNodeList.map((group: GroupedNodeListElem, idx: number) => (
-						<div>
-							<h4>Sink {group.sink_id}</h4>
-							<NodeTable
-								nodeList={group.node_list}
-								nodeState={this.state.nodeState}
-							></NodeTable>
-						</div>
-					))}
+					<div style={{ float: 'right' }}>
+						<span style={{ color: 'gray' }}>● : don't know </span>
+						<span style={{ color: 'lime' }}>● : stable </span>
+						<span style={{ color: '#FACC2E' }}>● : unstable </span>
+						<span style={{ color: 'red' }}>● : disconnect </span>
+					</div>
+					<div>
+						{groupedNodeList.map((group: GroupedNodeListElem, idx: number) => (
+							<div>
+								<span style={{ fontSize: '18pt', fontWeight: 500 }}>
+									Sink {group.sink_id}
+								</span>
+								<button
+									className="btn dropdown-toggle"
+									type="button"
+									data-toggle="collapse"
+									data-target={'#sink' + group.sink_id.toString()}
+									aria-controls={group.sink_id.toString()}
+									style={{ color: 'black' }}
+								></button>
+								<div
+									id={'sink' + group.sink_id.toString()}
+									className="collapse"
+								>
+									<NodeTable
+										nodeList={group.node_list}
+										nodeState={this.state.nodeState}
+									></NodeTable>
+								</div>
+							</div>
+						))}
+					</div>
 				</div>
 			</>
 		);
 	}
 }
-/*
-class NodeManagement extends Component {
-    render(){
-        return(
-            <>
-            <div style={{float:'right'}}>
-                <RegisterNode sensorList={this.props.sensorList}></RegisterNode>
-            </div>
-            <div>
-                <h3>Node</h3>
-                <NodeTable nodeList={this.props.nodeList}></NodeTable>
-            </div>
-            </>
-        );
-    }
-}*/
 
 export default NodeManagement;

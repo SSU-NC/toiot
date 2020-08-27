@@ -6,9 +6,16 @@
 
 - [Introduce](#Introduce)
 - [Setting](#Setting)
+  - [Setting IP, PORT](#1.-Setting-IP,-PORT)
+  - [Docker](#2.-Docker)
 - [Execute](#Execute)
 - [Structure](#Structure)
-- [Logic Core](#Logic-Core)
+  - [Navigation bar](#1.-Navigation-bar)
+  - [HOME](#2.-HOME)
+  - [MANAGEMENT](#3.-MANAGEMENT)
+  - [SERVICE](#4.-SERVICE)
+  - [KIBANA](#5.-KIBANA)
+  - [Alarm](#6.-Alarm)
 
 <!--te-->
 
@@ -129,27 +136,24 @@ Used Compoponent : `src/Navigation.tsx`
 
 User can see Kibana Dashboard at here.  
 Used Component : `src/Home.tsx`  
-![navbar_home](./img/navbar_home.png)
+![home_tab](./img/home_tab.png)
 
 ## 3. MANAGEMENT
 
-`MANAGEMENT` tab's components consist of `Sensor`, `Node`, and `Sink` tab.
-
-### 3.1. components
-
-Basically, components consist of sensor, node, and sink. User can manage each sensor, node, and sink at `MANAGEMENT` tab.
-
+`MANAGEMENT` tab's components consist of `Sensor`, `Node`, and `Sink` tab.  
+Basically, components consist of sensor, node, and sink. User can manage each sensor, node, and sink at `MANAGEMENT` tab.  
+These components are placed in `src/components` DIR.  
 ![navbar_management](./img/navbar_management.png)
 
-#### 3.1.1. Sensor
+### 3.1. Sensor
 
 Used Components : `src/components/SensorManagement.tsx`, `src/components/Register/RegisterSensor.tsx`, `src/components/Table/SensorTable`
 
-##### SensorManagement.tsx
+#### SensorManagement.tsx
 
 This component manage sensor tab.
 
-##### RegisterSensor.tsx
+#### RegisterSensor.tsx
 
 User can register sensor by using this component.  
 When user click `register sensor` button, a modal will show up.  
@@ -159,26 +163,29 @@ For example...
 
 - sensor name
 - sensor's values : Sensor can have more than two values, so user can register all values' name.
+- valid check
+  1.  Did user enter the sensor name?
+  2.  Did user enter more than a value name?
 
-##### SensorTable.tsx
+#### SensorTable.tsx
 
 User can see sensors' informations.  
 User can delete sensors by click wastebasket img.  
 ![sensor_table](./img/sensor_table.png)
 
-#### 3.1.2. Node
+### 3.2. Node
 
 Used Components : `src/components/NodeManagement.tsx`, `src/components/Register/RegisterNode.tsx`, `src/components/Table/NodeTable`
 
-##### NodeManagement.tsx
+#### NodeManagement.tsx
 
 This component manage node tab.
 
-##### RegisterNode.tsx
+#### RegisterNode.tsx
 
 User can register node by using this component.  
 When user click `register node` button, a modal will show up.  
-User enter node's informations( node name, group, location, selecting sensors... ).  
+User enter node's informations( node name, group, location, sensors, sink ).  
 For example...  
 ![register_node_ex](./img/register_node_ex.png)
 
@@ -187,22 +194,27 @@ For example...
 - location : User should type latitude and longitude.
 - sensors : User should select sensors which want to make belong to this node.
 - sink : User should select sink which want to connect.
+- valid check
+  1.  Did user enter the node name?
+  2.  Did user enter the group?
+  3.  Did user select more than a sensor?
+  4.  Did user select the sink?
 
-##### NodeTable.tsx
+#### NodeTable.tsx
 
 User can see nodes' informations.  
 User can delete nodes by click wastebasket img.  
 ![node_table](./img/node_table.png)
 
-### 3.1.4. Sink
+### 3.3. Sink
 
 Used Components : `src/components/SinkManagement.tsx`, `src/components/Register/RegisterSink.tsx`, `src/components/Table/SinkTable`
 
-##### SinkManagement.tsx
+#### SinkManagement.tsx
 
 This component manage sink tab.
 
-##### RegisterSink.tsx
+#### RegisterSink.tsx
 
 User can register sink by using this component.  
 When user click `register sink` button, a modal will show up.  
@@ -213,37 +225,89 @@ For example...
 - sink name
 - location
 - ip:port : User should type sink's ip:port info.
+- valid check
+  1.  Did user enter the sink name?
+  2.  Did user enter valid ip:port?
 
-##### SinkTable.tsx
+#### SinkTable.tsx
 
 User can see sinks' informations.  
 User can delete sinks by click wastebasket img.  
 ![sink_table](./img/sink_table.png)
 
-## 4. Service
+## 4. SERVICE
 
 ![navbar_service](./img/navbar_service.png)
 
+### 4.1. Logic Core
+
+`SERVICE` tab's component is only `Logic core` yet.  
+Components of this are placed in `src/LogicCoreComponents` DIR.  
+![navbar_management](./img/navbar_management.png)
+
+Used Components (major) : `src/LogicCoreComponents/LogicCoreManagement.tsx`, `src/LogicCoreComponents/RegisterLogic.tsx`, `src/LogicCoreComponents/LogicCoreTable.tsx`
+
+#### LogicCoreManagement.tsx
+
+This component manage Logic Core.
+
+#### RegisterLogic.tsx
+
+User can register logic by using this component.  
+When user click `register logic` button, a page will show up.  
+User enter logic's element( logic name, sensor, groups, time scope, value scopes, actions ).  
+Each element is considered as card at this page.  
+For example...  
+![register_logic_ex](./img/register_logic_ex.png)
+
+- logic name
+- sensor : A logic should be registered with a sensor.
+- group : These groups are that user enters at registering nodes.
+- time scope : User sets time scope when this logic does action.
+- value scope : User sets value scope when this logic does action.
+- action : User sets action which user wants this logic to do.
+- valid check
+  1. Did user enter the logic name?
+  2. Did user select sensor?
+  3. Did user set more than a action.
+
+Used Components : `InputActionCard.tsx`, `InputGroupCard.tsx`, `InputSensorCard.tsx`, `InputTimeCard.tsx`, `InputValueCard.tsx` in `/src/LogicCoreComponents/InputCards` DIR
+
+- Value card and action card can be multiple.
+- Value card and time card can have multiple scopes.
+
+#### LogicCoreTable.tsx
+
+User can see logic core here.  
+User can delete logics by click wastebasket img.  
+User can see logic's structure by click `show logic` button.  
+![logicCore_table](./img/logicCore_table.png)
+
+Used Components : `ShowActionCard.tsx`, `ShowGroupCard.tsx`, `ShowSensorCard.tsx`, `ShowTimeCard.tsx`, `ShowValueCard.tsx` in `/src/LogicCoreComponents/ShowCards` DIR
+
 ## 5. KIBANA
 
+User can make and control visulization.
 ![navbar_kibana](./img/navbar_kibana.png)
 
 ### 5.1. Visualize
 
+User can make and control visulization.
+![visualize_tab](./img/visualize_tab.png)
+
+Used Component : `src/KibanaVisulize.tsx`
+
 ### 5.2. Dashboard
+
+This tab is almost same as HOME tab.  
+![dashboard_tab](./img/dashboard_tab.png)
+
+Used Component : `src/KibanaDashboard.tsx`
 
 ## 6. Alarm
 
-Alert alarm should be service all time, so this function is implemented by 'web socket'.  
-This service can be serviced by registering logic.  
+Alerting alarm should be service all time, so this function is implemented by 'web socket'.  
+This service can be registered by registering logic.  
+![alarm_service_ex](./img/alarm_service_ex.png)
+
 Used Component : `src/components/AlertAlarm.tsx`
-
-![alarm_service](./img/alarm_service.png)
-
-# Logic Core
-
-## 1. Logic
-
-A logic
-
-## 2.

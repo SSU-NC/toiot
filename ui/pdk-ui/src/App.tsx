@@ -17,7 +17,6 @@ import { SENSOR_URL, NODE_URL, SINK_URL, LOGICCORE_URL } from './defineUrl';
 import { logicCoreElem } from './ElemInterface/LcElementsInterface';
 import SinkManagement from './components/SinkManagement';
 import AlertAlarm from './components/AlertAlarm';
-
 interface AppState {
 	sensorList: Array<sensorListElem>;
 	nodeList: Array<nodeListElem>;

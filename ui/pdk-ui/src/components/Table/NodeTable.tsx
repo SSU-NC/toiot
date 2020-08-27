@@ -6,9 +6,9 @@ import {
 import { NODE_URL } from '../../defineUrl';
 
 enum HealthColor {
-	red,
-	yellow,
-	lime,
+	'red',
+	'#FACC2E',
+	'lime',
 }
 
 interface NodeTableProps {
@@ -39,7 +39,6 @@ class NodeTable extends Component<NodeTableProps, {}> {
 					<td
 						style={{
 							color: HealthColor[this.props.nodeState[prop].state],
-							fontSize: '8pt',
 						}}
 					>
 						●
@@ -47,7 +46,7 @@ class NodeTable extends Component<NodeTableProps, {}> {
 				);
 			}
 		}
-		return <td style={{ color: 'gray', fontSize: '8pt' }}>●</td>;
+		return <td style={{ color: 'gray' }}>●</td>;
 	};
 
 	render() {

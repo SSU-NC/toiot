@@ -8,6 +8,7 @@ import {
 	sinkOptionsElem,
 } from '../../ElemInterface/ElementsInterface';
 import { NODE_URL } from '../../defineUrl';
+import LarLngPicker from '../LatLngPicker';
 // react-select : https://github.com/JedWatson/react-select
 
 interface RegisterNodeState {
@@ -43,6 +44,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		sensorValid: false,
 		sinkValid: false,
 	};
+
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.value.length > 0) {
 			this.setState({
@@ -77,6 +79,11 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 	handleLonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({
 			location: { ...this.state.location, lon: parseFloat(e.target.value) },
+		});
+	};
+	handleLarLngChange = (location: locationElem) => {
+		this.setState({
+			location,
 		});
 	};
 	handleSensorsChange = (sensors: any) => {
@@ -189,15 +196,6 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		});
 		return (
 			<>
-				<button
-					type="button"
-					className="btn"
-					data-toggle="modal"
-					data-target="#register-node"
-					style={{ background: 'pink' }}
-				>
-					register node
-				</button>
 				<div
 					className="modal fade"
 					id="register-node"
@@ -205,7 +203,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 					role="dialog"
 					aria-labelledby="register-node"
 				>
-					<div className="modal-dialog" role="document">
+					<div className="modal-dialog  modal-lg" role="document">
 						<div className="modal-content">
 							<div className="modal-header">
 								<h4 className="modal-title" id="register-node">
@@ -244,24 +242,10 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 											onChange={this.handleGroupChange}
 										/>
 									</div>
-									<div className="form-group">
-										<label>location - latitude</label>
-										<input
-											type="number"
-											className="form-control col-3 margin-right"
-											name="lat"
-											value={this.state.location.lat}
-											onChange={this.handleLatChange}
-										/>
-									</div>
-									<div className="form-group">
-										<label>location - longitude</label>
-										<input
-											type="number"
-											className="form-control col-3"
-											name="lon"
-											value={this.state.location.lon}
-											onChange={this.handleLonChange}
+									<div>
+										<label>location</label>
+										<LarLngPicker
+											handleLarLngChange={this.handleLarLngChange}
 										/>
 									</div>
 									<div className="form-group">
