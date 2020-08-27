@@ -72,6 +72,15 @@ class NodeManagement extends Component<
 		return (
 			<>
 				<div style={{ float: 'right' }}>
+					<button
+						type="button"
+						className="btn"
+						data-toggle="modal"
+						data-target="#register-node"
+						style={{ background: 'pink' }}
+					>
+						register node
+					</button>
 					<RegisterNode
 						sensorList={this.props.sensorList}
 						sinkList={this.props.sinkList}
@@ -117,21 +126,5 @@ class NodeManagement extends Component<
 		);
 	}
 }
-/*
-class NodeManagement extends Component {
-    render(){
-        return(
-            <>
-            <div style={{float:'right'}}>
-                <RegisterNode sensorList={this.props.sensorList}></RegisterNode>
-            </div>
-            <div>
-                <h3>Node</h3>
-                <NodeTable nodeList={this.props.nodeList}></NodeTable>
-            </div>
-            </>
-        );
-    }
-}*/
 
 export default NodeManagement;
