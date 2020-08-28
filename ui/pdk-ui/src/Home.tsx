@@ -2,6 +2,10 @@ import React from 'react';
 import Iframe from 'react-iframe';
 import { KIBANA_URL } from './defineUrl';
 
+/* 
+Home
+- linked by HOME tab.
+*/
 function Home() {
 	const kibanaUrl: string = KIBANA_URL;
 

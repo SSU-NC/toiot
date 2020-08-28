@@ -13,20 +13,26 @@ interface alarmListElem {
 	alarm_state: boolean;
 }
 
+/*
+AlertAlarm
+- Alarm service by using websocket
+*/
 class AlertAlarm extends Component<{}, AlertAlarmState> {
 	state: AlertAlarmState = {
 		alarmList: [],
 	};
 
+	// Open web socket
 	componentDidMount() {
 		client.onopen = () => {
 			console.log('Alarm WebSocket Client Connected');
 		};
 		client.onmessage = (message: any) => {
-			//console.log(message);
+			// Parsing message data as json form
 			var msg_json: alarmElem = JSON.parse(message.data);
 
 			// 이미 alarm list에 alarm이 들어가있으면 pass
+			// If alarm is already in alarm list,
 			for (var alarm of this.state.alarmList) {
 				if (JSON.stringify(msg_json) === JSON.stringify(alarm.alarm)) {
 					return;
@@ -41,7 +47,10 @@ class AlertAlarm extends Component<{}, AlertAlarmState> {
 			});
 		};
 	}
+
+	// Handle click button of alert
 	handleCloseAlert = (idx: number) => {
+		// Set state to filter closed alarm
 		this.setState({
 			alarmList: this.state.alarmList.filter(
 				(s: any, sidx: number) => idx !== sidx

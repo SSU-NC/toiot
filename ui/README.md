@@ -44,6 +44,7 @@ REACT_APP_LOGICCORE_IP=0.0.0.0
 REACT_APP_LOGICCORE_PORT=8080
 REACT_APP_ALARM_IP=0.0.0.0
 REACT_APP_ALARM_PORT=8080
+REACT_APP_KAKAO_MAP_KEY=abcdefg12345678
 ```
 
 ### 1.2. Solution 2 : export variable
@@ -95,6 +96,7 @@ If you use docker, follow this solution.
        - REACT_APP_LOGICCORE_PORT=8080
        - REACT_APP_ALARM_IP=0.0.0.0
        - REACT_APP_ALARM_PORT=8080
+       - REACT_APP_KAKAO_MAP_KEY=abcdefg12345678
        stdin_open: true
        tty: true
    ```

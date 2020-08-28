@@ -7,6 +7,10 @@ interface LogicCoreManagementProps {
 	logicCore: Array<logicCoreElem>;
 }
 
+/*
+LogicCoreManagement
+- Manage logic core table, register logic
+*/
 class LogicCoreManagement extends Component<LogicCoreManagementProps> {
 	render() {
 		return (

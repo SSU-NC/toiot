@@ -11,8 +11,13 @@ interface ShowLogicProps {
 	index: number;
 }
 
+/*
+ShowLogic
+- Show logic's elements
+*/
 class ShowLogic extends Component<ShowLogicProps, {}> {
 	render() {
+		// Divide modal id per index
 		var modal_id: string = 'show-logic-'
 			.concat(this.props.index + '')
 			.concat('-modal');

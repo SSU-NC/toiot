@@ -28,6 +28,10 @@ interface RegisterNodeProps {
 	sinkList: Array<sinkListElem>;
 }
 
+/*
+RegisterNode
+- Show modal to register node
+*/
 class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 	state: RegisterNodeState = {
 		node_name: '',
@@ -45,7 +49,9 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		sinkValid: false,
 	};
 
+	// Handle node name change by typing
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// name valid check : user should enter node name
 		if (e.target.value.length > 0) {
 			this.setState({
 				node_name: e.target.value,
@@ -58,7 +64,10 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			});
 		}
 	};
+
+	// Handle group change by typing
 	handleGroupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// group valid check : user should enter group name
 		if (e.target.value.length > 0) {
 			this.setState({
 				group: e.target.value,
@@ -71,23 +80,17 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			});
 		}
 	};
-	handleLatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			location: { ...this.state.location, lat: parseFloat(e.target.value) },
-		});
-	};
-	handleLonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			location: { ...this.state.location, lon: parseFloat(e.target.value) },
-		});
-	};
+
+	// Handle LarLng change by pick lat, lon at map
 	handleLarLngChange = (location: locationElem) => {
 		this.setState({
 			location,
 		});
 	};
+
+	// Handle selected sensor change by selecting sensors
 	handleSensorsChange = (sensors: any) => {
-		//sensors: Array<sensorOptionsElem> ?? ?? ??..
+		// sensor valid check : user should select more than a sensor
 		if (sensors !== null || sensors !== []) {
 			this.setState({
 				sensors,
@@ -100,8 +103,10 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			});
 		}
 	};
+
+	// Handle selected sink change by selecting sink
 	handleSinkChange = (sink: any) => {
-		//sensors: Array<sensorOptionsElem> ?? ?? ??..
+		// sink valid check : user should select sink
 		if (sink !== null) {
 			this.setState({
 				sink_id: sink.id,
@@ -114,6 +119,8 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			});
 		}
 	};
+
+	// Handle submit button click event
 	handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
@@ -123,6 +130,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			return { uuid: val.uuid };
 		});
 
+		// Valid check (unvalid -> alert)
 		if (!this.state.nameValid) {
 			alert('Please enter node name.');
 			return;
@@ -140,6 +148,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			return;
 		}
 
+		// Check whether user really want to submit
 		var submitValid: boolean;
 		submitValid = window.confirm('Are you sure to register this node?');
 		if (!submitValid) {
@@ -177,7 +186,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			.then((res) => res.json())
 			.then((response) => console.log('Success:', JSON.stringify(response)))
 			.catch((error) => console.error('Error:', error))
-			.then(() => window.location.reload(false));
+			.then(() => window.location.reload(false)); // nodeList will change so reload for reflecting change
 	};
 
 	render() {
@@ -198,15 +207,14 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			<>
 				<div
 					className="modal fade"
-					id="register-node"
-					//tabindex="-1"
+					id="register-node-modal"
 					role="dialog"
-					aria-labelledby="register-node"
+					aria-labelledby="register-node-modal"
 				>
 					<div className="modal-dialog  modal-lg" role="document">
 						<div className="modal-content">
 							<div className="modal-header">
-								<h4 className="modal-title" id="register-node">
+								<h4 className="modal-title" id="register-node-modal">
 									Register node
 								</h4>
 								<button

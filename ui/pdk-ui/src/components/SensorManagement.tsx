@@ -6,11 +6,24 @@ interface SensorManagementProps {
 	sensorList: any;
 }
 
+/*
+SensorManagement
+- Manage sensor table, register sensor
+*/
 class SensorManagement extends Component<SensorManagementProps> {
 	render() {
 		return (
 			<>
 				<div style={{ float: 'right' }}>
+					<button
+						type="button"
+						className="btn"
+						data-toggle="modal"
+						data-target="#register-sensor-modal"
+						style={{ background: 'pink' }}
+					>
+						register sensor
+					</button>
 					<RegisterSensor></RegisterSensor>
 				</div>
 				<div>

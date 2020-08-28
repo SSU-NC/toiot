@@ -1,4 +1,4 @@
-import React from 'react';
+// Define URLs
 
 declare global {
 	namespace NodeJS {

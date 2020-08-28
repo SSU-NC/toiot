@@ -3,11 +3,16 @@ import { logicCoreElem } from '../ElemInterface/LcElementsInterface';
 import ShowLogic from './ShowLogic';
 import { LOGICCORE_URL } from '../defineUrl';
 
-interface logicTableProps {
+interface LogicCoreTableProps {
 	logicCore: Array<logicCoreElem>;
 }
 
-class logicTable extends Component<logicTableProps> {
+/*
+LogicCoreTable
+- Show up node list.
+*/
+class LogicCoreTable extends Component<LogicCoreTableProps> {
+	// Handle click event of the Remove button
 	handleRemoveClick = (id: string) => () => {
 		var url = LOGICCORE_URL;
 
@@ -74,4 +79,4 @@ class logicTable extends Component<logicTableProps> {
 	}
 }
 
-export default logicTable;
+export default LogicCoreTable;

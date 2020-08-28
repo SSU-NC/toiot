@@ -8,7 +8,12 @@ interface SinkTableProps {
 	sinkList: Array<sinkListElem>;
 }
 
+/*
+SinkTable
+- Show up sink list.
+*/
 class SinkTable extends Component<SinkTableProps> {
+	// Handle click event of the Remove button
 	handleRemoveClick = (sink_id: number) => () => {
 		var url = SINK_URL + '/' + sink_id;
 

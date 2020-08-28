@@ -25,15 +25,19 @@ interface GroupedNodeListElem {
 	node_list: Array<nodeListElem>;
 }
 
+// Grouping node list as sink id.
 function groupBySinkid(
 	nodeList: Array<nodeListElem>,
 	sinkList: Array<sinkListElem>
 ) {
 	let groupedNodeList: Array<GroupedNodeListElem>;
+
+	// Initialize Grouped node list as sink id.
 	groupedNodeList = sinkList.map((sink) => {
 		return { sink_id: sink.id, node_list: [] };
 	});
 
+	// Fill node_list field of Grouped node list.
 	for (var node of nodeList) {
 		for (var group of groupedNodeList) {
 			if (node.sink_id === group.sink_id) {
@@ -44,6 +48,10 @@ function groupBySinkid(
 	return groupedNodeList;
 }
 
+/*
+NodeManagement
+- Manage node table, register node
+*/
 class NodeManagement extends Component<
 	NodeManagementProps,
 	NodeManagementState
@@ -52,9 +60,10 @@ class NodeManagement extends Component<
 		nodeState: [],
 	};
 
+	// Conect web socket
 	componentWillMount() {
 		client.onopen = () => {
-			console.log('WebSocket Client Connected');
+			console.log('WebSocket Client for Health Check Connected');
 		};
 		client.onmessage = (message: any) => {
 			console.log(message);
@@ -63,6 +72,7 @@ class NodeManagement extends Component<
 			});
 		};
 	}
+
 	render() {
 		var groupedNodeList = groupBySinkid(
 			this.props.nodeList,
@@ -76,7 +86,7 @@ class NodeManagement extends Component<
 						type="button"
 						className="btn"
 						data-toggle="modal"
-						data-target="#register-node"
+						data-target="#register-node-modal"
 						style={{ background: 'pink' }}
 					>
 						register node
