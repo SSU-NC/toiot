@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
+/* 
+Navigation
+- Navigation bar 
+*/
 class Navigation extends Component {
 	render() {
 		return (

@@ -30,6 +30,11 @@ interface RegisterLogicState {
 	actionValid: boolean;
 }
 
+/* 
+RegisterLogic
+- Linked by register logic button
+- register logic
+*/
 class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 	state: RegisterLogicState = {
 		logic_name: '',
@@ -48,7 +53,10 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 		sensorValid: false,
 		actionValid: false,
 	};
+
+	// Handle node name change by typing
 	handleLogicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// name valid check : user should enter logic name
 		if (e.target.value.length > 0) {
 			this.setState({
 				logic_name: e.target.value,
@@ -62,8 +70,9 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 		}
 	};
 
-	// handle each card change
+	// handle sensor card change
 	handleSensorCardChange = (sensor_info: sensorOptionsElem) => {
+		// sensor valid check : user should select sensor
 		if (sensor_info !== null) {
 			this.setState({
 				sensor_info,
@@ -76,13 +85,19 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 			});
 		}
 	};
+
+	// handle group card change
 	handleGroupCardChange = (selected_group: logicElem) => {
 		this.setState({
 			//selected_group :{ logic: "group", group : selectedGroups.map((selectedGroup: groupOptionsElem)=>(selectedGroup.value)),},
 			selected_group,
 		});
 	};
+
+	// handle value card change
 	handleValueCardChange = (idx: number) => (selectedValue: logicElem) => {
+		// Value card is updated dynamic. It can be added or removed freely.
+		// so find changing field by using received idx and change state.
 		const new_selected_value = this.state.selected_value.map(
 			(value: logicElem, sidx: number) => {
 				if (idx !== sidx) return value;
@@ -91,18 +106,26 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 		);
 		this.setState({ selected_value: new_selected_value });
 	};
+
+	// Handle time card change
 	handleTimeCardChange = (selected_time: logicElem) => {
 		this.setState({
 			selected_time,
 		});
 	};
+
+	// Handle action card change
 	handleActionCardChange = (idx: number) => (selectedAction: logicElem) => {
+		// Action card is updated dynamic. It can be added or removed freely.
+		// so find changing field by using received idx and change state.
 		const new_selected_action = this.state.selected_action.map(
 			(action: logicElem, sidx: number) => {
 				if (idx !== sidx) return action;
 				return selectedAction;
 			}
 		);
+
+		// action valid check : User should register more than a action
 		if (
 			new_selected_action !== null &&
 			new_selected_action !== [] &&
@@ -120,7 +143,7 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 		}
 	};
 
-	// handle add card button click event
+	// handle add value card button click event
 	handleAddValueCardClick = () => {
 		this.setState({
 			selected_value: [
@@ -129,6 +152,8 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 			],
 		});
 	};
+
+	// handle add action card button click event
 	handleAddActionCardClick = () => {
 		this.setState({
 			selected_action: [
@@ -138,7 +163,7 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 		});
 	};
 
-	// handle remove card button click event
+	// handle remove value card button click event
 	handleRemoveValueCardClick = (idx: number) => () => {
 		this.setState({
 			selected_value: this.state.selected_value.filter(
@@ -146,6 +171,8 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 			),
 		});
 	};
+
+	// handle remove action card button click event
 	handleRemoveActionCardClick = (idx: number) => () => {
 		this.setState({
 			selected_action: this.state.selected_action.filter(
@@ -155,6 +182,7 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 	};
 
 	// selected sensor에 따른 value_list에서, selected_value를 제외한 list 추출
+	// this didn't work I have to implement this function..
 	// getUnselectedValueList() {
 	// 	var valueOptions = this.state.sensor_info.value_list;
 
@@ -193,6 +221,7 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 		};
 		var url = LOGICCORE_URL;
 
+		// Valid check (unvalid -> alert)
 		if (!this.state.nameValid) {
 			alert('Please enter logic name.');
 			return;
@@ -201,12 +230,12 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 			alert('Please select a sensor.');
 			return;
 		}
-
 		if (!this.state.actionValid) {
 			alert('Please set more than a action.');
 			return;
 		}
 
+		// Check whether user really want to submit
 		var submitValid: boolean;
 		submitValid = window.confirm('Are you sure to register this logic?');
 		if (!submitValid) {

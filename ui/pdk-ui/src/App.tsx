@@ -17,6 +17,7 @@ import { SENSOR_URL, NODE_URL, SINK_URL, LOGICCORE_URL } from './defineUrl';
 import { logicCoreElem } from './ElemInterface/LcElementsInterface';
 import SinkManagement from './components/SinkManagement';
 import AlertAlarm from './components/AlertAlarm';
+
 interface AppState {
 	sensorList: Array<sensorListElem>;
 	nodeList: Array<nodeListElem>;
@@ -24,6 +25,12 @@ interface AppState {
 	sinkList: Array<sinkListElem>;
 }
 
+/* 
+App
+- Routing
+- Show navigation bar (Nav)
+- Alert alarm service
+*/
 class App extends Component<{}, AppState> {
 	state: AppState = {
 		sensorList: [],
@@ -32,6 +39,7 @@ class App extends Component<{}, AppState> {
 		sinkList: [],
 	};
 
+	// Get sensor list, node list, logic core, sink list
 	componentDidMount() {
 		this.getsensorList();
 		this.getnodeList();
@@ -39,6 +47,7 @@ class App extends Component<{}, AppState> {
 		this.getsinkList();
 	}
 
+	// Get sensor list from backend
 	getsensorList() {
 		var url = SENSOR_URL;
 
@@ -47,39 +56,36 @@ class App extends Component<{}, AppState> {
 			.then((data) => {
 				this.setState({ sensorList: data });
 			})
-			// .then(response => console.log('Success:', JSON.stringify(response)))
 			.catch((error) => console.error('Error:', error));
 	}
 
+	// Get node list from backend
 	getnodeList() {
 		var url = NODE_URL;
 
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) => this.setState({ nodeList: data }))
-			// .then(response => console.log('Success:', JSON.stringify(response)))
 			.catch((error) => console.error('Error:', error));
 	}
 
+	// Get sink list from backend
 	getsinkList() {
 		var url = SINK_URL;
 
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) => this.setState({ sinkList: data }))
-			// .then(response => console.log('Success:', JSON.stringify(response)))
 			.catch((error) => console.error('Error:', error));
 	}
 
+	// Get logic core list from backend
 	getlogicCore() {
-		//this.setState({ logicCore: logicTable_ex });
-
 		var url = LOGICCORE_URL;
 
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) => this.setState({ logicCore: data }))
-			// .then(response => console.log('Success:', JSON.stringify(response)))
 			.catch((error) => console.error('Error:', error));
 	}
 

@@ -11,7 +11,12 @@ interface SensorTableProps {
 	sensorList: Array<sensorListElem>;
 }
 
+/*
+SensorTable
+- Show up sensor list.
+*/
 class SensorTable extends Component<SensorTableProps> {
+	// Handle click event of the Remove button
 	handleRemoveClick = (sensor_uuid: string) => () => {
 		var url = SENSOR_URL;
 

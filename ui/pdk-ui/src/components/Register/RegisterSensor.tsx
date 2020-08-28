@@ -14,6 +14,10 @@ interface value_list_elem {
 	value_name: string;
 }
 
+/* 
+RegisterSensor
+- Show modal to register sensor
+*/
 class RegisterSensor extends Component<{}, RegisterSensorState> {
 	state: RegisterSensorState = {
 		value_list: [{ value_name: '' }],
@@ -22,7 +26,9 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 		valueValid: false,
 	};
 
+	// Handle node name change by typing
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// name valid check : user should enter sensor name
 		if (e.target.value.length > 0) {
 			this.setState({
 				name: e.target.value,
@@ -36,18 +42,23 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 		}
 	};
 
+	// Handle value's name change by typing
 	handleValueChange = (idx: number) => (
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
+		// Value list is updated dynamic. Its element can be added or removed freely.
+		// so find changing field by using received idx and change state.
 		const newvalue_list = this.state.value_list.map(
 			(value: value_list_elem, sidx: number) => {
 				if (idx !== sidx) return value;
 				return { ...value, value_name: e.target.value };
 			}
 		);
+
+		// value list valid check : User should enter more than a value and each value input field should be filled
 		if (
 			newvalue_list !== null &&
-			!newvalue_list.some((value) => value.value_name === '') &&
+			!newvalue_list.some((value) => value.value_name === '') && // find empty field
 			newvalue_list[idx].value_name.length > 0
 		) {
 			this.setState({ value_list: newvalue_list, valueValid: true });
@@ -56,15 +67,17 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 		}
 	};
 
-	// handle click event of the Add button
+	// Handle click event of the Add button
 	handleAddClick = () => {
+		// Add a value list elem
 		this.setState({
 			value_list: [...this.state.value_list, { value_name: '' }],
 		});
 	};
 
-	// handle click event of the Remove button
+	// Handle click event of the Remove button
 	handleRemoveClick = (idx: number) => () => {
+		// Remove #idx value list elem which user picked
 		this.setState({
 			value_list: this.state.value_list.filter(
 				(s: any, sidx: number) => idx !== sidx
@@ -72,12 +85,14 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 		});
 	};
 
+	// Handle submit button click event
 	handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
 		var url = SENSOR_URL;
 		var data = this.state;
 
+		// Valid check (unvalid -> alert)
 		if (!this.state.nameValid) {
 			alert('Please enter sensor name.');
 			return;
@@ -86,6 +101,8 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 			alert('Please enter value name.');
 			return;
 		}
+
+		// Check whether user really want to submit
 		var submitValid: boolean;
 		submitValid = window.confirm('Are you sure to register this sensor?');
 		if (!submitValid) {
@@ -108,15 +125,6 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 	render() {
 		return (
 			<>
-				<button
-					type="button"
-					className="btn"
-					data-toggle="modal"
-					data-target="#register-sensor-modal"
-					style={{ background: 'pink' }}
-				>
-					register sensor
-				</button>
 				<div
 					className="modal fade"
 					id="register-sensor-modal"

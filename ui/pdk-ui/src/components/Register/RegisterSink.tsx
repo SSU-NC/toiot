@@ -11,6 +11,10 @@ interface RegisterSinkState {
 	ipValid: boolean;
 }
 
+/* 
+RegisterSink
+- Show modal to register sink
+*/
 class RegisterSink extends Component<{}, RegisterSinkState> {
 	state: RegisterSinkState = {
 		name: '',
@@ -20,7 +24,9 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 		ipValid: false,
 	};
 
+	// Handle node name change by typing
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// name valid check : user should enter sink name
 		if (e.target.value.length > 0) {
 			this.setState({
 				name: e.target.value,
@@ -34,15 +40,19 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 		}
 	};
 
+	// Handle location change by typing
 	handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({
 			location: e.target.value,
 		});
 	};
 
+	// Handle ip:port change by typing
 	handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// Regular expression of check the ip:port format
 		const ipportRegExp = /^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{4,5}/;
 
+		// ip:port valid check : user should enter correct format of ip:port.
 		if (e.target.value.match(ipportRegExp)) {
 			this.setState({
 				ip: e.target.value,
@@ -56,12 +66,14 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 		}
 	};
 
+	// Handle submit button click event
 	handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
 		var url = SINK_URL;
 		var data = this.state;
 
+		// Valid check (unvalid -> alert)
 		if (!this.state.nameValid) {
 			alert('Please enter sink.');
 			return;
@@ -71,6 +83,7 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 			return;
 		}
 
+		// Check whether user really want to submit
 		var submitValid: boolean;
 		submitValid = window.confirm('Are you sure to register this sink?');
 		if (!submitValid) {
@@ -93,15 +106,6 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 	render() {
 		return (
 			<>
-				<button
-					type="button"
-					className="btn"
-					data-toggle="modal"
-					data-target="#register-sink-modal"
-					style={{ background: 'pink' }}
-				>
-					register sink
-				</button>
 				<div
 					className="modal fade"
 					id="register-sink-modal"
