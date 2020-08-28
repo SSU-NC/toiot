@@ -4,6 +4,10 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/KumKeeHyun/PDK/logic-core/rest"
+
+	"github.com/KumKeeHyun/PDK/logic-core/adapter"
+
 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 )
 
@@ -25,7 +29,10 @@ func NewMetaRepo() *metaRepo {
 		},
 	}
 
-	initMetaRepoRequest(metaData)
+	metaInfo, err := rest.MetaInfoRequest()
+	if err == nil {
+		metaData.SetMetaInfo(metaInfo)
+	}
 
 	return metaData
 }
@@ -40,6 +47,25 @@ type nodeRepo struct {
 	ninfo map[string]model.Node
 }
 
+func (mr *metaRepo) SetMetaInfo(mi adapter.MetaInfo) {
+	mr.nmu.Lock()
+	defer mr.nmu.Unlock()
+	mr.smu.Lock()
+	defer mr.smu.Unlock()
+
+	mr.ninfo = make(map[string]model.Node)
+	mr.sinfo = make(map[string]model.Sensor)
+
+	for _, n := range mi.NInfo {
+		mn := adapter.AppToNode(&n)
+		mr.NewNode(n.UUID, &mn)
+	}
+	for _, s := range mi.SInfo {
+		ms := adapter.AppToSensor(&s)
+		mr.NewSensor(s.UUID, &ms)
+	}
+}
+
 func (nr *nodeRepo) GetNode(key string) (*model.Node, error) {
 	nr.nmu.RLock()
 	defer nr.nmu.RUnlock()
@@ -52,9 +78,6 @@ func (nr *nodeRepo) GetNode(key string) (*model.Node, error) {
 }
 
 func (nr *nodeRepo) NewNode(key string, n *model.Node) error {
-	nr.nmu.Lock()
-	defer nr.nmu.Unlock()
-
 	_, ok := nr.ninfo[key]
 	if ok {
 		return errors.New("nodeRepo: already exist node")
@@ -64,9 +87,6 @@ func (nr *nodeRepo) NewNode(key string, n *model.Node) error {
 }
 
 func (nr *nodeRepo) DelNode(key string) error {
-	nr.nmu.Lock()
-	defer nr.nmu.Unlock()
-
 	_, ok := nr.ninfo[key]
 	if !ok {
 		return errors.New("nodeRepo: cannot delete node")
@@ -92,9 +112,6 @@ func (sr *sensorRepo) GetSensor(key string) (*model.Sensor, error) {
 }
 
 func (sr *sensorRepo) NewSensor(key string, s *model.Sensor) error {
-	sr.smu.Lock()
-	defer sr.smu.Unlock()
-
 	_, ok := sr.sinfo[key]
 	if ok {
 		return errors.New("nodeRepo: already exist sensor")
@@ -104,9 +121,6 @@ func (sr *sensorRepo) NewSensor(key string, s *model.Sensor) error {
 }
 
 func (sr *sensorRepo) DelSensor(key string) error {
-	sr.smu.Lock()
-	defer sr.smu.Unlock()
-
 	_, ok := sr.sinfo[key]
 	if !ok {
 		return errors.New("nodeRepo: cannot delete sensor")

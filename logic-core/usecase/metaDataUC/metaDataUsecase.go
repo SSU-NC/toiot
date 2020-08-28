@@ -1,6 +1,7 @@
 package metaDataUC
 
 import (
+	"github.com/KumKeeHyun/PDK/logic-core/adapter"
 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 	"github.com/KumKeeHyun/PDK/logic-core/domain/repository"
 	"github.com/KumKeeHyun/PDK/logic-core/domain/service"
@@ -16,6 +17,10 @@ func NewMetaDataUsecase(mr repository.MetaRepo, ls service.LogicCore) *metaDataU
 		mr: mr,
 		ls: ls,
 	}
+}
+
+func (mu *metaDataUsecase) SetMetaInfo(mi adapter.MetaInfo) {
+	mu.mr.SetMetaInfo(mi)
 }
 
 func (mu *metaDataUsecase) NewNode(key string, n *model.Node) (*model.Node, error) {

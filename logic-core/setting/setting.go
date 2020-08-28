@@ -2,21 +2,42 @@ package setting
 
 import (
 	"fmt"
-	"log"
-
-	"github.com/pelletier/go-toml"
+	"os"
+	"strconv"
 )
 
-type Server struct {
-	Address string
-	Port    string
+func GetenvInt(target *int, init int, env string) {
+	var err error
+
+	temp := os.Getenv(env)
+	if temp == "" {
+		*target = init
+	} else {
+		if *target, err = strconv.Atoi(temp); err != nil {
+			*target = init
+		}
+	}
 }
 
-func (c *Server) MakeAddr() string {
-	return fmt.Sprintf("%s:%s", c.Address, c.Port)
+func GetenvStr(target *string, init, env string) {
+	*target = os.Getenv(env)
+	if *target == "" {
+		*target = init
+	}
 }
 
-var Serversetting = &Server{}
+type Logic struct {
+	Server string
+}
+
+func (ls *Logic) Getenv() {
+	ls.Server = os.Getenv("LOGIC_SERVER")
+	if ls.Server == "" {
+		ls.Server = "220.70.2.160:8082"
+	}
+}
+
+var Logicsetting = &Logic{}
 
 type Kafka struct {
 	Broker      string   `toml:"broker"`
@@ -25,7 +46,17 @@ type Kafka struct {
 	ChanBufSize int      `toml:"chan_buf_size"`
 }
 
-var KafkaSetting = &Kafka{}
+func (ks *Kafka) Getenv() {
+	GetenvStr(&ks.Broker, "220.70.2.1:9092", "KAFKA_BROKER")
+	GetenvStr(&ks.GroupID, "logic", "KAFKA_GROUP")
+	ks.Topics = []string{os.Getenv("KAFKA_TOPIC")}
+	if ks.Topics[0] == "" {
+		ks.Topics = []string{"sensors"}
+	}
+	GetenvInt(&ks.ChanBufSize, 500, "KAFKA_BUFSIZE")
+}
+
+var Kafkasetting = &Kafka{}
 
 type Elastic struct {
 	Addresses    []string `toml:"addresses"`
@@ -35,32 +66,35 @@ type Elastic struct {
 	BatchSize    int      `toml:"batch_size"`
 }
 
-var ElasticSetting = &Elastic{}
-
-type AppServer struct {
-	Address string `toml:"address`
+func (es *Elastic) Getenv() {
+	temp := os.Getenv("ELASTIC_SERVER")
+	if temp == "" {
+		temp = "220.70.2.1:9200"
+	}
+	es.Addresses = []string{fmt.Sprintf("http://%s", temp)}
+	GetenvInt(&es.RequestRetry, 3, "ELASTIC_RETRY")
+	GetenvInt(&es.ChanBufSize, 500, "ELASTIC_BUFSIZE")
+	GetenvInt(&es.BatchTicker, 5, "ELASTIC_BATCHTICKER")
+	GetenvInt(&es.BatchSize, 450, "ELASTIC_BATCHSIZE")
 }
 
-var AppServerSetting = &AppServer{}
+var Elasticsetting = &Elastic{}
+
+type App struct {
+	Server string `toml:"address`
+}
+
+func (as *App) Getenv() {
+	GetenvStr(&as.Server, "220.70.2.160:8081", "APP_SERVER")
+}
+
+var Appsetting = &App{}
 
 func init() {
-	tree, err := toml.LoadFile("conf/config.toml")
-	if err != nil {
-		log.Fatalf("setting.Setup, fail to parse 'conf.config.toml': %v", err)
-		return
-	}
+	Logicsetting.Getenv()
+	Kafkasetting.Getenv()
+	Elasticsetting.Getenv()
+	Appsetting.Getenv()
 
-	serverTree := tree.Get("server").(*toml.Tree)
-	serverTree.Unmarshal(Serversetting)
-
-	kafkaTree := tree.Get("kafka").(*toml.Tree)
-	kafkaTree.Unmarshal(KafkaSetting)
-
-	elasticTree := tree.Get("elastic").(*toml.Tree)
-	elasticTree.Unmarshal(ElasticSetting)
-
-	appSrvTree := tree.Get("appserver").(*toml.Tree)
-	appSrvTree.Unmarshal(AppServerSetting)
-
-	fmt.Println(Serversetting, KafkaSetting, ElasticSetting, AppServerSetting)
+	fmt.Println(Logicsetting, Kafkasetting, Elasticsetting, Appsetting)
 }

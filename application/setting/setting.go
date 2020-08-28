@@ -7,7 +7,6 @@ import (
 
 type App struct {
 	Server string
-	React  string
 }
 
 func (as *App) Getenv() {
@@ -15,14 +14,22 @@ func (as *App) Getenv() {
 	if as.Server == "" {
 		as.Server = "0.0.0.0:8081"
 	}
-
-	as.React = os.Getenv("REACT_SERVER")
-	if as.React == "" {
-		as.React = "220.70.2.171:3000"
-	}
 }
 
 var Appsetting = &App{}
+
+type Logic struct {
+	Server string
+}
+
+func (ls *Logic) Getenv() {
+	ls.Server = os.Getenv("LOGIC_SERVER")
+	if ls.Server == "" {
+		ls.Server = "220.70.2.160:8082"
+	}
+}
+
+var Logicsetting = &Logic{}
 
 type Database struct {
 	Driver   string `toml:"driver"`
@@ -59,6 +66,7 @@ var Databasesetting = &Database{}
 
 func init() {
 	Appsetting.Getenv()
+	Logicsetting.Getenv()
 	Databasesetting.Getenv()
 
 	log.Printf("app : %v\ndb : %v\n", Appsetting, Databasesetting)

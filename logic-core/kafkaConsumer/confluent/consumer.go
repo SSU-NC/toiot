@@ -21,8 +21,8 @@ type consumer struct {
 
 func NewConsumer() *consumer {
 	config := &kafka.ConfigMap{
-		"bootstrap.servers":               setting.KafkaSetting.Broker,
-		"group.id":                        setting.KafkaSetting.GroupID,
+		"bootstrap.servers":               setting.Kafkasetting.Broker,
+		"group.id":                        setting.Kafkasetting.GroupID,
 		"session.timeout.ms":              6000,
 		"go.events.channel.enable":        true,
 		"go.application.rebalance.enable": true,
@@ -35,7 +35,7 @@ func NewConsumer() *consumer {
 		return nil
 	}
 
-	if err = c.SubscribeTopics(setting.KafkaSetting.Topics, nil); err != nil {
+	if err = c.SubscribeTopics(setting.Kafkasetting.Topics, nil); err != nil {
 		return nil
 	}
 

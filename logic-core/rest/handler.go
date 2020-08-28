@@ -87,3 +87,13 @@ func (h *Handler) DeleteSensor(c *gin.Context) {
 		c.JSON(http.StatusOK, as)
 	}
 }
+
+func (h *Handler) SyncMetaInfo(c *gin.Context) {
+	metaInfo, err := MetaInfoRequest()
+	if err == nil {
+		h.mduc.SetMetaInfo(metaInfo)
+		c.JSON(http.StatusOK, nil)
+	} else {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+}

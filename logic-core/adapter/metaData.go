@@ -2,6 +2,11 @@ package adapter
 
 import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
 
+type MetaInfo struct {
+	NInfo []Node   `json:"node_info"`
+	SInfo []Sensor `json:"sensor_info"`
+}
+
 type Node struct {
 	UUID     string `json:"uuid"`
 	Name     string `json:"name"`

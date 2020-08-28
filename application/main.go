@@ -57,9 +57,5 @@ func main() {
 
 	r.GET("/registerInfo", h.RegisterInfo)
 
-	r.GET("/", func(c *gin.Context) {
-		c.Redirect(302, setting.Appsetting.React)
-	})
-
 	log.Fatal(r.Run(setting.Appsetting.Server))
 }
