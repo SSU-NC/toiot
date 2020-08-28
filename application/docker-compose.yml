@@ -22,6 +22,7 @@ services:
             kbzjung359/pdk-app:dev
         environment: 
             APP_SERVER: 0.0.0.0:8080
+            REACT_SERVER: 0.0.0.0:3000
             DB_DRIVE: mysql
             DB_SERVER: db:3306
             DB_USER: pdk

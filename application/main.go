@@ -39,7 +39,7 @@ func main() {
 		sig.GET("", h.GetSinkInfo)
 		sig.GET("/:id", h.GetSinkByID)
 		sig.POST("", h.RegisterSink)
-		sig.DELETE("", h.DeleteSink)
+		sig.DELETE("/:id", h.DeleteSink)
 	}
 	ng := r.Group("/node")
 	{
@@ -56,7 +56,6 @@ func main() {
 	}
 
 	r.GET("/registerInfo", h.RegisterInfo)
-	r.POST("/logic/new", h.CreateLogic)
 
 	log.Fatal(r.Run(setting.Appsetting.Server))
 }

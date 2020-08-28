@@ -2,8 +2,8 @@ package rest
 
 import (
 	"github.com/KumKeeHyun/PDK/logic-core/setting"
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func RunServer(h *Handler) error {
@@ -17,12 +17,12 @@ func RunServer(h *Handler) error {
 	r.POST("/metadata/sensor", h.NewSensor)
 	r.DELETE("/metadata/node", h.DeleteNode)
 	r.DELETE("/metadata/sensor", h.DeleteSensor)
+	r.POST("/syncInfo", h.SyncMetaInfo)
 
 	r.POST("/logiccore", h.NewLogicChain)
 	r.GET("/logiccore", h.GetAllLogic)
 	r.DELETE("/logiccore", h.DeleteLogicChain)
 
 	r.GET("/websocket", h.NewWebSocket)
-
-	return r.Run(setting.Serversetting.MakeAddr())
+	return r.Run(setting.Logicsetting.Server)
 }

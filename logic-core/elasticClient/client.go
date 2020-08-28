@@ -25,11 +25,11 @@ func NewElasticClient() *client {
 	if elasticClient != nil {
 		return elasticClient
 	}
-	inBufSize := setting.ElasticSetting.ChanBufSize
+	inBufSize := setting.Elasticsetting.ChanBufSize
 
 	config := elasticsearch.Config{
-		Addresses:  setting.ElasticSetting.Addresses,
-		MaxRetries: setting.ElasticSetting.RequestRetry,
+		Addresses:  setting.Elasticsetting.Addresses,
+		MaxRetries: setting.Elasticsetting.RequestRetry,
 	}
 	cli, err := elasticsearch.NewClient(config)
 	if err != nil {
@@ -39,9 +39,9 @@ func NewElasticClient() *client {
 	elasticClient = &client{
 		es:      cli,
 		in:      make(chan model.Document, inBufSize),
-		ticker:  time.NewTicker(time.Duration(setting.ElasticSetting.BatchTicker) * time.Second),
-		docBuf:  make([]*model.Document, 0, setting.ElasticSetting.BatchSize),
-		bufSize: setting.ElasticSetting.BatchSize,
+		ticker:  time.NewTicker(time.Duration(setting.Elasticsetting.BatchTicker) * time.Second),
+		docBuf:  make([]*model.Document, 0, setting.Elasticsetting.BatchSize),
+		bufSize: setting.Elasticsetting.BatchSize,
 	}
 
 	go elasticClient.run()

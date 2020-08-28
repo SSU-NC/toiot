@@ -12,11 +12,24 @@ type App struct {
 func (as *App) Getenv() {
 	as.Server = os.Getenv("APP_SERVER")
 	if as.Server == "" {
-		as.Server = "0.0.0.0:8080"
+		as.Server = "0.0.0.0:8081"
 	}
 }
 
 var Appsetting = &App{}
+
+type Logic struct {
+	Server string
+}
+
+func (ls *Logic) Getenv() {
+	ls.Server = os.Getenv("LOGIC_SERVER")
+	if ls.Server == "" {
+		ls.Server = "220.70.2.160:8082"
+	}
+}
+
+var Logicsetting = &Logic{}
 
 type Database struct {
 	Driver   string `toml:"driver"`
@@ -53,6 +66,7 @@ var Databasesetting = &Database{}
 
 func init() {
 	Appsetting.Getenv()
+	Logicsetting.Getenv()
 	Databasesetting.Getenv()
 
 	log.Printf("app : %v\ndb : %v\n", Appsetting, Databasesetting)

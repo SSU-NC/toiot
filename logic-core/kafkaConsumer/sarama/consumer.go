@@ -26,7 +26,7 @@ func NewKafkaConsumer() *group {
 		return kafkaConsumer
 	}
 
-	outBufSize := setting.KafkaSetting.ChanBufSize
+	outBufSize := setting.Kafkasetting.ChanBufSize
 
 	kafkaConsumer = &group{
 		out: make(chan model.KafkaData, outBufSize),
@@ -34,9 +34,9 @@ func NewKafkaConsumer() *group {
 
 	cfg := sarama.NewConfig()
 	cfg.Version = sarama.V0_10_2_0
-	cfg.Consumer.Offsets.Initial = sarama.OffsetOldest
+	cfg.Consumer.Offsets.Initial = sarama.OffsetNewest
 
-	kafkaConsumer.client, err = sarama.NewConsumerGroup([]string{setting.KafkaSetting.Broker}, setting.KafkaSetting.GroupID, cfg)
+	kafkaConsumer.client, err = sarama.NewConsumerGroup([]string{setting.Kafkasetting.Broker}, setting.Kafkasetting.GroupID, cfg)
 	if err != nil {
 		panic(err)
 	}
@@ -48,7 +48,7 @@ func NewKafkaConsumer() *group {
 	}
 	go func() {
 		for {
-			err = kafkaConsumer.client.Consume(ctx, setting.KafkaSetting.Topics, &consumer)
+			err = kafkaConsumer.client.Consume(ctx, setting.Kafkasetting.Topics, &consumer)
 			if err != nil {
 				log.Panicf("Error from consumer: %v", err)
 			}
