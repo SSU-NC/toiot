@@ -208,6 +208,9 @@ User can see nodes' informations.
 User can delete nodes by click wastebasket img.  
 ![node_table](./img/node_table.png)
 
+User can check nodes' health by color immediatly. Each color represent state of nodes.  
+![health_state](./img/health_state.gif)
+
 ### 3.3. Sink
 
 Used Components : `src/components/SinkManagement.tsx`, `src/components/Register/RegisterSink.tsx`, `src/components/Table/SinkTable`
@@ -260,7 +263,7 @@ When user click `register logic` button, a page will show up.
 User enter logic's element( logic name, sensor, groups, time scope, value scopes, actions ).  
 Each element is considered as card at this page.  
 For example...  
-![register_logic_ex](./img/register_logic_ex.png)
+![register_logic_ex](./img/register_logic_ex.gif)
 
 - logic name
 - sensor : A logic should be registered with a sensor.
@@ -282,8 +285,10 @@ Used Components : `InputActionCard.tsx`, `InputGroupCard.tsx`, `InputSensorCard.
 
 User can see logic core here.  
 User can delete logics by click wastebasket img.  
-User can see logic's structure by click `show logic` button.  
 ![logicCore_table](./img/logicCore_table.png)
+
+User can see logic's structure by click `show logic` button.  
+![show_logic](./img/show_logic.png)
 
 Used Components : `ShowActionCard.tsx`, `ShowGroupCard.tsx`, `ShowSensorCard.tsx`, `ShowTimeCard.tsx`, `ShowValueCard.tsx` in `/src/LogicCoreComponents/ShowCards` DIR
 
@@ -294,14 +299,14 @@ User can make and control visulization.
 
 ### 5.1. Visualize
 
-User can make and control visulization.
+User can make and control visulization.  
 ![visualize_tab](./img/visualize_tab.png)
 
 Used Component : `src/KibanaVisulize.tsx`
 
 ### 5.2. Dashboard
 
-This tab is almost same as HOME tab.  
+User can make dashboard.  
 ![dashboard_tab](./img/dashboard_tab.png)
 
 Used Component : `src/KibanaDashboard.tsx`
@@ -309,7 +314,6 @@ Used Component : `src/KibanaDashboard.tsx`
 ## 6. Alarm
 
 Alerting alarm should be service all time, so this function is implemented by 'web socket'.  
-This service can be registered by registering logic.  
-![alarm_service_ex](./img/alarm_service_ex.png)
+This service can be registered by registering logic.
 
 Used Component : `src/components/AlertAlarm.tsx`
