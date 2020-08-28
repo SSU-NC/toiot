@@ -1,4 +1,4 @@
-# User Interface by using react
+# User Interface of ToIoT
 
 # Table of contents
 
