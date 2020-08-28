@@ -20,7 +20,6 @@ func (lcuc *logicCoreUsecase) ToLogicData(kd *model.KafkaData) (model.LogicData,
 	for i, vn := range s.ValueNames {
 		v[vn] = kd.Value.Values[i]
 	}
-
 	return model.LogicData{
 		SID:       kd.Key,
 		SName:     s.Name,

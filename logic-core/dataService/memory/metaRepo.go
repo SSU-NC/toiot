@@ -71,6 +71,7 @@ func (nr *nodeRepo) GetNode(key string) (*model.Node, error) {
 	defer nr.nmu.RUnlock()
 
 	n, ok := nr.ninfo[key]
+
 	if !ok {
 		return nil, errors.New("nodeRepo: cannot find node")
 	}

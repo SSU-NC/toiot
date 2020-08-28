@@ -1,31 +1,42 @@
-import React, { useImperativeHandle, Component } from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Nav from './Navigation';
-import SensorManagement from './SensorManagement';
-import NodeManagement from './NodeManagement';
+import SensorManagement from './components/SensorManagement';
+import NodeManagement from './components/NodeManagement';
 import Dashboard from './KibanaDashboard';
 import Visualize from './KibanaVisualize';
-import Main from './Main'; 
-import RegisterAlarm from './components/RegisterAlarm';
-
-import { sensorListElem, nodeListElem } from './components/ElementsInterface';
-import { SENSOR_URL, NODE_URL } from './defineUrl';
-
-interface appState {
+import Main from './Home';
+import LogicCoreManagement from './LogicCoreComponents/LogicCoreManagement';
+import RegisterLogic from './LogicCoreComponents/RegisterLogic';
+import {
+	sensorListElem,
+	nodeListElem,
+	sinkListElem,
+} from './ElemInterface/ElementsInterface';
+import { SENSOR_URL, NODE_URL, SINK_URL, LOGICCORE_URL } from './defineUrl';
+import { logicCoreElem } from './ElemInterface/LcElementsInterface';
+import SinkManagement from './components/SinkManagement';
+import AlertAlarm from './components/AlertAlarm';
+interface AppState {
 	sensorList: Array<sensorListElem>;
 	nodeList: Array<nodeListElem>;
+	logicCore: Array<logicCoreElem>;
+	sinkList: Array<sinkListElem>;
 }
 
-class App extends Component<{}, appState> {
-	state: appState = {
+class App extends Component<{}, AppState> {
+	state: AppState = {
 		sensorList: [],
 		nodeList: [],
-		// rasp: []
+		logicCore: [],
+		sinkList: [],
 	};
 
 	componentDidMount() {
 		this.getsensorList();
 		this.getnodeList();
+		this.getlogicCore();
+		this.getsinkList();
 	}
 
 	getsensorList() {
@@ -34,7 +45,6 @@ class App extends Component<{}, appState> {
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) => {
-				console.log(typeof data);
 				this.setState({ sensorList: data });
 			})
 			// .then(response => console.log('Success:', JSON.stringify(response)))
@@ -51,23 +61,37 @@ class App extends Component<{}, appState> {
 			.catch((error) => console.error('Error:', error));
 	}
 
+	getsinkList() {
+		var url = SINK_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ sinkList: data }))
+			// .then(response => console.log('Success:', JSON.stringify(response)))
+			.catch((error) => console.error('Error:', error));
+	}
+
+	getlogicCore() {
+		//this.setState({ logicCore: logicTable_ex });
+
+		var url = LOGICCORE_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ logicCore: data }))
+			// .then(response => console.log('Success:', JSON.stringify(response)))
+			.catch((error) => console.error('Error:', error));
+	}
+
 	render() {
 		return (
 			<div>
 				<Router>
 					<div>
 						<Nav></Nav>
+						<AlertAlarm />
 						<div className="container pt-4 mt-4">
 							<Route exact path="/" render={Main} />
-							{/* <Route
-								path="/management"
-								render={() => (
-									<SensorManagement
-										sensorList={this.state.sensorList}
-										nodeList={this.state.nodeList}
-									/>
-								)}
-							/> */}
 							<Route
 								path="/sensor"
 								render={() => (
@@ -79,18 +103,33 @@ class App extends Component<{}, appState> {
 								render={() => (
 									<NodeManagement
 										sensorList={this.state.sensorList}
+										sinkList={this.state.sinkList}
 										nodeList={this.state.nodeList}
 									/>
 								)}
 							/>
 							<Route
-								path="/alarm"
+								path="/sink"
+								render={() => <SinkManagement sinkList={this.state.sinkList} />}
+							/>
+							<Route
+								path="/logicCore"
 								render={() => (
-									<RegisterAlarm sensorList={this.state.sensorList} />
+									<LogicCoreManagement logicCore={this.state.logicCore} />
 								)}
 							/>
-						    <Route path= "/visualize" component={Visualize}/>
-							<Route path= "/dashboard" component={Dashboard}/> 
+							<Route
+								path="/registerLogic"
+								render={() => (
+									<RegisterLogic
+										sensorList={this.state.sensorList}
+										nodeList={this.state.nodeList}
+									/>
+								)}
+							></Route>
+
+							<Route path="/visualize" component={Visualize} />
+							<Route path="/dashboard" component={Dashboard} />
 						</div>
 					</div>
 				</Router>
@@ -99,10 +138,4 @@ class App extends Component<{}, appState> {
 	}
 }
 
-/*
-컴포넌트에 전달할 속성이 있을 경우 render 사용
-  * <Route exact path="/" render={() => <CardContainer location='cards.json' member={true}/>} />
-속성이 없다면 component 사용
-  * <Route path="/about" component={About} />
-*/
 export default App;

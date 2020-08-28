@@ -24,18 +24,19 @@ func NewLogicCore() *logicCore {
 	}
 }
 
-func (m *mux) CreateAndStartLogic(r *model.ChainRequest) {
+func (m *mux) CreateAndStartLogic(r *model.RingRequest, id string, event chan interface{}) {
 	listen := make(chan model.LogicData, 100)
-	lchs, ok := m.chTable[r.SID]
+	lchs, ok := m.chTable[r.Sensor]
 	if !ok {
-		m.chTable[r.SID] = make(map[string]chan model.LogicData)
-		lchs, _ = m.chTable[r.SID]
+		m.chTable[r.Sensor] = make(map[string]chan model.LogicData)
+		lchs, _ = m.chTable[r.Sensor]
 	}
-	lchs[r.Name] = listen
-
-	chain := chainFactory(r.Rings)
+	lchs[id] = listen
+	m.logicTable[id] = r.Sensor
+	
+	chain := chainFactory(r, event)
 	for d := range listen {
-		chain.execute(&d)
+		chain.exec(&d)
 	}
 }
 
@@ -47,23 +48,27 @@ func (m *mux) GetLogicChans(key string) map[string]chan model.LogicData {
 	return lchs
 }
 
-func (m *mux) RemoveLogic(lname string) error {
-	sid, ok := m.logicTable[lname]
+func (m *mux) RemoveLogic(id string) (err error) {
+	sid, ok := m.logicTable[id]
 	if !ok {
-		errors.New("cannot find logicChain " + lname)
+		err = errors.New("cannot find logicChain " + id )
+		return err
 	}
-	ch, _ := m.chTable[sid][lname]
+	ch, _ := m.chTable[sid][id]
 	close(ch)
+	
+	delete(m.chTable[sid], id)
+	delete(m.logicTable, id)
 	return nil
 }
 
-func (m *mux) RemoveLogicsBySID(sid string) error {
+func (m *mux) RemoveLogicsBySID(sid string) (err error) {
 	lchs, ok := m.chTable[sid]
 	if !ok {
-		errors.New("there is no sensor " + sid)
+		err = errors.New("there is no sensor " + sid)
 	}
 	for _, ch := range lchs {
 		close(ch)
 	}
-	return nil
+	return err
 }

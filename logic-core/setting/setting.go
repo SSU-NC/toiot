@@ -80,6 +80,18 @@ func (es *Elastic) Getenv() {
 
 var Elasticsetting = &Elastic{}
 
+type MongoDB struct {
+	Address string `toml:"address"`
+	Port    string `toml:"port"`
+}
+
+func (ms *MongoDB) Getenv() {
+	GetenvStr(&ms.Address, "127.0.0.1", "MONGO_ADDR")
+	GetenvStr(&ms.Port, "27017", "MONGO_PORT")
+}
+
+var MongoDbSetting = &MongoDB{}
+
 type App struct {
 	Server string `toml:"address`
 }
@@ -95,6 +107,7 @@ func init() {
 	Kafkasetting.Getenv()
 	Elasticsetting.Getenv()
 	Appsetting.Getenv()
+	MongoDbSetting.Getenv()
 
 	fmt.Println(Logicsetting, Kafkasetting, Elasticsetting, Appsetting)
 }

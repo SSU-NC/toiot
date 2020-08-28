@@ -1,7 +1,6 @@
 package elasticClient
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
@@ -11,6 +10,7 @@ import (
 )
 
 var elasticClient *client
+
 
 type client struct {
 	es *elasticsearch.Client
@@ -60,12 +60,58 @@ func (ec *client) run() {
 	}
 }
 
+/*
+type client struct {
+	es *elasticsearch.Client
+	in chan model.Document
+}
+
+func NewElasticClient() *client {
+	if elasticClient != nil {
+		return elasticClient
+	}
+
+	inBufSize := 100
+
+	config := elasticsearch.Config{
+		Addresses: setting.ElasticSetting.Addresses,
+	}
+	cli, err := elasticsearch.NewClient(config)
+	if err != nil {
+		return nil
+	}
+
+	elasticClient = &client{
+		es: cli,
+		in: make(chan model.Document, inBufSize),
+	}
+
+	go elasticClient.run()
+
+	return elasticClient
+}
+
+func (ec *client) run() {
+	for doc := range elasticClient.in {
+		fmt.Printf("Doc: %v\n", doc)
+		d, err := json.Marshal(doc.Doc)
+		if err != nil {
+			continue
+		}
+		ec.es.Index(
+			doc.Index,
+			bytes.NewReader(d),
+		)
+	}
+}
+*/
 func (ec *client) GetInput() chan<- model.Document {
 	if ec != nil {
 		return ec.in
 	}
 	return nil
 }
+
 
 func (ec *client) insertDoc(d *model.Document) {
 	ec.docBuf = append(ec.docBuf, d)
@@ -80,7 +126,7 @@ func (ec *client) bulk() {
 		res, _ := ec.es.Bulk(strings.NewReader(bulkStr))
 		res.Body.Close()
 
-		fmt.Println(bulkStr)
+		//fmt.Println(bulkStr)
 		ec.docBuf = make([]*model.Document, 0, ec.bufSize)
 	}
 }

@@ -14,3 +14,9 @@ type MetaRepo interface {
 	DelNode(key string) error
 	DelSensor(key string) error
 }
+
+type LogicRepo interface {
+	GetAll() ([]model.Ring, error)
+	Create(*model.RingRequest) (string, error)
+	Delete(string) error
+}

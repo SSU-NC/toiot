@@ -5,27 +5,23 @@ TODO : ring(node) chain
 package logicCore
 
 import (
-	"fmt"
-
 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 )
 
-type chainRing interface {
-	setNext(nr chainRing)
-	execute(d *model.LogicData)
+type Ringer interface {
+	setNext(Ringer)
+	exec(*model.LogicData)
 }
 
-type chainRingBase struct {
-	next chainRing
+type baseRing struct {
+	next Ringer
 }
 
-func (crb *chainRingBase) setNext(nr chainRing) {
-	crb.next = nr
+func (r *baseRing) setNext(n Ringer) {
+	r.next = n
 }
-
-func (crb *chainRingBase) execute(d *model.LogicData) {
-	fmt.Printf("test: %v\n", *d)
-	if crb.next != nil {
-		crb.next.execute(d)
+func (r *baseRing) exec(d *model.LogicData) {
+	if r.next != nil {
+		r.next.exec(d)
 	}
 }

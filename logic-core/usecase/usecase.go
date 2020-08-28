@@ -3,6 +3,7 @@ package usecase
 import (
 	"github.com/KumKeeHyun/PDK/logic-core/adapter"
 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/dustin/go-broadcast"
 )
 
 // type ConsumerManageUsecase interface {
@@ -10,8 +11,10 @@ import (
 // }
 
 type LogicCoreUsecase interface {
-	SetLogicChain(r *model.ChainRequest) error
+	SetLogicChain(r *model.RingRequest) error
 	RemoveLogicChain(lname string) error
+	RemoveLogicChainsBySID(sid string) error
+	GetAllLogics() ([]model.Ring, error)
 }
 
 type MetaDataUsecase interface {
@@ -20,4 +23,8 @@ type MetaDataUsecase interface {
 	NewSensor(key string, s *model.Sensor) (*model.Sensor, error)
 	DeleteNode(key string) error
 	DeleteSensor(key string) error
+}
+
+type WebsocketUsecase interface {
+	broadcast.Broadcaster
 }
