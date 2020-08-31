@@ -6,6 +6,8 @@ import (
 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
 )
 
+var loc *time.Location
+
 type SensorData struct {
 	NID       string    `json:"nid"`
 	Values    []float64 `json:"values"`
@@ -18,7 +20,7 @@ type KafkaData struct {
 }
 
 func AppToKafka(kd *KafkaData) model.KafkaData {
-	t, err := time.Parse("2006-01-02 15:04:05", kd.Value.Timestamp)
+	t, err := time.ParseInLocation("2006-01-02 15:04:05", kd.Value.Timestamp, loc)
 	if err != nil {
 		return model.KafkaData{}
 	}
@@ -30,4 +32,8 @@ func AppToKafka(kd *KafkaData) model.KafkaData {
 			Timestamp: t,
 		},
 	}
+}
+
+func init() {
+	loc, _ = time.LoadLocation("Asia/Seoul")
 }
