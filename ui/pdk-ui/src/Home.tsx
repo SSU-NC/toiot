@@ -1,13 +1,13 @@
 import React from 'react';
 import Iframe from 'react-iframe';
-import { KIBANA_URL } from './defineUrl';
+import { KIBANA_DASHBOARDS_URL } from './defineUrl';
 
 /* 
 Home
 - linked by HOME tab.
 */
 function Home() {
-	const kibanaUrl: string = KIBANA_URL;
+	const dashboardUrl: string = KIBANA_DASHBOARDS_URL;
 
 	return (
 		<div
@@ -20,7 +20,7 @@ function Home() {
 			}}
 		>
 			<Iframe
-				url={kibanaUrl}
+				url={dashboardUrl}
 				className="embed-responsive-item"
 				height="50%"
 				scrolling="yes"
