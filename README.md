@@ -7,21 +7,14 @@ Table of contents
 =================
 <!--ts-->
    * [Result](#Result)
-   * [How to use](#How-to-use)
-   * [Requirement](#Requirement)
-   * [Build & Installation](#Build--Installation)
    * [Detail](#Detail)
    * [Help](#Help)
+   * [LICENSE](#LICENSE)
 <!--te-->
 
 Result
 =======
 
-Requirement
-=======
-
-Build & Installation
-=======
 
 Detail
 =======
@@ -29,4 +22,8 @@ Detail
 * [Backend Server](./application/README.md)
 
 Help
+=======
+yoonje.choi.dev@gmail.com
+
+LICENSE
 =======
