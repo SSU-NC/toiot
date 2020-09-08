@@ -7,21 +7,14 @@ Table of contents
 =================
 <!--ts-->
    * [Result](#Result)
-   * [How to use](#How-to-use)
-   * [Requirement](#Requirement)
-   * [Build & Installation](#Build--Installation)
    * [Detail](#Detail)
    * [Help](#Help)
+   * [License](#License)
 <!--te-->
 
 Result
 =======
 
-Requirement
-=======
-
-Build & Installation
-=======
 
 Detail
 =======
@@ -30,3 +23,22 @@ Detail
 
 Help
 =======
+yoonje.choi.dev@gmail.com
+
+License
+=======
+```
+Copyright 2020 Keehyun Kum, Haegyeong Im, Jungsu Kim, Sehee Jung, Yoonje Choi
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
