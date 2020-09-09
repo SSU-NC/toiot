@@ -92,13 +92,9 @@ class App extends Component<{}, AppState> {
 								)}
 							/>
 							<Route path="/node" component={NodeManagement} />
-							<Route
-								path="/sink"
-								render={() => <SinkManagement sinkList={this.state.sinkList} />}
-							/>
+							<Route path="/sink" component={SinkManagement} />
 							<Route path="/logicCore" component={LogicCoreManagement} />
-							<Route path="/registerLogic" component={RegisterLogic}></Route>
-
+							<Route path="/registerLogic" component={RegisterLogic} />
 							<Route path="/visualize" component={Visualize} />
 							<Route path="/dashboard" component={Dashboard} />
 						</div>

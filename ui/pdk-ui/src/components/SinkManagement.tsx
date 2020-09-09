@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
 import RegisterSink from './Register/RegisterSink';
 import SinkTable from './Table/SinkTable';
-import { sinkListElem } from '../ElemInterface/ElementsInterface';
-
-interface SinkManagementProps {
-	sinkList: Array<sinkListElem>;
-}
 
 /*
 SinkManagement
 - Manage sink table, register sink
 */
-const SinkManagement: React.FunctionComponent<SinkManagementProps> = (
-	props
-) => {
+const SinkManagement: React.FunctionComponent = () => {
 	return (
 		<>
 			<div style={{ float: 'right' }}>
@@ -30,7 +23,7 @@ const SinkManagement: React.FunctionComponent<SinkManagementProps> = (
 			</div>
 			<div>
 				<h3>Sink</h3>
-				<SinkTable sinkList={props.sinkList} />
+				<SinkTable />
 			</div>
 		</>
 	);

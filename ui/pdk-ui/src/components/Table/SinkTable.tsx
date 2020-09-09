@@ -4,7 +4,7 @@ import { SINK_URL } from '../../defineUrl';
 
 //import DeleteRequest from './DeleteRequest'
 
-interface SinkTableProps {
+interface SinkTableState {
 	sinkList: Array<sinkListElem>;
 }
 
@@ -12,7 +12,24 @@ interface SinkTableProps {
 SinkTable
 - Show up sink list.
 */
-class SinkTable extends Component<SinkTableProps> {
+class SinkTable extends Component<{}, SinkTableState> {
+	state: SinkTableState = {
+		sinkList: [],
+	};
+	componentDidMount() {
+		this.getsinkList();
+	}
+
+	// Get sink list from backend
+	getsinkList() {
+		var url = SINK_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ sinkList: data }))
+			.catch((error) => console.error('Error:', error));
+	}
+
 	// Handle click event of the Remove button
 	handleRemoveClick = (sink_id: number) => () => {
 		var url = SINK_URL + '/' + sink_id;
@@ -43,7 +60,7 @@ class SinkTable extends Component<SinkTableProps> {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.sinkList.map((sink: sinkListElem, idx: number) => (
+						{this.state.sinkList.map((sink: sinkListElem, idx: number) => (
 							<tr>
 								<th scope="row">{idx}</th>
 								<td>{sink.name}</td>
