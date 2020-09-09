@@ -1,0 +1,11 @@
+version: '3.2'
+
+services:
+    health:
+        hostname:
+            health
+        image:
+            kbzjung359/pdk-health:0.3
+        environment: 
+            HEALTH_SERVER: 0.0.0.0:8083
+            APP_SERVER: localhost:8081
