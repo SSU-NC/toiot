@@ -1,5 +1,5 @@
-# PDK
-Internet of Things platform for device management, data collection, analytics and visualization, remote control and more.
+# Toiot
+Internet of Things platform for device management, data collection, analytics and visualization, and more. Toiot provides a powerful enterprise-class platform for those with little web skills, and provides drivers for sensors and hardware boards.
 
 ![1598848553084](https://user-images.githubusercontent.com/44857109/91684069-52ca5b00-eb91-11ea-98ec-68376a3ba1f0.png)
 
