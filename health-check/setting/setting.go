@@ -6,15 +6,30 @@ import (
 	"strconv"
 )
 
-type App struct {
+type Health struct {
 	Server string
+}
+
+func (hs *Health) Getenv() {
+	hs.Server = os.Getenv("HEALTH_SERVER")
+	if hs.Server == "" {
+		hs.Server = "0.0.0.0:8083"
+	}
+}
+
+var Healthsetting = &Health{}
+
+type App struct {
+	Server      string
+	MetaRequest string
 }
 
 func (as *App) Getenv() {
 	as.Server = os.Getenv("APP_SERVER")
 	if as.Server == "" {
-		as.Server = "0.0.0.0:8082"
+		as.Server = "0.0.0.0:8081"
 	}
+	as.MetaRequest = "/node/select"
 }
 
 var Appsetting = &App{}
@@ -96,9 +111,10 @@ func (ks *Kafka) Getenv() {
 var KafkaSetting = &Kafka{}
 
 func init() {
+	Healthsetting.Getenv()
 	Appsetting.Getenv()
 	StatusSetting.Getenv()
 	KafkaSetting.Getenv()
 
-	fmt.Printf("App : %v\nStatus : %v\nKafka : %v\n\n", Appsetting, StatusSetting, KafkaSetting)
+	fmt.Printf("Health : &v\nApp : %v\nStatus : %v\nKafka : %v\n\n", Healthsetting, Appsetting, StatusSetting, KafkaSetting)
 }
