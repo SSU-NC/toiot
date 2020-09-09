@@ -9,6 +9,7 @@ import {
 } from '../ElemInterface/ElementsInterface';
 import { HEALTHCHECK_URL } from '../defineUrl';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
+import NodeMap from './NodeMap';
 
 const client = new W3CWebSocket(HEALTHCHECK_URL);
 
@@ -105,6 +106,10 @@ class NodeManagement extends Component<
 						<span style={{ color: '#FACC2E' }}>● : unstable </span>
 						<span style={{ color: 'red' }}>● : disconnect </span>
 					</div>
+					<NodeMap
+						nodeList={this.props.nodeList}
+						nodeState={this.state.nodeState}
+					></NodeMap>
 					<div>
 						{groupedNodeList.map((group: GroupedNodeListElem, idx: number) => (
 							<div>
