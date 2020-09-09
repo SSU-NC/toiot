@@ -7,7 +7,7 @@ import { SENSOR_URL } from '../../defineUrl';
 
 //import DeleteRequest from './DeleteRequest'
 
-interface SensorTableProps {
+interface SensorTableState {
 	sensorList: Array<sensorListElem>;
 }
 
@@ -15,7 +15,26 @@ interface SensorTableProps {
 SensorTable
 - Show up sensor list.
 */
-class SensorTable extends Component<SensorTableProps> {
+class SensorTable extends Component<{}, SensorTableState> {
+	state: SensorTableState = {
+		sensorList: [],
+	};
+	componentDidMount() {
+		this.getsensorList();
+	}
+
+	// Get sensor list from backend
+	getsensorList() {
+		var url = SENSOR_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => {
+				this.setState({ sensorList: data });
+			})
+			.catch((error) => console.error('Error:', error));
+	}
+
 	// Handle click event of the Remove button
 	handleRemoveClick = (sensor_uuid: string) => () => {
 		var url = SENSOR_URL;
@@ -46,7 +65,7 @@ class SensorTable extends Component<SensorTableProps> {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.sensorList.map(
+						{this.state.sensorList.map(
 							(sensor: sensorListElem, idx: number) => (
 								<tr>
 									<th scope="row">{idx}</th>
