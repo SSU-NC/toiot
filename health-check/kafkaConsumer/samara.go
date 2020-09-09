@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
+	"github.com/KumKeeHyun/PDK/health-check/adapter"
 	"github.com/KumKeeHyun/PDK/health-check/setting"
 	"github.com/Shopify/sarama"
 )

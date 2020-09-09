@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
+	"github.com/KumKeeHyun/PDK/health-check/adapter"
 	"github.com/KumKeeHyun/PDK/health-check/domain/model"
 	"github.com/dustin/go-broadcast"
 )
