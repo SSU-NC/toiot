@@ -14,14 +14,13 @@ import {
 	sinkListElem,
 } from './ElemInterface/ElementsInterface';
 import { SENSOR_URL, NODE_URL, SINK_URL, LOGICCORE_URL } from './defineUrl';
-import { logicCoreElem } from './ElemInterface/LcElementsInterface';
 import SinkManagement from './components/SinkManagement';
 import AlertAlarm from './components/AlertAlarm';
 
 interface AppState {
 	sensorList: Array<sensorListElem>;
 	nodeList: Array<nodeListElem>;
-	logicCore: Array<logicCoreElem>;
+
 	sinkList: Array<sinkListElem>;
 }
 
@@ -35,7 +34,6 @@ class App extends Component<{}, AppState> {
 	state: AppState = {
 		sensorList: [],
 		nodeList: [],
-		logicCore: [],
 		sinkList: [],
 	};
 
@@ -43,7 +41,6 @@ class App extends Component<{}, AppState> {
 	componentDidMount() {
 		this.getsensorList();
 		this.getnodeList();
-		this.getlogicCore();
 		this.getsinkList();
 	}
 
@@ -79,16 +76,6 @@ class App extends Component<{}, AppState> {
 			.catch((error) => console.error('Error:', error));
 	}
 
-	// Get logic core list from backend
-	getlogicCore() {
-		var url = LOGICCORE_URL;
-
-		fetch(url)
-			.then((res) => res.json())
-			.then((data) => this.setState({ logicCore: data }))
-			.catch((error) => console.error('Error:', error));
-	}
-
 	render() {
 		return (
 			<div>
@@ -118,12 +105,7 @@ class App extends Component<{}, AppState> {
 								path="/sink"
 								render={() => <SinkManagement sinkList={this.state.sinkList} />}
 							/>
-							<Route
-								path="/logicCore"
-								render={() => (
-									<LogicCoreManagement logicCore={this.state.logicCore} />
-								)}
-							/>
+							<Route path="/logicCore" render={() => <LogicCoreManagement />} />
 							<Route
 								path="/registerLogic"
 								render={() => (

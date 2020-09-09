@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { logicCoreElem } from '../ElemInterface/LcElementsInterface';
-import LogicCoreTable from './LogicCoreTable';
-
-interface LogicCoreManagementProps {
-	logicCore: Array<logicCoreElem>;
-}
+import LogicTable from './LogicTable';
 
 /*
 LogicCoreManagement
 - Manage logic core table, register logic
 */
-class LogicCoreManagement extends Component<LogicCoreManagementProps> {
+class LogicCoreManagement extends Component {
 	render() {
 		return (
 			<div>
@@ -25,7 +20,7 @@ class LogicCoreManagement extends Component<LogicCoreManagementProps> {
 					</button>
 				</Link>
 				<h3>Logic Core</h3>
-				<LogicCoreTable logicCore={this.props.logicCore} />
+				<LogicTable />
 			</div>
 		);
 	}
