@@ -13,7 +13,7 @@ import {
 	nodeListElem,
 	sinkListElem,
 } from './ElemInterface/ElementsInterface';
-import { SENSOR_URL, NODE_URL, SINK_URL, LOGICCORE_URL } from './defineUrl';
+import { SENSOR_URL, NODE_URL, SINK_URL } from './defineUrl';
 import SinkManagement from './components/SinkManagement';
 import AlertAlarm from './components/AlertAlarm';
 
@@ -91,21 +91,12 @@ class App extends Component<{}, AppState> {
 									<SensorManagement sensorList={this.state.sensorList} />
 								)}
 							/>
-							<Route
-								path="/node"
-								render={() => (
-									<NodeManagement
-										sensorList={this.state.sensorList}
-										sinkList={this.state.sinkList}
-										nodeList={this.state.nodeList}
-									/>
-								)}
-							/>
+							<Route path="/node" component={NodeManagement} />
 							<Route
 								path="/sink"
 								render={() => <SinkManagement sinkList={this.state.sinkList} />}
 							/>
-							<Route path="/logicCore" render={() => <LogicCoreManagement />} />
+							<Route path="/logicCore" component={LogicCoreManagement} />
 							<Route
 								path="/registerLogic"
 								render={() => (

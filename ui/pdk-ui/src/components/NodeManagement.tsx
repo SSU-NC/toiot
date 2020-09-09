@@ -2,23 +2,19 @@ import React, { Component } from 'react';
 import RegisterNode from './Register/RegisterNode';
 import NodeTable from './Table/NodeTable';
 import {
-	sensorListElem,
 	nodeListElem,
 	sinkListElem,
 	nodeHealthCheckElem,
 } from '../ElemInterface/ElementsInterface';
-import { HEALTHCHECK_URL } from '../defineUrl';
+import { HEALTHCHECK_URL, NODE_URL, SINK_URL } from '../defineUrl';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import NodeMap from './NodeMap';
 
 const client = new W3CWebSocket(HEALTHCHECK_URL);
 
-interface NodeManagementProps {
-	sensorList: Array<sensorListElem>;
-	sinkList: Array<sinkListElem>;
-	nodeList: Array<nodeListElem>;
-}
 interface NodeManagementState {
+	nodeList: Array<nodeListElem>;
+	sinkList: Array<sinkListElem>;
 	nodeState: Array<nodeHealthCheckElem>;
 }
 interface GroupedNodeListElem {
@@ -53,11 +49,10 @@ function groupBySinkid(
 NodeManagement
 - Manage node table, register node
 */
-class NodeManagement extends Component<
-	NodeManagementProps,
-	NodeManagementState
-> {
+class NodeManagement extends Component<{}, NodeManagementState> {
 	state: NodeManagementState = {
+		nodeList: [],
+		sinkList: [],
 		nodeState: [],
 	};
 
@@ -74,10 +69,35 @@ class NodeManagement extends Component<
 		};
 	}
 
+	componentDidMount() {
+		this.getnodeList();
+		this.getsinkList();
+	}
+
+	// Get node list from backend
+	getnodeList() {
+		var url = NODE_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ nodeList: data }))
+			.catch((error) => console.error('Error:', error));
+	}
+
+	// Get sink list from backend
+	getsinkList() {
+		var url = SINK_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ sinkList: data }))
+			.catch((error) => console.error('Error:', error));
+	}
+
 	render() {
 		var groupedNodeList = groupBySinkid(
-			this.props.nodeList,
-			this.props.sinkList
+			this.state.nodeList,
+			this.state.sinkList
 		);
 
 		return (
@@ -92,10 +112,7 @@ class NodeManagement extends Component<
 					>
 						register node
 					</button>
-					<RegisterNode
-						sensorList={this.props.sensorList}
-						sinkList={this.props.sinkList}
-					></RegisterNode>
+					<RegisterNode></RegisterNode>
 				</div>
 				<div>
 					<h3>Node</h3>
@@ -107,7 +124,7 @@ class NodeManagement extends Component<
 						<span style={{ color: 'red' }}>● : disconnect </span>
 					</div>
 					<NodeMap
-						nodeList={this.props.nodeList}
+						nodeList={this.state.nodeList}
 						nodeState={this.state.nodeState}
 					></NodeMap>
 					<div>
