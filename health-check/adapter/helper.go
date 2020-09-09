@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/KumKeeHyun/PDK/health-check/setting"
+
 	"github.com/go-resty/resty/v2"
 )
 
@@ -23,8 +25,9 @@ func GetNodeInfo(s *States) ([]Node, error) {
 	}
 	res := make([]Node, 0)
 
+	url := fmt.Sprintf("http://%s%s", setting.Appsetting.Server, setting.Appsetting.MetaRequest)
 	cli := resty.New()
-	_, err := cli.R().SetResult(&res).SetQueryString(queryFac(ids)).Get("http://220.70.2.160:8080/node/select")
+	_, err := cli.R().SetResult(&res).SetQueryString(queryFac(ids)).Get(url)
 	if err != nil {
 		return nil, err
 	}
