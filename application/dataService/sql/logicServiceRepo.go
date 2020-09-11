@@ -10,7 +10,7 @@ type logicServiceRepo struct {
 	db *gorm.DB
 }
 
-func NewLogicService() *logicServiceRepo {
+func NewLogicServiceRepo() *logicServiceRepo {
 	return &logicServiceRepo{
 		db: dbConn,
 	}

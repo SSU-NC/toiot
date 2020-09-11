@@ -3,12 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/KumKeeHyun/PDK/application/dataService/sql"
-	"github.com/KumKeeHyun/PDK/application/rest"
-	"github.com/KumKeeHyun/PDK/application/setting"
-	"github.com/KumKeeHyun/PDK/application/usecase/nodeUsecase"
-	"github.com/KumKeeHyun/PDK/application/usecase/sensorUsecase"
-	"github.com/KumKeeHyun/PDK/application/usecase/sinkUsecase"
+	"github.com/KumKeeHyun/toiot/application/dataService/sql"
+	"github.com/KumKeeHyun/toiot/application/rest/handler"
+	"github.com/KumKeeHyun/toiot/application/setting"
+	"github.com/KumKeeHyun/toiot/application/usecase/registUsecase"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
@@ -18,15 +16,16 @@ import (
 func main() {
 	sql.Setup()
 
-	sir := sql.NewSinkRepository()
-	nr := sql.NewNodeRepository()
-	sr := sql.NewSensorRepository()
+	sir := sql.NewSinkRepo()
+	ndr := sql.NewNodeRepo()
+	snr := sql.NewSensorRepo()
+	lgr := sql.NewLogicRepo()
+	lsr := sql.NewLogicServiceRepo()
+	tpr := sql.NewTopicRepo()
 
-	siu := sinkUsecase.NewSinkUsecase(sir, nr)
-	nu := nodeUsecase.NewNodeUsecase(nr, sr)
-	su := sensorUsecase.NewSensorUsecase(sr)
+	ru := registUsecase.NewRegistUsecase(sir, ndr, snr, lgr, lsr, tpr)
 
-	h := rest.NewHandler(siu, nu, su)
+	h := handler.NewHandler(ru)
 
 	r := gin.Default()
 	config := cors.DefaultConfig()
@@ -34,28 +33,48 @@ func main() {
 	config.AllowCredentials = true
 	r.Use(cors.New(config))
 
-	sig := r.Group("/sink")
-	{
-		sig.GET("", h.GetSinkInfo)
-		sig.GET("/:id", h.GetSinkByID)
-		sig.POST("", h.RegisterSink)
-		sig.DELETE("/:id", h.DeleteSink)
-	}
-	ng := r.Group("/node")
-	{
-		ng.GET("", h.GetNodesInfo)
-		ng.GET("/select", h.GetNodesByIDs)
-		ng.POST("", h.RegisterNode)
-		ng.DELETE("", h.DeleteNode)
-	}
-	sg := r.Group("/sensor")
-	{
-		sg.GET("", h.GetSensorsInfo)
-		sg.POST("", h.RegisterSensor)
-		sg.DELETE("", h.DeleteSensor)
-	}
-
-	r.GET("/registerInfo", h.RegisterInfo)
+	setRegistrationRoute(r, h)
 
 	log.Fatal(r.Run(setting.Appsetting.Server))
+}
+
+func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
+	regist := r.Group("/regist")
+	{
+		sink := regist.Group("/sink")
+		{
+			sink.GET("", h.ListSinks)
+			sink.POST("", h.RegistSink)
+			sink.DELETE("/:id", h.UnregistSink)
+		}
+		node := regist.Group("/node")
+		{
+			node.GET("", h.ListNodes)
+			node.POST("", h.RegistNode)
+			node.DELETE("/:id", h.UnregistNode)
+		}
+		sensor := regist.Group("/sensor")
+		{
+			sensor.GET("", h.ListSensors)
+			sensor.POST("", h.RegistSensor)
+			sensor.DELETE("/:id", h.UnregistSensor)
+		}
+		logic := regist.Group("/logic")
+		{
+			logic.GET("", h.ListLogics)
+			logic.POST("", h.RegistLogic)
+			logic.DELETE("/:id", h.UnregistLogic)
+		}
+		logicService := regist.Group("/logic-service")
+		{
+			logicService.GET("", h.ListLogicServices)
+			logicService.DELETE("/:id", h.UnregistLogicService)
+		}
+		topic := regist.Group("/topic")
+		{
+			topic.GET("", h.ListTopics)
+			topic.POST("", h.RegistTopic)
+			topic.DELETE("/:id", h.UnregistTopic)
+		}
+	}
 }

@@ -11,7 +11,7 @@ type registUsecase struct {
 	tpr repository.TopicRepo
 }
 
-func NewRegistusecase(sir repository.SinkRepo,
+func NewRegistUsecase(sir repository.SinkRepo,
 	ndr repository.NodeRepo,
 	snr repository.SensorRepo,
 	lgr repository.LogicRepo,

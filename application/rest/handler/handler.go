@@ -1,9 +1,10 @@
-package rest
+package handler
 
 import (
 	"net/http"
 	"strconv"
 
+	"github.com/KumKeeHyun/toiot/application/adapter"
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 	"github.com/KumKeeHyun/toiot/application/usecase"
 	"github.com/gin-gonic/gin"
@@ -113,7 +114,7 @@ func (h *Handler) RegistSensor(c *gin.Context) {
 		return
 	}
 
-	err := h.ru.UnregistSensor(&sensor)
+	err := h.ru.RegistSensor(&sensor)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -135,4 +136,114 @@ func (h *Handler) UnregistSensor(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, sensor)
+}
+
+func (h *Handler) ListLogics(c *gin.Context) {
+	logics, err := h.ru.GetLogics()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	aLogics := adapter.LogicsToAdapter(logics)
+	c.JSON(http.StatusOK, aLogics)
+}
+
+func (h *Handler) RegistLogic(c *gin.Context) {
+	var aLogic adapter.Logic
+	if err := c.ShouldBindJSON(&aLogic); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	logic, err := adapter.LogicToModel(&aLogic)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err = h.ru.RegistLogic(&logic)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, logic)
+}
+
+func (h *Handler) UnregistLogic(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	logic := model.Logic{ID: id}
+
+	err = h.ru.UnregistLogic(&logic)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, logic)
+}
+
+func (h *Handler) ListLogicServices(c *gin.Context) {
+	logicServices, err := h.ru.GetLogicServices()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, logicServices)
+}
+
+func (h *Handler) UnregistLogicService(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	logicService := model.LogicService{ID: id}
+
+	err = h.ru.UnregistLogicService(&logicService)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, logicService)
+}
+
+func (h *Handler) ListTopics(c *gin.Context) {
+	topics, err := h.ru.GetTopics()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, topics)
+}
+
+func (h *Handler) RegistTopic(c *gin.Context) {
+	var topic model.Topic
+	if err := c.ShouldBindJSON(&topic); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := h.ru.RegistTopic(&topic)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, topic)
+}
+
+func (h *Handler) UnregistTopic(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	topic := model.Topic{ID: id}
+
+	err = h.ru.UnregistTopic(&topic)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, topic)
 }
