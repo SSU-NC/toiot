@@ -1,45 +1,42 @@
 package repository
 
-import "github.com/KumKeeHyun/PDK/application/domain/model"
+import (
+	"github.com/KumKeeHyun/toiot/application/domain/model"
+)
 
-type SinkRepository interface {
-	GetAll() ([]model.Sink, error)
-	GetAllWithNodes() ([]model.Sink, error)
-	GetByID(uint) (*model.Sink, error)
-	GetByIDWithNodes(uint) (*model.Sink, error)
+type SinkRepo interface {
+	FindsWithTopic() ([]model.Sink, error)
+	FindByIDWithNodesSensorsValuesTopic(id int) (*model.Sink, error)
 	Create(*model.Sink) error
 	Delete(*model.Sink) error
 }
 
-type NodeRepository interface {
-	GetAll() ([]model.Node, error)
-	GetByUUIDs([]string) ([]model.Node, error)
-	GetByUUID(string) (*model.Node, error)
-	GetBySinkID(uint) ([]model.Node, error)
+type NodeRepo interface {
+	FindsWithSensorsValues() ([]model.Node, error)
 	Create(*model.Node) error
 	Delete(*model.Node) error
-	CreateNS(*model.NodeSensor) error
 }
 
-type SensorRepository interface {
-	// SELECT * FROM sensors
-	GetAll() ([]model.Sensor, error)
-
-	// SELECT * FROM sensors JOIN nodesensors(s_uuid) WHERE n_uuid = string
-	GetByNodeUUID(string) ([]model.Sensor, error)
-
-	// SELECT * FROM sensors JOIN sensor_values(sensor_uuid) JOIN nodesensors(s_uuid) WHERE n_uuid = string
-	GetByNodeUUIDWithValues(string) ([]model.Sensor, error)
-
-	// SELECT * FROM sensors WHERE uuid = string
-	GetByUUID(string) (*model.Sensor, error)
-
-	// SELECT * FROM sensors JOIN sensor_values(sensor_uuid) WHERE uuid = string
-	GetByUUIDWithValues(string) (*model.Sensor, error)
-
-	// SELECT * FROM sensor_values WHERE sensor_uuid = string
-	GetValuesByUUID(string) ([]model.SensorValue, error)
+type SensorRepo interface {
+	FindsWithValues() ([]model.Sensor, error)
 	Create(*model.Sensor) error
 	Delete(*model.Sensor) error
-	CreateValue(*model.SensorValue) error
+}
+
+type LogicRepo interface {
+	FindsWithSensorValues() ([]model.Logic, error)
+	Create(*model.Logic) error
+	Delete(*model.Logic) error
+}
+
+type LogicServiceRepo interface {
+	FindsWithTopic() ([]model.LogicService, error)
+	Create(*model.LogicService) error
+	Delete(*model.LogicService) error
+}
+
+type TopicRepo interface {
+	FindsWithLogicService() ([]model.Topic, error)
+	Create(*model.Topic) error
+	Delete(*model.Topic) error
 }
