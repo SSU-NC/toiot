@@ -18,19 +18,6 @@ func (as *App) Getenv() {
 
 var Appsetting = &App{}
 
-type Logic struct {
-	Server string
-}
-
-func (ls *Logic) Getenv() {
-	ls.Server = os.Getenv("LOGIC_SERVER")
-	if ls.Server == "" {
-		ls.Server = "220.70.2.160:8082"
-	}
-}
-
-var Logicsetting = &Logic{}
-
 type Database struct {
 	Driver   string `toml:"driver"`
 	Server   string `toml:"tcp"`
@@ -46,7 +33,7 @@ func (ds *Database) Getenv() {
 	}
 	ds.Server = os.Getenv("DB_SERVER")
 	if ds.Server == "" {
-		ds.Server = "localhost:3306"
+		ds.Server = "172.20.2.82:3306"
 	}
 	ds.User = os.Getenv("DB_USER")
 	if ds.User == "" {
@@ -66,7 +53,6 @@ var Databasesetting = &Database{}
 
 func init() {
 	Appsetting.Getenv()
-	Logicsetting.Getenv()
 	Databasesetting.Getenv()
 
 	log.Printf("app : %v\ndb : %v\n", Appsetting, Databasesetting)
