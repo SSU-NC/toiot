@@ -1,18 +1,10 @@
 package model
 
-import "github.com/rs/xid"
-
 type Sensor struct {
-	UUID      string        `json:"uuid" gorm:"primary_key;type:char(20);not null;"`
-	Name      string        `json:"name" gorm:"type:varchar(32);unique;not null"`
-	ValueList []SensorValue `json:"value_list" gorm:"foreignkey:SensorUUID"`
-}
-
-func NewSensor(name string) Sensor {
-	return Sensor{
-		UUID: xid.New().String(),
-		Name: name,
-	}
+	ID           int           `json:"id" gorm:"primary_key"`
+	Name         string        `json:"name" gorm:"type:varchar(32);unique;not null"`
+	SensorValues []SensorValue `json:"sensor_values" gorm:"foreignkey:SensorID"`
+	Nodes        []Node        `json:"nodes" gorm:"many2many:has_sensors"`
 }
 
 func (Sensor) TableName() string {
@@ -20,9 +12,9 @@ func (Sensor) TableName() string {
 }
 
 type SensorValue struct {
-	SensorUUID string `json:"sensor_uuid" gorm:"primary_key;type:char(20);not null"`
-	ValueName  string `json:"value_name" gorm:"primary_key;type:varchar(32);not null"`
-	Index      int    `json:"index" gorm:"not null"`
+	SensorID  int    `json:"sensor_id" gorm:"primary_key"`
+	ValueName string `json:"value_name" gorm:"primary_key;type:varchar(32)"`
+	Index     int    `json:"index" gorm:"not null"`
 }
 
 func (SensorValue) TableName() string {
