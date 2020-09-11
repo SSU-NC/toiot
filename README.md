@@ -10,13 +10,13 @@ Internet of Things platform for device management, data collection, analytics an
 Table of contents
 =================
 <!--ts-->
-   * [Result](#Result)
+   * [Output](#Output)
    * [Detail](#Detail)
    * [Help](#Help)
    * [License](#License)
 <!--te-->
 
-Result
+Output
 =======
 - Dashboard
 ![dashboard](https://user-images.githubusercontent.com/38535571/92531615-96942300-f269-11ea-83a6-144addd100d4.png)
