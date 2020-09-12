@@ -21,7 +21,18 @@ func (s *Sink) BeforeDelete(tx *gorm.DB) (err error) {
 
 // node
 func (n *Node) AfterCreate(tx *gorm.DB) (err error) {
-	return tx.Preload("Sink.Topic").Preload("Sink").Find(n).Error
+	if err := tx.Preload("Sink.Topic").Preload("Sink").Find(n).Error; err != nil {
+		return err
+	}
+	l := []Logic{}
+	// TODO : I want to Preload("Sensors.Logics") but it dosen't work for me :(
+	for i := range n.Sensors {
+		if err := tx.Where("sensor_id=?", n.Sensors[i].ID).Find(&l).Error; err != nil {
+			return err
+		}
+		n.Sensors[i].Logics = l
+	}
+	return nil
 }
 
 func (n *Node) BeforeDelete(tx *gorm.DB) (err error) {
@@ -34,16 +45,16 @@ func (s *Sensor) AfterCreate(tx *gorm.DB) (err error) {
 }
 
 func (s *Sensor) BeforeDelete(tx *gorm.DB) (err error) {
-	return tx.Preload("Nodes.Sink.Topic").Preload("Nodes.Sink").Preload("Nodes").Find(s).Error
+	return tx.Preload("Logics").Find(s).Error
 }
 
 // logic
 func (l *Logic) AfterCreate(tx *gorm.DB) (err error) {
-	return tx.Preload("Sensor.Nodes.Sink.Topic").Preload("Sensor.Nodes.Sink").Preload("Sensor.Nodes").Preload("Sensor").Find(l).Error
+	return tx.Preload("Sensor").Find(l).Error
 }
 
 func (l *Logic) BeforeDelete(tx *gorm.DB) (err error) {
-	return tx.Preload("Sensor.Nodes.Sink.Topic").Preload("Sensor.Nodes.Sink").Preload("Sensor.Nodes").Preload("Sensor").Find(l).Error
+	return tx.Preload("Sensor").Find(l).Error
 }
 
 // logicService

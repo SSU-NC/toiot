@@ -3,7 +3,7 @@ module github.com/KumKeeHyun/toiot/application
 go 1.13
 
 require (
-	github.com/KumKeeHyun/PDK/application v0.0.0-20200909185806-c42e73f3bbd7 // indirect
+	github.com/KumKeeHyun/PDK/application v0.0.0-20200909185806-c42e73f3bbd7
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-resty/resty/v2 v2.3.0
