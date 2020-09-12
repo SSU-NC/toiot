@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"github.com/KumKeeHyun/toiot/application/adapter"
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 )
 
@@ -33,4 +34,12 @@ type RegistUsecase interface {
 // for event channel
 type EventUsecase interface {
 	RegistLogicService(l *model.LogicService) error
+	CheckAndUnregistLogicServices() error
+
+	DeleteSinkEvent(s *model.Sink) error
+	CreateNodeEvent(n *model.Node) error
+	DeleteNodeEvent(n *model.Node) error
+	DeleteSensorEvent(s *model.Sensor) error
+	CreateLogicEvent(l *adapter.Logic) error
+	DeleteLogicEvent(l *adapter.Logic) error
 }

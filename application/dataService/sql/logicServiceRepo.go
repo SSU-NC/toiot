@@ -16,12 +16,31 @@ func NewLogicServiceRepo() *logicServiceRepo {
 	}
 }
 
+func (lsr *logicServiceRepo) Finds() (ll []model.LogicService, err error) {
+	return ll, lsr.db.Find(&ll).Error
+}
+
 func (lsr *logicServiceRepo) FindsWithTopic() (ll []model.LogicService, err error) {
 	return ll, lsr.db.Preload("Topic").Find(&ll).Error
 }
 
+func (lsr *logicServiceRepo) FindsByTopicID(TopicID int) (ll []model.LogicService, err error) {
+	return ll, lsr.db.Where("topic_id=?", TopicID).Find(&ll).Error
+}
+
 func (lsr *logicServiceRepo) Create(l *model.LogicService) error {
-	return lsr.db.Omit(clause.Associations).Create(l).Error
+	return lsr.db.Transaction(func(tx *gorm.DB) error {
+		t := model.Topic{}
+		if err := tx.Where("name=?", l.Topic.Name).Find(&t).Error; err != nil {
+			return err
+		}
+		l.TopicID = t.ID
+		if err := tx.Omit(clause.Associations).Create(l).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	// return lsr.db.Omit(clause.Associations).Create(l).Error
 }
 
 func (lsr *logicServiceRepo) Delete(l *model.LogicService) error {

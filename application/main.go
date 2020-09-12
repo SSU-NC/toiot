@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 
+	"github.com/KumKeeHyun/toiot/application/usecase/eventUsecase"
+
 	"github.com/KumKeeHyun/toiot/application/dataService/sql"
 	"github.com/KumKeeHyun/toiot/application/rest/handler"
 	"github.com/KumKeeHyun/toiot/application/setting"
@@ -24,8 +26,9 @@ func main() {
 	tpr := sql.NewTopicRepo()
 
 	ru := registUsecase.NewRegistUsecase(sir, ndr, snr, lgr, lsr, tpr)
+	eu := eventUsecase.NewEventUsecase(lsr)
 
-	h := handler.NewHandler(ru)
+	h := handler.NewHandler(ru, eu)
 
 	r := gin.Default()
 	config := cors.DefaultConfig()
@@ -34,8 +37,16 @@ func main() {
 	r.Use(cors.New(config))
 
 	setRegistrationRoute(r, h)
+	setEventRoute(r, h)
 
 	log.Fatal(r.Run(setting.Appsetting.Server))
+}
+
+func setEventRoute(r *gin.Engine, h *handler.Handler) {
+	event := r.Group("/event")
+	{
+		event.POST("", h.RegistLogicService)
+	}
 }
 
 func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {

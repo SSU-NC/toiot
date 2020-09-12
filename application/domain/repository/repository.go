@@ -30,7 +30,9 @@ type LogicRepo interface {
 }
 
 type LogicServiceRepo interface {
+	Finds() ([]model.LogicService, error)
 	FindsWithTopic() ([]model.LogicService, error)
+	FindsByTopicID(TopicID int) ([]model.LogicService, error)
 	Create(*model.LogicService) error
 	Delete(*model.LogicService) error
 }
