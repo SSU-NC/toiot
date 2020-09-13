@@ -4,11 +4,16 @@ import {
 	value_list_elem,
 } from '../../ElemInterface/ElementsInterface';
 import { SENSOR_URL } from '../../defineUrl';
+import Pagination from '../Pagination';
 
 //import DeleteRequest from './DeleteRequest'
 
 interface SensorTableState {
 	sensorList: Array<sensorListElem>;
+	start: number;
+	end: number;
+	currentPage: number;
+	pageSize: number;
 }
 
 /*
@@ -18,13 +23,18 @@ SensorTable
 class SensorTable extends Component<{}, SensorTableState> {
 	state: SensorTableState = {
 		sensorList: [],
+		start: 0, // start page number
+		end: 10, // end page number
+		currentPage: 1, // current page number
+		pageSize: 12,
 	};
+
 	componentDidMount() {
-		this.getsensorList();
+		this.getsensorList(this.state.currentPage);
 	}
 
-	// Get sensor list from backend
-	getsensorList() {
+	// Get sensor list from backend per page
+	getsensorList(page: number) {
 		var url = SENSOR_URL;
 
 		fetch(url)
@@ -49,6 +59,11 @@ class SensorTable extends Component<{}, SensorTableState> {
 			.then((res) => res.json())
 			.catch((error) => console.error('Error:', error))
 			.then(() => window.location.reload(false));
+	};
+
+	handlePageChange = (page: number) => {
+		this.setState({ currentPage: page });
+		this.getsensorList(page);
 	};
 
 	render() {
@@ -103,6 +118,12 @@ class SensorTable extends Component<{}, SensorTableState> {
 						)}
 					</tbody>
 				</table>
+				<Pagination
+					pageSize={this.state.pageSize}
+					itemsCount={this.state.sensorList.length}
+					currentPage={this.state.currentPage}
+					onPageChange={this.handlePageChange}
+				></Pagination>
 			</>
 		);
 	}
