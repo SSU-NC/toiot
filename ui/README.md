@@ -4,7 +4,7 @@
 
 <!--ts-->
 
-- [Introduction](#Introdution)
+- [Introduction](#Introduction)
 - [Setting](#Setting)
 - [Installation & Run](#Installation--Run)
   - [Git](##1.-Git)
@@ -16,8 +16,6 @@
 `ToioT` use typescript, html, css and react framework.
 
 # Setting
-
-## Setting IP, PORT
 
 ### Solution 1 : environment variable
 We recomment this solution.  
@@ -38,7 +36,7 @@ REACT_APP_ALARM_PORT=8080
 REACT_APP_KAKAO_MAP_KEY=abcdefg12345678
 ```
 
-### 1.2. Solution 2 : export variable
+### Solution 2 : export variable
 If you cannot solve the problem, do solution 2.
 Modify `/toiot/ui/src/defineUrl.tsx`.  
 For example..
@@ -52,7 +50,7 @@ export const NODE_URL = 'http://<DB_IP>:<DB_PORT>/node';
 
 # Installation & Run
 
-## Solution 1 : Git
+### Solution 1 : Git
 
 If you want to start toiot ui at localhost or get source code, you can follow this.
 
@@ -70,11 +68,9 @@ npm install    // install dependency modules
 npm run start  // start react
 ```
 
-## Solution 2 : Docker
+### Solution 2 : Docker
 
 If you use docker, follow this solution.
-
-### 2.1. Download Docker
 
 1. Download Docker image  
    For example...
