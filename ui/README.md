@@ -16,23 +16,12 @@
 `ToioT` use typescript, html, css and react framework.
 
 # Setting
+You should set environment variables by next solutions.  
 
-### Solution 1 : export variable
-If you cannot solve the problem, do solution 2.
-Modify `/toiot/ui/src/defineUrl.tsx`.  
-For example..
-
-```typescript
-import React from 'react';
-export const KIBANA_URL = 'http://<KIBANA_IP>:<KIBANA_PORT>';
-export const SENSOR_URL = 'http://<DB_IP>:<DB_PORT>/sensor';
-export const NODE_URL = 'http://<DB_IP>:<DB_PORT>/node';
-```
-
-### Solution 2 : environment variable
-We recomment this solution.  
-Add `/toiot/ui/.env.development` file for using kibana, connect with backend.  
-For example..
+### Solution1 : Git
+If you install toiot ui by git clone, set environment variables like this.  
+Add `/toiot/ui/.env.development` file for using kibana and connecting at backend.  
+For example...
 
 ```
 REACT_APP_DB_IP=0.0.0.0
@@ -48,6 +37,38 @@ REACT_APP_ALARM_PORT=8080
 REACT_APP_KAKAO_MAP_KEY=abcdefg12345678
 ```
 
+### Solution 2 : Docker
+If you install by docker image, you can set environment variables like this.  
+Add `docker-compose.yml` and set environment.  
+For example... 
+ ```docker
+   version: "3.2"
+
+   services:
+   toiot-ui:
+       container_name: toiot-ui
+       image: iamhge/toiot-ui:0.1.1
+       ports:
+       - "3001:3000"
+       environment:
+       - NODE_ENV=development
+       - CHOIDAR_USEPOLLING=true
+       - REACT_APP_DB_IP=0.0.0.0
+       - REACT_APP_DB_PORT=8080
+       - REACT_APP_KIBANA_IP=0.0.0.0
+       - REACT_APP_KIBANA_PORT=8080
+       - REACT_APP_HEALTHCHECK_IP=0.0.0.0
+       - REACT_APP_HEALTHCHECK_PORT=8080
+       - REACT_APP_LOGICCORE_IP=0.0.0.0
+       - REACT_APP_LOGICCORE_PORT=8080
+       - REACT_APP_ALARM_IP=0.0.0.0
+       - REACT_APP_ALARM_PORT=8080
+       - REACT_APP_KAKAO_MAP_KEY=abcdefg12345678
+       stdin_open: true
+       tty: true
+   ```
+Also you can set environment variables as solution 1 instead this solution, even you use docker image.
+
 # Installation & Run
 
 ### Solution 1 : Git
@@ -61,7 +82,7 @@ If you want to start toiot ui at localhost or get source code, you can follow th
    ```
 
 2. Setting IP/PORT like `Setting Solution 1`
-3. Execute this instruction at `/ui`. After you execute instruction, enter `localhost://3000` at web address. (default port : 3000)
+3. Execute this instruction at `/ui`. After you execute instruction, enter `localhost:3000` at web address. (default port : 3000)
 
    ```shell
    npm install    // install dependency modules
