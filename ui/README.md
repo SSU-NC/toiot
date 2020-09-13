@@ -6,7 +6,6 @@
 
 - [Introduction](#Introdution)
 - [Setting](#Setting)
-  - [Setting IP, PORT](##1.-Setting-IP,-PORT)
 - [Installation & Run](#Installation--Run)
   - [Git](##1.-Git)
   - [Docker](##2.-Docker)
@@ -63,7 +62,7 @@ If you want to start toiot ui at localhost or get source code, you can follow th
 git clone https://github.com/SSU-NC/toiot.git
 ```
 
-2. Setting IP/PORT as [Setting](#Setting)
+2. Setting IP/PORT like [Setting](#Setting)
 3. Execute this instruction at `/ui`. After you execute instruction, enter `localhost://3000` at web address. (default port : 3000)
 
 ```shell
@@ -82,7 +81,7 @@ If you use docker, follow this solution.
    ```shell
    docker pull iamhge/toiot-ui:0.1.1
    ```
-2. Make docker-compose.yml
+2. Make docker-compose.yml  
    For example...
 
    ```docker
