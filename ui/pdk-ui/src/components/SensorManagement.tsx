@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 import RegisterSensor from './Register/RegisterSensor';
 import SensorTable from './Table/SensorTable';
 
-interface SensorManagementProps {
-	sensorList: any;
-}
-
 /*
 SensorManagement
 - Manage sensor table, register sensor
 */
-class SensorManagement extends Component<SensorManagementProps> {
+class SensorManagement extends Component {
 	render() {
 		return (
 			<>
@@ -28,7 +24,7 @@ class SensorManagement extends Component<SensorManagementProps> {
 				</div>
 				<div>
 					<h3>Sensor</h3>
-					<SensorTable sensorList={this.props.sensorList}></SensorTable>
+					<SensorTable></SensorTable>
 				</div>
 			</>
 		);

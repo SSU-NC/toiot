@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { logicCoreElem, logicElem } from '../ElemInterface/LcElementsInterface';
+import { logicListElem, logicElem } from '../ElemInterface/LcElementsInterface';
 import ShowValueCard from './ShowCards/ShowValueCard';
 import ShowGroupCard from './ShowCards/ShowGroupCard';
 import ShowActionCard from './ShowCards/ShowActionCard';
@@ -7,7 +7,7 @@ import ShowTimeCard from './ShowCards/ShowTimeCard';
 import ShowSensorCard from './ShowCards/ShowSensorCard';
 
 interface ShowLogicProps {
-	logic: logicCoreElem;
+	logic: logicListElem;
 	index: number;
 }
 

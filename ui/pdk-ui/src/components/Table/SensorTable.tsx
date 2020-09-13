@@ -4,18 +4,47 @@ import {
 	value_list_elem,
 } from '../../ElemInterface/ElementsInterface';
 import { SENSOR_URL } from '../../defineUrl';
+import Pagination from '../Pagination';
 
 //import DeleteRequest from './DeleteRequest'
 
-interface SensorTableProps {
+interface SensorTableState {
 	sensorList: Array<sensorListElem>;
+	start: number;
+	end: number;
+	currentPage: number;
+	pageSize: number;
 }
 
 /*
 SensorTable
 - Show up sensor list.
 */
-class SensorTable extends Component<SensorTableProps> {
+class SensorTable extends Component<{}, SensorTableState> {
+	state: SensorTableState = {
+		sensorList: [],
+		start: 0, // start page number
+		end: 10, // end page number
+		currentPage: 1, // current page number
+		pageSize: 12,
+	};
+
+	componentDidMount() {
+		this.getsensorList(this.state.currentPage);
+	}
+
+	// Get sensor list from backend per page
+	getsensorList(page: number) {
+		var url = SENSOR_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => {
+				this.setState({ sensorList: data });
+			})
+			.catch((error) => console.error('Error:', error));
+	}
+
 	// Handle click event of the Remove button
 	handleRemoveClick = (sensor_uuid: string) => () => {
 		var url = SENSOR_URL;
@@ -32,6 +61,11 @@ class SensorTable extends Component<SensorTableProps> {
 			.then(() => window.location.reload(false));
 	};
 
+	handlePageChange = (page: number) => {
+		this.setState({ currentPage: page });
+		this.getsensorList(page);
+	};
+
 	render() {
 		return (
 			<>
@@ -46,7 +80,7 @@ class SensorTable extends Component<SensorTableProps> {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.sensorList.map(
+						{this.state.sensorList.map(
 							(sensor: sensorListElem, idx: number) => (
 								<tr>
 									<th scope="row">{idx}</th>
@@ -84,6 +118,12 @@ class SensorTable extends Component<SensorTableProps> {
 						)}
 					</tbody>
 				</table>
+				<Pagination
+					pageSize={this.state.pageSize}
+					itemsCount={this.state.sensorList.length}
+					currentPage={this.state.currentPage}
+					onPageChange={this.handlePageChange}
+				></Pagination>
 			</>
 		);
 	}

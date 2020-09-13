@@ -30,13 +30,9 @@ export interface lcActionArg {
 	text: string;
 }
 
-export interface logicCoreElem {
+export interface logicListElem {
 	sensor_uuid: string;
 	id: string; // request: undefined, receive: number
 	logic_name: string;
 	logic: Array<logicElem>;
-}
-
-export interface logicCore {
-	logic_core: Array<logicCoreElem>;
 }

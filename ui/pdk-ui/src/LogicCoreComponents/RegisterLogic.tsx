@@ -11,14 +11,13 @@ import InputValueCard from './InputCards/InputValueCard';
 import InputGroupCard from './InputCards/InputGroupCard';
 import InputTimeCard from './InputCards/InputTimeCard';
 import InputActionCard from './InputCards/InputActionCard';
-import { LOGICCORE_URL } from '../defineUrl';
+import { LOGICCORE_URL, SENSOR_URL, NODE_URL } from '../defineUrl';
 import { Link } from 'react-router-dom';
-interface RegisterLogicProps {
-	sensorList: Array<sensorListElem>;
-	nodeList: Array<nodeListElem>;
-}
 
 interface RegisterLogicState {
+	sensorList: Array<sensorListElem>;
+	nodeList: Array<nodeListElem>;
+
 	logic_name: string;
 	sensor_info: sensorOptionsElem;
 	selected_value: Array<logicElem>;
@@ -35,8 +34,11 @@ RegisterLogic
 - Linked by register logic button
 - register logic
 */
-class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
+class RegisterLogic extends Component<{}, RegisterLogicState> {
 	state: RegisterLogicState = {
+		sensorList: [],
+		nodeList: [],
+
 		logic_name: '',
 		sensor_info: {
 			uuid: '',
@@ -53,6 +55,32 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 		sensorValid: false,
 		actionValid: false,
 	};
+	componentDidMount() {
+		this.getsensorList();
+		this.getnodeList();
+	}
+
+	// Get sensor list from backend
+	getsensorList() {
+		var url = SENSOR_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => {
+				this.setState({ sensorList: data });
+			})
+			.catch((error) => console.error('Error:', error));
+	}
+
+	// Get node list from backend
+	getnodeList() {
+		var url = NODE_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ nodeList: data }))
+			.catch((error) => console.error('Error:', error));
+	}
 
 	// Handle node name change by typing
 	handleLogicNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -288,11 +316,11 @@ class RegisterLogic extends Component<RegisterLogicProps, RegisterLogicState> {
 					<br />
 					<h5>Build Logic</h5>
 					<InputSensorCard
-						sensorList={this.props.sensorList}
+						sensorList={this.state.sensorList}
 						handleInputSensorCardChange={this.handleSensorCardChange}
 					/>
 					<InputGroupCard
-						nodeList={this.props.nodeList}
+						nodeList={this.state.nodeList}
 						handleInputGroupCardChange={this.handleGroupCardChange}
 					/>
 					<InputTimeCard

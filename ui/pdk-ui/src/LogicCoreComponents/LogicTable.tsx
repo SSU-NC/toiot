@@ -1,17 +1,35 @@
 import React, { Component } from 'react';
-import { logicCoreElem } from '../ElemInterface/LcElementsInterface';
+import { logicListElem } from '../ElemInterface/LcElementsInterface';
 import ShowLogic from './ShowLogic';
 import { LOGICCORE_URL } from '../defineUrl';
 
-interface LogicCoreTableProps {
-	logicCore: Array<logicCoreElem>;
+interface LogicTableState {
+	logicList: Array<logicListElem>;
 }
 
 /*
-LogicCoreTable
+LogicListTable
 - Show up node list.
 */
-class LogicCoreTable extends Component<LogicCoreTableProps> {
+class LogicTable extends Component<{}, LogicTableState> {
+	state: LogicTableState = {
+		logicList: [],
+	};
+
+	componentDidMount() {
+		this.getlogicList();
+	}
+
+	// Get logic core list from backend
+	getlogicList() {
+		var url = LOGICCORE_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ logicList: data }))
+			.catch((error) => console.error('Error:', error));
+	}
+
 	// Handle click event of the Remove button
 	handleRemoveClick = (id: string) => () => {
 		var url = LOGICCORE_URL;
@@ -41,7 +59,7 @@ class LogicCoreTable extends Component<LogicCoreTableProps> {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.logicCore.map((logic: logicCoreElem, idx: number) => (
+						{this.state.logicList.map((logic: logicListElem, idx: number) => (
 							<tr>
 								<th scope="row">{idx}</th>
 								<td>{logic.logic_name}</td>
@@ -79,4 +97,4 @@ class LogicCoreTable extends Component<LogicCoreTableProps> {
 	}
 }
 
-export default LogicCoreTable;
+export default LogicTable;

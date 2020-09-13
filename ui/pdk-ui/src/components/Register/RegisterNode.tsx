@@ -7,11 +7,14 @@ import {
 	locationElem,
 	sinkOptionsElem,
 } from '../../ElemInterface/ElementsInterface';
-import { NODE_URL } from '../../defineUrl';
+import { NODE_URL, SINK_URL, SENSOR_URL } from '../../defineUrl';
 import LarLngPicker from '../LatLngPicker';
 // react-select : https://github.com/JedWatson/react-select
 
 interface RegisterNodeState {
+	sensorList: Array<sensorListElem>;
+	sinkList: Array<sinkListElem>;
+
 	node_name: string;
 	group: string;
 	location: locationElem;
@@ -23,17 +26,15 @@ interface RegisterNodeState {
 	sinkValid: boolean;
 }
 
-interface RegisterNodeProps {
-	sensorList: Array<sensorListElem>;
-	sinkList: Array<sinkListElem>;
-}
-
 /*
 RegisterNode
 - Show modal to register node
 */
-class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
+class RegisterNode extends Component<{}, RegisterNodeState> {
 	state: RegisterNodeState = {
+		sensorList: [],
+		sinkList: [],
+
 		node_name: '',
 		group: '',
 		location: {
@@ -48,6 +49,32 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 		sensorValid: false,
 		sinkValid: false,
 	};
+	componentDidMount() {
+		this.getsensorList();
+		this.getsinkList();
+	}
+
+	// Get sensor list from backend
+	getsensorList() {
+		var url = SENSOR_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => {
+				this.setState({ sensorList: data });
+			})
+			.catch((error) => console.error('Error:', error));
+	}
+
+	// Get sink list from backend
+	getsinkList() {
+		var url = SINK_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ sinkList: data }))
+			.catch((error) => console.error('Error:', error));
+	}
 
 	// Handle node name change by typing
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,7 +218,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 
 	render() {
 		let sensorOptions: Array<sensorOptionsElem>;
-		sensorOptions = this.props.sensorList.map((val: sensorListElem) => {
+		sensorOptions = this.state.sensorList.map((val: sensorListElem) => {
 			return {
 				label: val.name,
 				value: val.name,
@@ -200,7 +227,7 @@ class RegisterNode extends Component<RegisterNodeProps, RegisterNodeState> {
 			};
 		});
 		let sinkOptions: Array<sinkOptionsElem>;
-		sinkOptions = this.props.sinkList.map((val: sinkListElem) => {
+		sinkOptions = this.state.sinkList.map((val: sinkListElem) => {
 			return { label: val.name, value: val.name, id: val.id };
 		});
 		return (
