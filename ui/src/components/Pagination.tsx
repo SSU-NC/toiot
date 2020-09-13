@@ -15,9 +15,9 @@ const Pagination: React.FunctionComponent<PaginationProps> = (props) => {
 	const pages = _.range(1, props.pages + 1); // 마지막 페이지에 보여줄 컨텐츠를 위해 +1, https://lodash.com/docs/#range 참고
 
 	return (
-		<nav>
+		<nav> 
 			{/* VSCode 입력: nav>ul.pagination>li.page-item>a.page-link */}
-			<ul className="pagination">
+			<ul className="pagination justify-content-center">
 				{pages.map((page: number) => (
 					<li
 						key={page}
