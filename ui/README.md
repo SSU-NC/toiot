@@ -17,7 +17,19 @@
 
 # Setting
 
-### Solution 1 : environment variable
+### Solution 1 : export variable
+If you cannot solve the problem, do solution 2.
+Modify `/toiot/ui/src/defineUrl.tsx`.  
+For example..
+
+```typescript
+import React from 'react';
+export const KIBANA_URL = 'http://<KIBANA_IP>:<KIBANA_PORT>';
+export const SENSOR_URL = 'http://<DB_IP>:<DB_PORT>/sensor';
+export const NODE_URL = 'http://<DB_IP>:<DB_PORT>/node';
+```
+
+### Solution 2 : environment variable
 We recomment this solution.  
 Add `/toiot/ui/.env.development` file for using kibana, connect with backend.  
 For example..
@@ -36,18 +48,6 @@ REACT_APP_ALARM_PORT=8080
 REACT_APP_KAKAO_MAP_KEY=abcdefg12345678
 ```
 
-### Solution 2 : export variable
-If you cannot solve the problem, do solution 2.
-Modify `/toiot/ui/src/defineUrl.tsx`.  
-For example..
-
-```typescript
-import React from 'react';
-export const KIBANA_URL = 'http://<KIBANA_IP>:<KIBANA_PORT>';
-export const SENSOR_URL = 'http://<DB_IP>:<DB_PORT>/sensor';
-export const NODE_URL = 'http://<DB_IP>:<DB_PORT>/node';
-```
-
 # Installation & Run
 
 ### Solution 1 : Git
@@ -60,7 +60,7 @@ If you want to start toiot ui at localhost or get source code, you can follow th
    git clone https://github.com/SSU-NC/toiot.git
    ```
 
-2. Setting IP/PORT like [Setting](#Setting)
+2. Setting IP/PORT like [Setting Solution 1](### Solution 1 : export variable)
 3. Execute this instruction at `/ui`. After you execute instruction, enter `localhost://3000` at web address. (default port : 3000)
 
    ```shell
