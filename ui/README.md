@@ -60,7 +60,7 @@ If you want to start toiot ui at localhost or get source code, you can follow th
    git clone https://github.com/SSU-NC/toiot.git
    ```
 
-2. Setting IP/PORT like [Setting Solution 1](### Solution 1 : export variable)
+2. Setting IP/PORT like `Setting Solution 1`
 3. Execute this instruction at `/ui`. After you execute instruction, enter `localhost://3000` at web address. (default port : 3000)
 
    ```shell
