@@ -6,6 +6,7 @@ import (
 
 type SinkRepo interface {
 	FindsWithTopic() ([]model.Sink, error)
+	FindsByTopicIDWithNodesSensorsValuesLogics(tid int) (sl []model.Sink, err error)
 	FindByIDWithNodesSensorsValuesTopic(id int) (*model.Sink, error)
 	Create(*model.Sink) error
 	Delete(*model.Sink) error

@@ -6,6 +6,10 @@ func (ru *registUsecase) GetSinks() ([]model.Sink, error) {
 	return ru.sir.FindsWithTopic()
 }
 
+func (ru *registUsecase) GetSinksByTopicID(tid int) ([]model.Sink, error) {
+	return ru.sir.FindsByTopicIDWithNodesSensorsValuesLogics(tid)
+}
+
 func (ru *registUsecase) RegistSink(s *model.Sink) error {
 	return ru.sir.Create(s)
 }

@@ -59,7 +59,7 @@ func (l *Logic) BeforeDelete(tx *gorm.DB) (err error) {
 
 // logicService
 func (l *LogicService) AfterCreate(tx *gorm.DB) (err error) {
-	return tx.Preload("Topic").Find(l).Error
+	return tx.Preload("Topic.Sinks.Nodes.Sensors.Logics").Preload("Topic.Sinks.Nodes.Sensors.SensorValues", orderByASC).Preload("Topic.Sinks.Nodes.Sensors").Preload("Topic.Sinks.Nodes").Preload("Topic.Sinks").Preload("Topic").Find(l).Error
 }
 
 func (l *LogicService) BeforeDelete(tx *gorm.DB) (err error) {

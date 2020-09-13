@@ -1,13 +1,13 @@
 package usecase
 
 import (
-	"github.com/KumKeeHyun/toiot/application/adapter"
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 )
 
 // for ui registration
 type RegistUsecase interface {
 	GetSinks() ([]model.Sink, error)
+	GetSinksByTopicID(tid int) ([]model.Sink, error)
 	RegistSink(s *model.Sink) error
 	UnregistSink(s *model.Sink) error
 
@@ -40,6 +40,6 @@ type EventUsecase interface {
 	CreateNodeEvent(n *model.Node) error
 	DeleteNodeEvent(n *model.Node) error
 	DeleteSensorEvent(s *model.Sensor) error
-	CreateLogicEvent(l *adapter.Logic) error
-	DeleteLogicEvent(l *adapter.Logic) error
+	CreateLogicEvent(l *model.Logic) error
+	DeleteLogicEvent(l *model.Logic) error
 }

@@ -3,7 +3,6 @@ package eventUsecase
 import (
 	"sync"
 
-	"github.com/KumKeeHyun/toiot/application/adapter"
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 )
 
@@ -14,6 +13,7 @@ func waitRespGroup(path string, body interface{}, ll []model.LogicService) {
 		go func(_l model.LogicService) {
 			url := makeUrl(_l.Addr, path)
 			eventClient.R().SetBody(body).Post(url)
+			wg.Done()
 		}(l)
 	}
 	wg.Wait()
@@ -77,7 +77,7 @@ func (eu *eventUsecase) DeleteSensorEvent(s *model.Sensor) error {
 	return nil
 }
 
-func (eu *eventUsecase) CreateLogicEvent(l *adapter.Logic) error {
+func (eu *eventUsecase) CreateLogicEvent(l *model.Logic) error {
 	path := "/event/logic/create"
 
 	ll, err := eu.lsr.Finds()
@@ -89,7 +89,7 @@ func (eu *eventUsecase) CreateLogicEvent(l *adapter.Logic) error {
 	return nil
 }
 
-func (eu *eventUsecase) DeleteLogicEvent(l *adapter.Logic) error {
+func (eu *eventUsecase) DeleteLogicEvent(l *model.Logic) error {
 	path := "/event/logic/delete"
 
 	ll, err := eu.lsr.Finds()

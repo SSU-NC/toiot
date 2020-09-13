@@ -163,7 +163,7 @@ func (h *Handler) RegistLogic(c *gin.Context) {
 	}
 
 	resLogic, _ := adapter.LogicToAdapter(&logic)
-	h.eu.CreateLogicEvent(&resLogic)
+	h.eu.CreateLogicEvent(&logic)
 	c.JSON(http.StatusOK, resLogic)
 }
 
@@ -182,7 +182,7 @@ func (h *Handler) UnregistLogic(c *gin.Context) {
 	}
 
 	resLogic, _ := adapter.LogicToAdapter(&logic)
-	h.eu.DeleteLogicEvent(&resLogic)
+	h.eu.DeleteLogicEvent(&logic)
 	c.JSON(http.StatusOK, resLogic)
 }
 
