@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"github.com/KumKeeHyun/toiot/application/adapter"
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 	"gorm.io/gorm"
 )
@@ -15,8 +16,28 @@ func NewNodeRepo() *nodeRepo {
 	}
 }
 
+func (ndr *nodeRepo) GetPages(size int) int {
+	temp := []model.Node{}
+	result := ndr.db.Find(&temp)
+	count := int(result.RowsAffected)
+	return (count / size) + 1
+}
+
 func (ndr *nodeRepo) FindsWithSensorsValues() (nl []model.Node, err error) {
 	return nl, ndr.db.Preload("Sensors.SensorValues", orderByASC).Preload("Sensors").Find(&nl).Error
+}
+
+func (ndr *nodeRepo) FindsPage(p adapter.Page) (nl []model.Node, err error) {
+	offset := p.GetOffset()
+	if p.Sink == 0 {
+		return nl, ndr.db.Offset(offset).Limit(p.Size).Preload("Sensors.SensorValues", orderByASC).Preload("Sensors").Find(&nl).Error
+	} else {
+		return nl, ndr.db.Where("sink_id=?", p.Sink).Offset(offset).Limit(p.Size).Preload("Sensors.SensorValues", orderByASC).Preload("Sensors").Find(&nl).Error
+	}
+}
+
+func (ndr *nodeRepo) FindsSquare(sq adapter.Square) (nl []model.Node, err error) {
+	return nl, ndr.db.Where("loc_lon BETWEEN ? AND ?", sq.Left, sq.Right).Where("loc_lat BETWEEN ? AND ?", sq.Down, sq.Up).Preload("Sensors.SensorValues", orderByASC).Preload("Sensors").Find(&nl).Error
 }
 
 func (ndr *nodeRepo) Create(n *model.Node) error {

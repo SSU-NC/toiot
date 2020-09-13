@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"github.com/KumKeeHyun/toiot/application/adapter"
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 )
 
@@ -11,7 +12,10 @@ type RegistUsecase interface {
 	RegistSink(s *model.Sink) error
 	UnregistSink(s *model.Sink) error
 
+	GetPageCount(size int) int
 	GetNodes() ([]model.Node, error)
+	GetNodesPage(p adapter.Page) ([]model.Node, error)
+	GetNodesSquare(sq adapter.Square) ([]model.Node, error)
 	RegistNode(n *model.Node) error
 	UnregistNode(n *model.Node) error
 

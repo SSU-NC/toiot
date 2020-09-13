@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -50,12 +51,47 @@ func (h *Handler) UnregistSink(c *gin.Context) {
 }
 
 func (h *Handler) ListNodes(c *gin.Context) {
-	nodes, err := h.ru.GetNodes()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	var (
+		err    error
+		nodes  []model.Node
+		page   adapter.Page
+		pages  int
+		square adapter.Square
+	)
+
+	if temp := c.Query("page"); temp != "" {
+		c.ShouldBind(&page)
+		fmt.Println(page)
+		if page.Size == 0 {
+			page.Size = 10
+		}
+		if nodes, err = h.ru.GetNodesPage(page); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if page.Page == 1 {
+			pages = h.ru.GetPageCount(page.Size)
+		}
+		c.JSON(http.StatusOK, gin.H{"nodes": nodes, "pages": pages})
+		return
+	} else if temp := c.Query("left"); temp != "" {
+		c.ShouldBind(&square)
+		if nodes, err = h.ru.GetNodesSquare(square); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, nodes)
+		return
+	} else {
+		nodes, err := h.ru.GetNodes()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, nodes)
 		return
 	}
-	c.JSON(http.StatusOK, nodes)
+
 }
 
 func (h *Handler) RegistNode(c *gin.Context) {

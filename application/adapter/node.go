@@ -16,4 +16,19 @@ type Location struct {
 	Lon float64 `json:"lon"`
 }
 
-// TODO : resp node.Sensors.Logics, sensor.Logics to adapter
+type Square struct {
+	Left  float64 `json:"left"`
+	Right float64 `json:"right"`
+	Up    float64 `json:"up"`
+	Down  float64 `json:"down"`
+}
+
+type Page struct {
+	Page int `json:"page"`
+	Sink int `json:"sink_id"`
+	Size int
+}
+
+func (p Page) GetOffset() int {
+	return (p.Page - 1) * p.Size
+}

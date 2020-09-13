@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/KumKeeHyun/toiot/application/adapter"
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 )
 
@@ -13,7 +14,10 @@ type SinkRepo interface {
 }
 
 type NodeRepo interface {
+	GetPages(size int) int
 	FindsWithSensorsValues() ([]model.Node, error)
+	FindsPage(p adapter.Page) (nl []model.Node, err error)
+	FindsSquare(sq adapter.Square) (nl []model.Node, err error)
 	Create(*model.Node) error
 	Delete(*model.Node) error
 }
