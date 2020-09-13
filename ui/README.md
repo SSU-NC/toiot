@@ -56,17 +56,17 @@ If you want to start toiot ui at localhost or get source code, you can follow th
 
 1. Git clone
 
-```shell
-git clone https://github.com/SSU-NC/toiot.git
-```
+   ```shell
+   git clone https://github.com/SSU-NC/toiot.git
+   ```
 
 2. Setting IP/PORT like [Setting](#Setting)
 3. Execute this instruction at `/ui`. After you execute instruction, enter `localhost://3000` at web address. (default port : 3000)
 
-```shell
-npm install    // install dependency modules
-npm run start  // start react
-```
+   ```shell
+   npm install    // install dependency modules
+   npm run start  // start react
+   ```
 
 ### Solution 2 : Docker
 
