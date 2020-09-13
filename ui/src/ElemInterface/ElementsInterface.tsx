@@ -1,5 +1,3 @@
-import { logicElem } from './LcElementsInterface';
-
 // nodeList interface
 export interface nodeListElem {
 	id: number;
@@ -7,6 +5,7 @@ export interface nodeListElem {
 	lat: number;
 	lng: number;
 	sink_id: number;
+	sink: Array<sinkListElem>;
 	sensors: Array<sensorListElem>;
 }
 
