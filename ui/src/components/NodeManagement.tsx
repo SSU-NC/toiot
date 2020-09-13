@@ -2,58 +2,32 @@ import React, { Component } from 'react';
 import RegisterNode from './Register/RegisterNode';
 import NodeTable from './Table/NodeTable';
 import {
-	nodeListElem,
 	sinkListElem,
 	nodeHealthCheckElem,
 } from '../ElemInterface/ElementsInterface';
-import { HEALTHCHECK_URL, NODE_URL, SINK_URL } from '../defineUrl';
+import { HEALTHCHECK_URL, SINK_URL } from '../defineUrl';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import NodeMap from './NodeMap';
 
 const client = new W3CWebSocket(HEALTHCHECK_URL);
 
 interface NodeManagementState {
-	nodeList: Array<nodeListElem>;
 	sinkList: Array<sinkListElem>;
 	nodeState: Array<nodeHealthCheckElem>;
+
+	showAllValid: boolean;
 }
-interface GroupedNodeListElem {
-	sink_id: number;
-	node_list: Array<nodeListElem>;
-}
-
-// Grouping node list as sink id.
-function groupBySinkid(
-	nodeList: Array<nodeListElem>,
-	sinkList: Array<sinkListElem>
-) {
-	let groupedNodeList: Array<GroupedNodeListElem>;
-
-	// Initialize Grouped node list as sink id.
-	groupedNodeList = sinkList.map((sink) => {
-		return { sink_id: sink.id, node_list: [] };
-	});
-
-	// Fill node_list field of Grouped node list.
-	for (var node of nodeList) {
-		for (var group of groupedNodeList) {
-			if (node.sink_id === group.sink_id) {
-				group.node_list.push(node);
-			}
-		}
-	}
-	return groupedNodeList;
-}
-
 /*
 NodeManagement
 - Manage node table, register node
 */
+
 class NodeManagement extends Component<{}, NodeManagementState> {
 	state: NodeManagementState = {
-		nodeList: [],
 		sinkList: [],
 		nodeState: [],
+
+		showAllValid: true,
 	};
 
 	// Conect web socket
@@ -70,18 +44,7 @@ class NodeManagement extends Component<{}, NodeManagementState> {
 	}
 
 	componentDidMount() {
-		this.getnodeList();
 		this.getsinkList();
-	}
-
-	// Get node list from backend
-	getnodeList() {
-		var url = NODE_URL;
-
-		fetch(url)
-			.then((res) => res.json())
-			.then((data) => this.setState({ nodeList: data }))
-			.catch((error) => console.error('Error:', error));
 	}
 
 	// Get sink list from backend
@@ -94,14 +57,20 @@ class NodeManagement extends Component<{}, NodeManagementState> {
 			.catch((error) => console.error('Error:', error));
 	}
 
-	render() {
-		var groupedNodeList = groupBySinkid(
-			this.state.nodeList,
-			this.state.sinkList
-		);
+	handleAllClick = () => {
+		this.setState({
+			showAllValid: true,
+		});
+	}
+	handleMapClick = () => {
+		this.setState({
+			showAllValid: false,
+		});
+	}
 
+	render() {
 		return (
-			<>
+			<div>
 				<div style={{ float: 'right' }}>
 					<button
 						type="button"
@@ -123,40 +92,60 @@ class NodeManagement extends Component<{}, NodeManagementState> {
 						<span style={{ color: '#FACC2E' }}>● : unstable </span>
 						<span style={{ color: 'red' }}>● : disconnect </span>
 					</div>
-					<NodeMap
-						nodeList={this.state.nodeList}
-						nodeState={this.state.nodeState}
-					></NodeMap>
-					<div>
-						{groupedNodeList.map((group: GroupedNodeListElem, idx: number) => (
+					<span >Viewer type </span>
+					<button
+						type="button"
+						className="btn"
+						style={{ background: 'pink' }}
+						onClick={this.handleAllClick}
+					>
+						All
+					</button>
+					<span> </span>
+					<button
+						type="button"
+						className="btn"
+						style={{ background: 'pink' }}
+						onClick={this.handleMapClick}
+					>
+						Map
+					</button>
+					<hr/>
+					{(this.state.showAllValid)?(
+						<div>
+						{this.state.sinkList.map((sink: sinkListElem, idx: number) => (
 							<div>
 								<span style={{ fontSize: '18pt', fontWeight: 500 }}>
-									Sink {group.sink_id}
+									Sink {sink.id}
 								</span>
 								<button
 									className="btn dropdown-toggle"
 									type="button"
 									data-toggle="collapse"
-									data-target={'#sink' + group.sink_id.toString()}
-									aria-controls={group.sink_id.toString()}
+									data-target={'#sink' + sink.id.toString()}
+									aria-controls={sink.id.toString()}
 									style={{ color: 'black' }}
 								></button>
 								<div
-									id={'sink' + group.sink_id.toString()}
+									id={'sink' + sink.id.toString()}
 									className="collapse"
 								>
 									<NodeTable
-										nodeList={group.node_list}
+										sink_id={sink.id}
 										nodeState={this.state.nodeState}
 									></NodeTable>
 								</div>
 							</div>
 						))}
 					</div>
+					):(
+						<NodeMap nodeState={this.state.nodeState}></NodeMap>
+					)}	
 				</div>
-			</>
+			</div>
 		);
-	}
-}
+	};
+};
+
 
 export default NodeManagement;

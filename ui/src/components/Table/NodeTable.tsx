@@ -4,6 +4,7 @@ import {
 	nodeHealthCheckElem,
 } from '../../ElemInterface/ElementsInterface';
 import { NODE_URL } from '../../defineUrl';
+import Pagination from '../Pagination';
 
 enum HealthColor {
 	'red',
@@ -12,15 +13,43 @@ enum HealthColor {
 }
 
 interface NodeTableProps {
-	nodeList: Array<nodeListElem>;
+	sink_id: number;
 	nodeState: Array<nodeHealthCheckElem>;
 }
-
+interface NodeTableState {
+	nodeList: Array<nodeListElem>;
+	currentPage: number;
+	pages: number; // num of total pages
+}
 /*
 NodeTable
 - Show up node list.
 */
-class NodeTable extends Component<NodeTableProps, {}> {
+
+class NodeTable extends Component<NodeTableProps, NodeTableState> {
+	state: NodeTableState = {
+		nodeList: [],
+		currentPage: 1,
+		pages: 0,
+	};
+
+	componentDidMount() {
+		this.getnodeList(this.state.currentPage);
+	}
+
+	// Get node list from backend
+	getnodeList(page: number) {
+		var url =
+			NODE_URL + '?sink=(' + this.props.sink_id + ')&page=(' + page + ')';
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) =>
+				this.setState({ nodeList: data.nodes, pages: data.pages })
+			)
+			.catch((error) => console.error('Error:', error));
+	}
+
 	// Handle click event of the Remove button
 	handleRemoveClick = (node_id: number) => () => {
 		var url = NODE_URL + '/' + node_id;
@@ -54,6 +83,11 @@ class NodeTable extends Component<NodeTableProps, {}> {
 		return <td style={{ color: 'gray' }}>●</td>;
 	};
 
+	handlePageChange = (page: number) => {
+		this.setState({ currentPage: page });
+		this.getnodeList(page);
+	};
+
 	render() {
 		return (
 			<>
@@ -64,19 +98,17 @@ class NodeTable extends Component<NodeTableProps, {}> {
 							<th scope="col">name</th>
 							<th scope="col">id</th>
 							<th scope="col">sensors</th>
-							<th scope="col">group</th>
 							<th scope="col">health</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.nodeList.map((node: nodeListElem, idx: number) => (
+						{this.state.nodeList.map((node: nodeListElem, idx: number) => (
 							<tr>
 								<th scope="row">{idx}</th>
 								<td>{node.name}</td>
 								<td>{node.id}</td>
 								<td>{node.sensors.map((sensor: any) => sensor.name + ', ')}</td>
-								<td>{node.group}</td>
 								{this.findNodeState(node.id)}
 								<td>
 									<button
@@ -104,6 +136,11 @@ class NodeTable extends Component<NodeTableProps, {}> {
 						))}
 					</tbody>
 				</table>
+				<Pagination
+					pages={this.state.pages}
+					currentPage={this.state.currentPage}
+					onPageChange={this.handlePageChange}
+				></Pagination>
 			</>
 		);
 	}

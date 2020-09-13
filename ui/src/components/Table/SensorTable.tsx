@@ -11,7 +11,7 @@ import Pagination from '../Pagination';
 interface SensorTableState {
 	sensorList: Array<sensorListElem>;
 	currentPage: number;
-	pageSize: number;
+	pages: number; // num of total pages
 }
 
 /*
@@ -22,7 +22,7 @@ class SensorTable extends Component<{}, SensorTableState> {
 	state: SensorTableState = {
 		sensorList: [],
 		currentPage: 1, // current page number
-		pageSize: 12,
+		pages: 0,
 	};
 
 	componentDidMount() {
@@ -31,12 +31,12 @@ class SensorTable extends Component<{}, SensorTableState> {
 
 	// Get sensor list from backend per page
 	getsensorList(page: number) {
-		var url = SENSOR_URL;
+		var url = SENSOR_URL + '?page=(' + page + ')';
 
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) => {
-				this.setState({ sensorList: data });
+				this.setState({ sensorList: data.sensors, pages: data.pages });
 			})
 			.catch((error) => console.error('Error:', error));
 	}
@@ -114,8 +114,7 @@ class SensorTable extends Component<{}, SensorTableState> {
 					</tbody>
 				</table>
 				<Pagination
-					pageSize={this.state.pageSize}
-					itemsCount={this.state.sensorList.length}
+					pages={this.state.pages}
 					currentPage={this.state.currentPage}
 					onPageChange={this.handlePageChange}
 				></Pagination>

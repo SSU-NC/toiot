@@ -1,15 +1,16 @@
+import { logicElem } from './LcElementsInterface';
+
 // nodeList interface
 export interface nodeListElem {
 	id: number;
 	name: string;
-	group: string;
 	lat: number;
 	lng: number;
 	sink_id: number;
 	sensors: Array<sensorListElem>;
 }
 
-export interface locationElem{
+export interface locationElem {
 	lat: number;
 	lng: number;
 }
@@ -19,7 +20,7 @@ export interface sensorListElem {
 	id: number;
 	name: string;
 	sensor_values: Array<value_list_elem>;
-	nodes: null;
+	nodes: Array<nodeListElem>;
 }
 
 export interface value_list_elem {
@@ -32,11 +33,10 @@ export interface value_list_elem {
 export interface sinkListElem {
 	id: number;
 	name: string;
-	location: string;
 	addr: string;
 	topic_id: number;
-	topic: Array<topicListElem>;
-	nodes: null;
+	topic: topicListElem;
+	nodes: Array<nodeListElem>;
 }
 
 // topic
@@ -45,8 +45,14 @@ export interface topicListElem {
 	name: string;
 	partitions: number;
 	replications: number;
-	sinks: null;
-	logic_services: Array<null>;
+	sinks: Array<sinkListElem>;
+	logic_services: Array<logic_services_elem>;
+}
+
+export interface logic_services_elem {
+	id: number;
+	addr: string;
+	topic_id: number;
 }
 
 // used to <Select> options

@@ -5,7 +5,7 @@ import {
 	sensorOptionsElem,
 	sinkListElem,
 	sinkOptionsElem,
-	locationElem
+	locationElem,
 } from '../../ElemInterface/ElementsInterface';
 import { NODE_URL, SINK_URL, SENSOR_URL } from '../../defineUrl';
 import LarLngPicker from '../LatLngPicker';
@@ -16,12 +16,10 @@ interface RegisterNodeState {
 	sinkList: Array<sinkListElem>;
 
 	node_name: string;
-	group: string;
 	location: locationElem;
 	sink_id: number;
 	sensors: Array<sensorOptionsElem>;
 	nameValid: boolean;
-	groupValid: boolean;
 	sensorValid: boolean;
 	sinkValid: boolean;
 }
@@ -36,7 +34,6 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 		sinkList: [],
 
 		node_name: '',
-		group: '',
 		location: {
 			lng: 0,
 			lat: 0,
@@ -45,7 +42,6 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 		sensors: [],
 
 		nameValid: false,
-		groupValid: false,
 		sensorValid: false,
 		sinkValid: false,
 	};
@@ -92,26 +88,10 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 		}
 	};
 
-	// Handle group change by typing
-	handleGroupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		// group valid check : user should enter group name
-		if (e.target.value.length > 0) {
-			this.setState({
-				group: e.target.value,
-				groupValid: true,
-			});
-		} else {
-			this.setState({
-				group: e.target.value,
-				groupValid: false,
-			});
-		}
-	};
-
 	// Handle LarLng change by pick lat, lon at map
 	handleLarLngChange = (location: locationElem) => {
 		this.setState({
-			location
+			location,
 		});
 	};
 
@@ -162,10 +142,6 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 			alert('Please enter node name.');
 			return;
 		}
-		if (!this.state.groupValid) {
-			alert('Please enter group.');
-			return;
-		}
 		if (!this.state.sensorValid) {
 			alert('Please select more than a sensor.');
 			return;
@@ -185,7 +161,6 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 		console.log(
 			JSON.stringify({
 				name: data.node_name,
-				group: data.group,
 				lat: data.location.lat,
 				lon: data.location.lng,
 				sensors: sensor_id,
@@ -196,7 +171,6 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 			method: 'POST', // or 'PUT'
 			body: JSON.stringify({
 				name: data.node_name,
-				group: data.group,
 				location: {
 					lat: data.location.lat,
 					lon: data.location.lng,
@@ -262,17 +236,6 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 											placeholder="name"
 											value={this.state.node_name}
 											onChange={this.handleNameChange}
-										/>
-									</div>
-									<div className="form-group">
-										<label>group</label>
-										<input
-											type="text"
-											className="form-control"
-											name="group"
-											placeholder="group"
-											value={this.state.group}
-											onChange={this.handleGroupChange}
 										/>
 									</div>
 									<div>
