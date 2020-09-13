@@ -12,7 +12,7 @@
 
 <!--te-->
 
-# Introduce
+# Introduction
 `ToioT` use typescript, html, css and react framework.
 
 # Setting
