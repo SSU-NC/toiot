@@ -28,6 +28,8 @@ func main() {
 	ru := registUsecase.NewRegistUsecase(sir, ndr, snr, lgr, lsr, tpr)
 	eu := eventUsecase.NewEventUsecase(lsr)
 
+	// TODO : init Topic table according to the setting value (example : Topic{"sensors", 3, 3})
+
 	h := handler.NewHandler(ru, eu)
 
 	r := gin.Default()
