@@ -39,23 +39,23 @@ export const SENSOR_URL = 'http://'
 	.concat(process.env.REACT_APP_DB_IP)
 	.concat(':')
 	.concat(process.env.REACT_APP_DB_PORT)
-	.concat('/sensor');
+	.concat('/regist/sensor');
 export const NODE_URL = 'http://'
 	.concat(process.env.REACT_APP_DB_IP)
 	.concat(':')
 	.concat(process.env.REACT_APP_DB_PORT)
-	.concat('/node');
+	.concat('/regist/node');
 export const SINK_URL = 'http://'
 	.concat(process.env.REACT_APP_DB_IP)
 	.concat(':')
 	.concat(process.env.REACT_APP_DB_PORT)
-	.concat('/sink');
+	.concat('/regist/sink');
 
 export const LOGICCORE_URL = 'http://'
 	.concat(process.env.REACT_APP_LOGICCORE_IP)
 	.concat(':')
 	.concat(process.env.REACT_APP_LOGICCORE_PORT)
-	.concat('/logiccore');
+	.concat('/regist/logic');
 
 export const HEALTHCHECK_URL = 'ws://'
 	.concat(process.env.REACT_APP_HEALTHCHECK_IP)

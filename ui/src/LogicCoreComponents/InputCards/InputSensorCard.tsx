@@ -22,8 +22,8 @@ class InputSensorCard extends Component<InputSensorCardProps, {}> {
 			return {
 				label: val.name,
 				value: val.name,
-				uuid: val.uuid,
-				value_list: val.value_list,
+				id: val.id,
+				sensor_values: val.sensor_values,
 			};
 		});
 		return (

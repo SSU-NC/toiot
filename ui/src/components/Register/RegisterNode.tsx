@@ -4,8 +4,8 @@ import {
 	sensorListElem,
 	sensorOptionsElem,
 	sinkListElem,
-	locationElem,
 	sinkOptionsElem,
+	locationElem
 } from '../../ElemInterface/ElementsInterface';
 import { NODE_URL, SINK_URL, SENSOR_URL } from '../../defineUrl';
 import LarLngPicker from '../LatLngPicker';
@@ -38,7 +38,7 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 		node_name: '',
 		group: '',
 		location: {
-			lon: 0,
+			lng: 0,
 			lat: 0,
 		},
 		sink_id: 0,
@@ -111,7 +111,7 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 	// Handle LarLng change by pick lat, lon at map
 	handleLarLngChange = (location: locationElem) => {
 		this.setState({
-			location,
+			location
 		});
 	};
 
@@ -153,8 +153,8 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 
 		var url = NODE_URL;
 		var data = this.state;
-		var sensor_uuid = data.sensors.map((val: sensorOptionsElem) => {
-			return { uuid: val.uuid };
+		var sensor_id = data.sensors.map((val: sensorOptionsElem) => {
+			return { id: val.id };
 		});
 
 		// Valid check (unvalid -> alert)
@@ -186,11 +186,9 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 			JSON.stringify({
 				name: data.node_name,
 				group: data.group,
-				location: {
-					lat: data.location.lat,
-					lon: data.location.lon,
-				},
-				sensors: sensor_uuid,
+				lat: data.location.lat,
+				lon: data.location.lng,
+				sensors: sensor_id,
 			})
 		);
 
@@ -201,10 +199,10 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 				group: data.group,
 				location: {
 					lat: data.location.lat,
-					lon: data.location.lon,
+					lon: data.location.lng,
 				},
 				sink_id: data.sink_id,
-				sensors: sensor_uuid,
+				sensors: sensor_id,
 			}),
 			headers: {
 				'Content-Type': 'application/json',
@@ -222,8 +220,8 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 			return {
 				label: val.name,
 				value: val.name,
-				uuid: val.uuid,
-				value_list: val.value_list,
+				id: val.id,
+				sensor_values: val.sensor_values,
 			};
 		});
 		let sinkOptions: Array<sinkOptionsElem>;

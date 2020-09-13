@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../LogicCore.css';
 
 interface ShowSesorCardProps {
-	sensor_uuid: string;
+	sensor_id: number;
 }
 
 /*
@@ -20,9 +20,9 @@ class ShowSesorCard extends Component<ShowSesorCardProps, {}> {
 					<div className="col-1"></div>
 					<div>
 						<span style={{ fontSize: '15pt', fontWeight: 450 }}>
-							sensor uuid{' '}
+							sensor id{' '}
 						</span>
-						<span style={{ fontSize: '15pt' }}>: {this.props.sensor_uuid}</span>
+						<span style={{ fontSize: '15pt' }}>: {this.props.sensor_id}</span>
 					</div>
 				</div>
 			</div>

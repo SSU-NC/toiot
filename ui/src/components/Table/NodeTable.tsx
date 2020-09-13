@@ -22,12 +22,11 @@ NodeTable
 */
 class NodeTable extends Component<NodeTableProps, {}> {
 	// Handle click event of the Remove button
-	handleRemoveClick = (node_uuid: string) => () => {
-		var url = NODE_URL;
+	handleRemoveClick = (node_id: number) => () => {
+		var url = NODE_URL + '/' + node_id;
 
 		fetch(url, {
 			method: 'DELETE',
-			body: JSON.stringify({ uuid: node_uuid }),
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -38,9 +37,9 @@ class NodeTable extends Component<NodeTableProps, {}> {
 	};
 
 	// Find node state(health) and represent as colors (red - yellow - green, gray)
-	findNodeState = (uuid: string) => {
+	findNodeState = (id: number) => {
 		for (let prop in this.props.nodeState) {
-			if (this.props.nodeState[prop].n_uuid === uuid) {
+			if (this.props.nodeState[prop].n_id === id) {
 				return (
 					<td
 						style={{
@@ -63,7 +62,7 @@ class NodeTable extends Component<NodeTableProps, {}> {
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">name</th>
-							<th scope="col">uuid</th>
+							<th scope="col">id</th>
 							<th scope="col">sensors</th>
 							<th scope="col">group</th>
 							<th scope="col">health</th>
@@ -75,16 +74,16 @@ class NodeTable extends Component<NodeTableProps, {}> {
 							<tr>
 								<th scope="row">{idx}</th>
 								<td>{node.name}</td>
-								<td>{node.uuid}</td>
+								<td>{node.id}</td>
 								<td>{node.sensors.map((sensor: any) => sensor.name + ', ')}</td>
 								<td>{node.group}</td>
-								{this.findNodeState(node.uuid)}
+								{this.findNodeState(node.id)}
 								<td>
 									<button
 										className="btn btn-default btn-sm"
 										type="button"
 										id="button-delete"
-										onClick={this.handleRemoveClick(node.uuid)}
+										onClick={this.handleRemoveClick(node.id)}
 									>
 										<svg
 											width="1em"
