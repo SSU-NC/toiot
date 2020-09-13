@@ -30,7 +30,7 @@ ToioT use typescript, html, css and react frame work.
 ### 1.1. Solution 1 : environment variable
 
 We recomment this solution then solution 2.  
-Add `/PDK/ui/pdk-ui/.env.development` file for using kibana, connect with backend.  
+Add `/toiot/ui/.env.development` file for using kibana, connect with backend.  
 For example..
 
 ```
@@ -50,14 +50,14 @@ REACT_APP_KAKAO_MAP_KEY=abcdefg12345678
 ### 1.2. Solution 2 : export variable
 
 If you cannot solve the problem, do solution 2.
-Modify `/PDK/ui/pdk-ui/src/defineUrl.tsx`.  
+Modify `/toiot/ui/src/defineUrl.tsx`.  
 For example..
 
 ```typescript
-import React from "react";
-export const KIBANA_URL = "http://<KIBANA_IP>:<KIBANA_PORT>";
-export const SENSOR_URL = "http://<DB_IP>:<DB_PORT>/sensor";
-export const NODE_URL = "http://<DB_IP>:<DB_PORT>/node";
+import React from 'react';
+export const KIBANA_URL = 'http://<KIBANA_IP>:<KIBANA_PORT>';
+export const SENSOR_URL = 'http://<DB_IP>:<DB_PORT>/sensor';
+export const NODE_URL = 'http://<DB_IP>:<DB_PORT>/node';
 ```
 
 ## 2. Docker
@@ -69,7 +69,7 @@ If you use docker, follow this solution.
 1. Download Docker image  
    For example...
    ```shell
-   docker pull iamhge/pdk-ui:0.1.1
+   docker pull iamhge/toiot-ui:0.1.1
    ```
 2. Make docker-compose.yml
    For example...
@@ -78,9 +78,9 @@ If you use docker, follow this solution.
    version: "3.2"
 
    services:
-   pdk-ui:
-       container_name: pdk-ui
-       image: iamhge/pdk-ui:0.1.1
+   toiot-ui:
+       container_name: toiot-ui
+       image: iamhge/toiot-ui:0.1.1
        ports:
        - "3001:3000"
        environment:
@@ -114,7 +114,7 @@ If you use docker, follow this solution.
 
 # Execute
 
-If you want to start react, execute this instruction at `/ui/pdk-ui`. After you execute instruction, enter `localhost://3000` in address.
+If you want to start react, execute this instruction at `/ui`. After you execute instruction, enter `localhost://3000` in address.
 
 ```shell
 npm install    // install dependency modules
