@@ -1,30 +1,14 @@
 package usecase
 
-import (
-	"github.com/KumKeeHyun/PDK/logic-core/adapter"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/dustin/go-broadcast"
-)
+import "github.com/KumKeeHyun/toiot/logic-core/adapter"
 
-// type ConsumerManageUsecase interface {
-// 	SetNumOfConsumers(int) (int, error)
-// }
-
-type LogicCoreUsecase interface {
-	SetLogicChain(r *model.RingRequest) error
-	RemoveLogicChain(lname string) error
-	RemoveLogicChainsBySID(sid string) error
-	GetAllLogics() ([]model.Ring, error)
+type EventUsecase interface {
+	DeleteSink(nl []adapter.Node) error
+	CreateNode(n *adapter.Node) error
+	DeleteNode(n *adapter.Node) error
+	DeleteSensor(s *adapter.Sensor) error
+	CreateLogic(l *adapter.Logic) error
+	DeleteLogic(l *adapter.Logic) error
 }
 
-type MetaDataUsecase interface {
-	SetMetaInfo(mi adapter.MetaInfo)
-	NewNode(key string, n *model.Node) (*model.Node, error)
-	NewSensor(key string, s *model.Sensor) (*model.Sensor, error)
-	DeleteNode(key string) error
-	DeleteSensor(key string) error
-}
-
-type WebsocketUsecase interface {
-	broadcast.Broadcaster
-}
+type LogicCoreUsecase interface{}

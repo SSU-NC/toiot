@@ -1,31 +1,26 @@
 package logicCoreUC
 
 import (
-	"errors"
-
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/repository"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/service"
-	
+	"github.com/KumKeeHyun/toiot/logic-core/domain/repository"
+	"github.com/KumKeeHyun/toiot/logic-core/domain/service"
 )
 
 type logicCoreUsecase struct {
-	mr repository.MetaRepo
-	lr repository.LogicRepo
+	rr repository.RegistRepo
 	ks service.KafkaConsumerGroup
 	es service.ElasticClient
-	ls service.LogicCore
-	event chan interface{}
+	ls service.LogicService
 }
 
-func NewLogicCoreUsecase(mr repository.MetaRepo, lr repository.LogicRepo, ks service.KafkaConsumerGroup, es service.ElasticClient, ls service.LogicCore, event chan interface{}) *logicCoreUsecase {
+func NewLogicCoreUsecase(rr repository.RegistRepo,
+	ks service.KafkaConsumerGroup,
+	es service.ElasticClient,
+	ls service.LogicService) *logicCoreUsecase {
 	lcu := &logicCoreUsecase{
-		mr: mr,
-		lr: lr,
+		rr: rr,
 		ks: ks,
 		es: es,
 		ls: ls,
-		event: event,
 	}
 
 	in := lcu.ks.GetOutput()
@@ -38,8 +33,8 @@ func NewLogicCoreUsecase(mr repository.MetaRepo, lr repository.LogicRepo, ks ser
 				continue
 			}
 
-			lchs := lcu.ls.GetLogicChans(rawData.Key)
-			if lchs != nil {
+			lchs, err := lcu.ls.GetLogicChans(ld.SensorID)
+			if err == nil {
 				for _, ch := range lchs {
 					ch <- ld
 				}
@@ -50,41 +45,3 @@ func NewLogicCoreUsecase(mr repository.MetaRepo, lr repository.LogicRepo, ks ser
 
 	return lcu
 }
-
-func (lu *logicCoreUsecase) SetLogicChain(r *model.RingRequest) error {
-	_, err := lu.mr.GetSensor(r.Sensor)
-	if err != nil {
-		return errors.New("sensor does not exist")
-	}
-	if len(r.Logic) == 0 {
-		return errors.New("Need more than one logic")
-	}
-	id, err := lu.lr.Create(r)
-	if err != nil {
-		return err
-	}
-
-	go lu.ls.CreateAndStartLogic(r, id, lu.event)
-	return nil
-}
-
-func (lu *logicCoreUsecase) RemoveLogicChain(id string) error {
-	if err := lu.lr.Delete(id); err != nil {
-		return err
-	}
-	return lu.ls.RemoveLogic(id)
-}
-
-func (lu *logicCoreUsecase) RemoveLogicChainsBySID(sid string) error {
-	return lu.ls.RemoveLogicsBySID(sid)
-}
-
-func (lu *logicCoreUsecase) GetAllLogics() ([]model.Ring, error) {
-	lg, err := lu.lr.GetAll()
-	if err != nil {
-		return nil, err
-	}
-
-	return lg, err
-}
-

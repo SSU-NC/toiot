@@ -1,6 +1,6 @@
 package service
 
-import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
+import "github.com/KumKeeHyun/toiot/logic-core/domain/model"
 
 type KafkaConsumerGroup interface {
 	GetOutput() <-chan model.KafkaData

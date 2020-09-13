@@ -2,23 +2,22 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"runtime"
 	"runtime/trace"
 	"syscall"
 
-	"github.com/KumKeeHyun/PDK/logic-core/dataService/memory"
-	"github.com/KumKeeHyun/PDK/logic-core/elasticClient"
-	kafkaConsumer "github.com/KumKeeHyun/PDK/logic-core/kafkaConsumer/sarama"
-	"github.com/KumKeeHyun/PDK/logic-core/logicCore"
-	"github.com/KumKeeHyun/PDK/logic-core/rest"
-	_ "github.com/KumKeeHyun/PDK/logic-core/setting"
-	"github.com/KumKeeHyun/PDK/logic-core/usecase/logicCoreUC"
-	"github.com/KumKeeHyun/PDK/logic-core/usecase/metaDataUC"
-	"github.com/KumKeeHyun/PDK/logic-core/usecase/websocketUC"
-	"github.com/KumKeeHyun/PDK/logic-core/db"
-
+	"github.com/KumKeeHyun/toiot/logic-core/dataService/memory"
+	"github.com/KumKeeHyun/toiot/logic-core/elasticClient"
+	"github.com/KumKeeHyun/toiot/logic-core/kafkaConsumer/sarama"
+	"github.com/KumKeeHyun/toiot/logic-core/logicService"
+	"github.com/KumKeeHyun/toiot/logic-core/rest/handler"
+	"github.com/KumKeeHyun/toiot/logic-core/setting"
+	"github.com/KumKeeHyun/toiot/logic-core/usecase/eventUC"
+	"github.com/KumKeeHyun/toiot/logic-core/usecase/logicCoreUC"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -39,21 +38,33 @@ func main() {
 		trace.Stop()
 	}()
 
-	mr := memory.NewMetaRepo()
-	lr := db.NewLogicRepository()
-	ks := kafkaConsumer.NewKafkaConsumer()
+	rr := memory.NewRegistRepo
+	ks := sarama.NewKafkaConsumer()
 	es := elasticClient.NewElasticClient()
-	ls := logicCore.NewLogicCore()
+	ls := logicService.NewLogicService()
 
-	event := make(chan interface{}, 2)
-	mduc := metaDataUC.NewMetaDataUsecase(mr, ls)
-	lcuc := logicCoreUC.NewLogicCoreUsecase(mr, lr, ks, es, ls, event)
-	wuc := websocketUC.NewWebsocketUsecase(event)
-	
-	h := rest.NewHandler(mduc, lcuc, wuc)
-	go rest.RunServer(h)
-	
+	evuc := eventUC.NewEventUsecase(rr, ls)
+	lcuc := logicCoreUC.NewLogicCoreUsecase(rr, ks, es, ls)
+
+	h := handler.NewHandler(evuc, lcuc)
+	r := gin.Default()
+	SetEventRoute(r, h)
+
+	go log.Fatal(r.Run(setting.Logicsetting.Server))
+
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
 	<-sigterm
+}
+
+func SetEventRoute(r *gin.Engine, h *handler.Handler) {
+	e := r.Group("/event")
+	{
+		e.POST("/sink/delete", h.DeleteSink)
+		e.POST("/node/create", h.CreateNode)
+		e.POST("/node/delete", h.DeleteNode)
+		e.POST("/sink/delete", h.DeleteSensor)
+		e.POST("/logic/delete", h.CreateLogic)
+		e.POST("/logic/delete", h.DeleteLogic)
+	}
 }
