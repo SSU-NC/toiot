@@ -15,9 +15,9 @@ var (
 
 func init() {
 	eventClient = resty.New()
-	eventClient.SetRetryCount(3).SetRetryWaitTime(300 * time.Millisecond).SetRetryMaxWaitTime(1 * time.Second)
+	eventClient.SetTimeout(200 * time.Millisecond)
 	pingClient = resty.New()
-	pingClient.SetTimeout(200 * time.Millisecond)
+	pingClient.SetRetryCount(2).SetRetryWaitTime(100 * time.Millisecond).SetTimeout(500 * time.Millisecond)
 }
 
 func ping(l model.LogicService) error {
