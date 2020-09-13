@@ -122,7 +122,10 @@ type Sink struct {
 }
 
 type Topic struct {
-	Name         string `json:"name"`
-	Partitions   int    `json:"partitions"`
-	Replications int    `json:"replications"`
+	Name string `json:"name"`
+}
+
+type LogicService struct {
+	Addr  string `json:"addr"`
+	Topic Topic  `json:"topic"`
 }

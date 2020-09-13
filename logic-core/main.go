@@ -8,7 +8,11 @@ import (
 	"runtime"
 	"runtime/trace"
 	"syscall"
+	"time"
 
+	"github.com/KumKeeHyun/toiot/logic-core/usecase"
+
+	"github.com/KumKeeHyun/toiot/logic-core/adapter"
 	"github.com/KumKeeHyun/toiot/logic-core/dataService/memory"
 	"github.com/KumKeeHyun/toiot/logic-core/elasticClient"
 	"github.com/KumKeeHyun/toiot/logic-core/kafkaConsumer/sarama"
@@ -18,6 +22,7 @@ import (
 	"github.com/KumKeeHyun/toiot/logic-core/usecase/eventUC"
 	"github.com/KumKeeHyun/toiot/logic-core/usecase/logicCoreUC"
 	"github.com/gin-gonic/gin"
+	"github.com/go-resty/resty/v2"
 )
 
 func main() {
@@ -38,7 +43,7 @@ func main() {
 		trace.Stop()
 	}()
 
-	rr := memory.NewRegistRepo
+	rr := memory.NewRegistRepo()
 	ks := sarama.NewKafkaConsumer()
 	es := elasticClient.NewElasticClient()
 	ls := logicService.NewLogicService()
@@ -49,6 +54,7 @@ func main() {
 	h := handler.NewHandler(evuc, lcuc)
 	r := gin.Default()
 	SetEventRoute(r, h)
+	RegistLogicService(evuc)
 
 	go log.Fatal(r.Run(setting.Logicsetting.Server))
 
@@ -64,7 +70,33 @@ func SetEventRoute(r *gin.Engine, h *handler.Handler) {
 		e.POST("/node/create", h.CreateNode)
 		e.POST("/node/delete", h.DeleteNode)
 		e.POST("/sink/delete", h.DeleteSensor)
-		e.POST("/logic/delete", h.CreateLogic)
+		e.POST("/logic/create", h.CreateLogic)
 		e.POST("/logic/delete", h.DeleteLogic)
+	}
+}
+
+func RegistLogicService(ls usecase.EventUsecase) {
+	var (
+		sinks  []adapter.Sink
+		url    = fmt.Sprintf("http://%s/event", setting.Appsetting.Server)
+		regist = adapter.LogicService{
+			Addr: setting.Logicsetting.Server,
+			Topic: adapter.Topic{
+				Name: setting.Kafkasetting.Topics[0],
+			},
+		}
+	)
+
+	client := resty.New()
+	client.SetRetryCount(5).SetRetryWaitTime(5 * time.Second).SetRetryMaxWaitTime(30 * time.Second)
+	resp, err := client.R().SetResult(&sinks).SetBody(regist).Post(url)
+	if err != nil || !resp.IsSuccess() {
+		panic(fmt.Errorf("can't regist logicService"))
+	}
+
+	for _, s := range sinks {
+		for _, n := range s.Nodes {
+			ls.CreateNode(&n, s.Name)
+		}
 	}
 }

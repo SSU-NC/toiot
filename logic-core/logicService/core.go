@@ -1,4 +1,4 @@
-package logicCore
+package logicService
 
 import (
 	"fmt"

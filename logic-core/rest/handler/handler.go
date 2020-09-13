@@ -39,7 +39,7 @@ func (h *Handler) CreateNode(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if err := h.evuc.CreateNode(&an); err != nil {
+	if err := h.evuc.CreateNode(&an, an.Sink.Name); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

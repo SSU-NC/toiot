@@ -25,8 +25,8 @@ func (eu *eventUsecase) DeleteSink(nl []adapter.Node) error {
 	return nil
 }
 
-func (eu *eventUsecase) CreateNode(n *adapter.Node) error {
-	mn, asl := adapter.NodeToModel(n, n.Sink.Name)
+func (eu *eventUsecase) CreateNode(n *adapter.Node, sn string) error {
+	mn, asl := adapter.NodeToModel(n, sn)
 	eu.rr.CreateNode(n.ID, &mn)
 
 	all := []adapter.Logic{}
