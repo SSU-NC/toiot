@@ -4,26 +4,24 @@
 
 <!--ts-->
 
-- [Introduce](#Introduce)
+- [Introduction](#Introdution)
 - [Setting](#Setting)
   - [Setting IP, PORT](##1.-Setting-IP,-PORT)
-- [Installation](#Installation)
+- [Installation & Run](#Installation--Run)
   - [Git](##1.-Git)
   - [Docker](##2.-Docker)
-- [Output](#Output)
+- [Run](#Run)
 
 <!--te-->
 
 # Introduce
-
-ToioT use typescript, html, css and react frame work.
+`ToioT` use typescript, html, css and react framework.
 
 # Setting
 
-## 1. Setting IP, PORT
+## Setting IP, PORT
 
-### 1.1. Solution 1 : environment variable
-
+### Solution 1 : environment variable
 We recomment this solution.  
 Add `/toiot/ui/.env.development` file for using kibana, connect with backend.  
 For example..
@@ -43,7 +41,6 @@ REACT_APP_KAKAO_MAP_KEY=abcdefg12345678
 ```
 
 ### 1.2. Solution 2 : export variable
-
 If you cannot solve the problem, do solution 2.
 Modify `/toiot/ui/src/defineUrl.tsx`.  
 For example..
@@ -55,9 +52,9 @@ export const SENSOR_URL = 'http://<DB_IP>:<DB_PORT>/sensor';
 export const NODE_URL = 'http://<DB_IP>:<DB_PORT>/node';
 ```
 
-# Installation
+# Installation & Run
 
-## 1. Git
+## Solution 1 : Git
 
 If you want to start toiot ui at localhost or get source code, you can follow this.
 
@@ -75,7 +72,7 @@ npm install    // install dependency modules
 npm run start  // start react
 ```
 
-## 2. Docker
+## Solution 2 : Docker
 
 If you use docker, follow this solution.
 
@@ -129,8 +126,3 @@ If you use docker, follow this solution.
    ```
 
 5. Enter your docker ip and port at web address. ex) http://123.123.123.123:3001
-
-# Output
-
-You can see this ui with empty dashboard.
-![home_tab](https://user-images.githubusercontent.com/59961690/93011988-0cd0b680-f5d7-11ea-88fa-9c57581835f4.png)
