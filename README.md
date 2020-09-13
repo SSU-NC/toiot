@@ -11,6 +11,7 @@ Table of contents
 =================
 <!--ts-->
    * [Output](#Output)
+   * [Installation & Run](#Installation--Run)
    * [Detail](#Detail)
    * [Help](#Help)
    * [License](#License)
@@ -28,10 +29,15 @@ Output
 ![service](https://user-images.githubusercontent.com/38535571/92531789-f5599c80-f269-11ea-963a-269f53424760.gif)
 
 
-Detail
+Installation & Run
 =======
 * [User Interface](./ui/README.md)
 * [Backend Server](./application/README.md)
+
+
+Detail
+=======
+[WIKI](https://github.com/SSU-NC/toiot/wiki)
 
 Help
 =======
