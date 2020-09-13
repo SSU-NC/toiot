@@ -10,8 +10,6 @@ import Pagination from '../Pagination';
 
 interface SensorTableState {
 	sensorList: Array<sensorListElem>;
-	start: number;
-	end: number;
 	currentPage: number;
 	pageSize: number;
 }
@@ -23,8 +21,6 @@ SensorTable
 class SensorTable extends Component<{}, SensorTableState> {
 	state: SensorTableState = {
 		sensorList: [],
-		start: 0, // start page number
-		end: 10, // end page number
 		currentPage: 1, // current page number
 		pageSize: 12,
 	};
@@ -46,12 +42,11 @@ class SensorTable extends Component<{}, SensorTableState> {
 	}
 
 	// Handle click event of the Remove button
-	handleRemoveClick = (sensor_uuid: string) => () => {
-		var url = SENSOR_URL;
+	handleRemoveClick = (sensor_id: number) => () => {
+		var url = SENSOR_URL + '/' + sensor_id;
 
 		fetch(url, {
 			method: 'DELETE',
-			body: JSON.stringify({ uuid: sensor_uuid }),
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -74,7 +69,7 @@ class SensorTable extends Component<{}, SensorTableState> {
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">name</th>
-							<th scope="col">uuid</th>
+							<th scope="col">id</th>
 							<th scope="col">values</th>
 							<th scope="col"></th>
 						</tr>
@@ -85,10 +80,10 @@ class SensorTable extends Component<{}, SensorTableState> {
 								<tr>
 									<th scope="row">{idx}</th>
 									<td>{sensor.name}</td>
-									<td>{sensor.uuid}</td>
+									<td>{sensor.id}</td>
 									<td>
-										{sensor.value_list.map(
-											(value: value_list_elem) => value.value_name + ', '
+										{sensor.sensor_values.map(
+											(value: value_list_elem) => value.value_name
 										)}
 									</td>
 									<td>
@@ -96,7 +91,7 @@ class SensorTable extends Component<{}, SensorTableState> {
 											className="btn btn-default btn-sm"
 											type="button"
 											id="button-delete"
-											onClick={this.handleRemoveClick(sensor.uuid)}
+											onClick={this.handleRemoveClick(sensor.id)}
 										>
 											<svg
 												width="1em"

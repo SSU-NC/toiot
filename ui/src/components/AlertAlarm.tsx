@@ -78,7 +78,7 @@ class AlertAlarm extends Component<{}, AlertAlarmState> {
 									×
 								</button>
 								<h3 className="alert-heading">
-									{alarm.alarm.sensor_name} - {alarm.alarm.sensor_uuid}
+									{alarm.alarm.sensor_name} - {alarm.alarm.sensor_id}
 								</h3>
 								<hr />
 								<p>{alarm.alarm.msg}</p>

@@ -1,3 +1,5 @@
+import {sensorListElem} from "./ElementsInterface";
+
 // LogicCore(lc) interface
 export interface numRange {
 	min: number;
@@ -31,8 +33,9 @@ export interface lcActionArg {
 }
 
 export interface logicListElem {
-	sensor_uuid: string;
 	id: string; // request: undefined, receive: number
 	logic_name: string;
-	logic: Array<logicElem>;
+	elems: Array<logicElem>;
+	sensor_id: number;
+	sensor: sensorListElem;
 }

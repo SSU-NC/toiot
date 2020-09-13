@@ -31,12 +31,11 @@ class LogicTable extends Component<{}, LogicTableState> {
 	}
 
 	// Handle click event of the Remove button
-	handleRemoveClick = (id: string) => () => {
-		var url = LOGICCORE_URL;
+	handleRemoveClick = (logic_id: string) => () => {
+		var url = LOGICCORE_URL + '/' + logic_id;
 
 		fetch(url, {
 			method: 'DELETE',
-			body: JSON.stringify({ id: id }),
 			headers: {
 				'Content-Type': 'application/json',
 			},

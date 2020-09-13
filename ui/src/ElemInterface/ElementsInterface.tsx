@@ -1,27 +1,29 @@
 // nodeList interface
 export interface nodeListElem {
-	uuid: string;
+	id: number;
 	name: string;
 	group: string;
-	location: locationElem;
+	lat: number;
+	lng: number;
 	sink_id: number;
 	sensors: Array<sensorListElem>;
 }
 
-export interface locationElem {
-	lon: number; // longitude
-	lat: number; // latitude
+export interface locationElem{
+	lat: number;
+	lng: number;
 }
 
 // sensorList interface
 export interface sensorListElem {
-	uuid: string;
+	id: number;
 	name: string;
-	value_list: Array<value_list_elem>;
+	sensor_values: Array<value_list_elem>;
+	nodes: null;
 }
 
 export interface value_list_elem {
-	sensor_uuid: string;
+	sensor_id: number;
 	value_name: string;
 	index: number;
 }
@@ -31,15 +33,28 @@ export interface sinkListElem {
 	id: number;
 	name: string;
 	location: string;
-	ip: string;
+	addr: string;
+	topic_id: number;
+	topic: Array<topicListElem>;
+	nodes: null;
+}
+
+// topic
+export interface topicListElem {
+	id: number;
+	name: string;
+	partitions: number;
+	replications: number;
+	sinks: null;
+	logic_services: Array<null>;
 }
 
 // used to <Select> options
 export interface sensorOptionsElem {
 	label: string;
 	value: string; // 이때 value는 sensor내의 value값들이 아닌, select component를 사용하기 위해
-	uuid: string;
-	value_list: Array<value_list_elem>;
+	id: number;
+	sensor_values: Array<value_list_elem>;
 }
 
 export interface groupOptionsElem {
@@ -60,13 +75,13 @@ export interface sinkOptionsElem {
 
 // node health check
 export interface nodeHealthCheckElem {
-	n_uuid: string;
+	n_id: number;
 	state: number;
 }
 
 // alarm
 export interface alarmElem {
-	sensor_uuid: string;
+	sensor_id: number;
 	sensor_name: string;
 	msg: string;
 }

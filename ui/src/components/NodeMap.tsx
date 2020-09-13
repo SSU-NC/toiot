@@ -4,6 +4,7 @@ import './NodeMap.css';
 import {
 	nodeListElem,
 	nodeHealthCheckElem,
+	sensorListElem,
 } from '../ElemInterface/ElementsInterface';
 declare global {
 	interface Window {
@@ -35,12 +36,12 @@ class NodeMap extends Component<NodeMapProps, {}> {
 				title: node.name,
 				content: [
 					'sink : ' + node.sink_id,
-					'uuid : ' + node.uuid,
-					'sensor : ' + node.sensors.map((sensor: any) => sensor.name),
+					'id : ' + node.id,
+					'sensor : ' + node.sensors.map((sensor: sensorListElem) => sensor.name),
 				],
 				latlng: new window.kakao.maps.LatLng(
-					node.location.lat,
-					node.location.lon
+					node.lat,
+					node.lng
 				),
 			};
 		});

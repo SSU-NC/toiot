@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { sinkListElem } from '../../ElemInterface/ElementsInterface';
 import { SINK_URL } from '../../defineUrl';
 
-//import DeleteRequest from './DeleteRequest'
 
 interface SinkTableState {
 	sinkList: Array<sinkListElem>;
@@ -55,7 +54,7 @@ class SinkTable extends Component<{}, SinkTableState> {
 							<th scope="col">name</th>
 							<th scope="col">id</th>
 							<th scope="col">location</th>
-							<th scope="col">ip</th>
+							<th scope="col">address</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
@@ -66,7 +65,7 @@ class SinkTable extends Component<{}, SinkTableState> {
 								<td>{sink.name}</td>
 								<td>{sink.id}</td>
 								<td>{sink.location}</td>
-								<td>{sink.ip}</td>
+								<td>{sink.addr}</td>
 								<td>
 									<button
 										className="btn btn-default btn-sm"

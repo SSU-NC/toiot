@@ -48,7 +48,7 @@ class LarLngPicker extends Component<LarLngPickerProps, {}> {
 			map.relayout();
 
 			// loc : save latitude and longitude which user pick
-			var loc = { lat: latlng.getLat(), lon: latlng.getLng() };
+			var loc = { lat: latlng.getLat(), lng: latlng.getLng() };
 
 			// send loc to parent component( RegisterNode )
 			this.props.handleLarLngChange(loc);

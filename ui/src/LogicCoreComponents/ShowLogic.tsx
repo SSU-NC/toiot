@@ -52,29 +52,29 @@ class ShowLogic extends Component<ShowLogicProps, {}> {
 								</button>
 							</div>
 							<div className="modal-body">
-								<ShowSensorCard sensor_uuid={this.props.logic.sensor_uuid} />
-								{this.props.logic.logic
+								<ShowSensorCard sensor_id={this.props.logic.sensor_id} />
+								{this.props.logic.elems
 									.filter(function (element) {
 										return element.elem === 'group';
 									})
 									.map((groupCard: logicElem) => (
 										<ShowGroupCard logic_elem={groupCard} />
 									))}
-								{this.props.logic.logic
+								{this.props.logic.elems
 									.filter(function (element) {
 										return element.elem === 'time';
 									})
 									.map((timeCard: logicElem) => (
 										<ShowTimeCard logic_elem={timeCard} />
 									))}
-								{this.props.logic.logic
+								{this.props.logic.elems
 									.filter(function (element) {
 										return element.elem === 'value';
 									})
 									.map((valueCard: logicElem, idx: number) => (
 										<ShowValueCard index={idx} logic_elem={valueCard} />
 									))}
-								{this.props.logic.logic
+								{this.props.logic.elems
 									.filter(function (element) {
 										return element.elem === 'alarm' || element.elem === 'email';
 									})

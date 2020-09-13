@@ -41,10 +41,10 @@ class RegisterLogic extends Component<{}, RegisterLogicState> {
 
 		logic_name: '',
 		sensor_info: {
-			uuid: '',
+			id: 0,
 			value: '',
 			label: '',
-			value_list: [],
+			sensor_values: [],
 		},
 		selected_value: [],
 		selected_group: { elem: 'empty', arg: { group: [] } },
@@ -243,7 +243,7 @@ class RegisterLogic extends Component<{}, RegisterLogicState> {
 		});
 
 		var request_msg = {
-			sensor_uuid: this.state.sensor_info.uuid,
+			sensor_id: this.state.sensor_info.id,
 			logic_name: this.state.logic_name,
 			logic: logic_array,
 		};
@@ -328,7 +328,7 @@ class RegisterLogic extends Component<{}, RegisterLogicState> {
 					/>
 					{this.state.selected_value.map((d: any, idx: number) => (
 						<InputValueCard
-							valueList={this.state.sensor_info.value_list}
+							valueList={this.state.sensor_info.sensor_values}
 							handleRemoveInputValueCardClick={this.handleRemoveValueCardClick(
 								idx
 							)}
