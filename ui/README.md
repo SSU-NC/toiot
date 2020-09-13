@@ -10,7 +10,6 @@
 - [Installation & Run](#Installation--Run)
   - [Git](##1.-Git)
   - [Docker](##2.-Docker)
-- [Run](#Run)
 
 <!--te-->
 
