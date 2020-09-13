@@ -7,8 +7,6 @@
 - [Introduction](#Introduction)
 - [Setting](#Setting)
 - [Installation & Run](#Installation--Run)
-  - [Git](##1.-Git)
-  - [Docker](##2.-Docker)
 
 <!--te-->
 
