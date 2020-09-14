@@ -12,17 +12,16 @@ services:
             MYSQL_PASSWORD: pdk1234
             MYSQL_DATABASE: pdk
         ports: 
-            - 3307:3306
+            - 3306:3306
         volumes:
             - ./mysql/data:/var/lib/mysql
     app:
         hostname: 
             app
         image: 
-            kbzjung359/pdk-app
+            kbzjung359/pdk-app:0.0.0.1
         environment: 
             APP_SERVER: 0.0.0.0:8080
-            REACT_SERVER: 0.0.0.0:3000
             DB_DRIVE: mysql
             DB_SERVER: db:3306
             DB_USER: pdk
@@ -30,7 +29,8 @@ services:
             DB_DATABASE: pdk
             TOPIC_NAME: sensor-data
         ports:
-            - 80:8080
+            - 8080:8080
+        restart: always
         depends_on: 
             - db
         links:
