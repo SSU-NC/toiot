@@ -16,11 +16,17 @@ func NewNodeRepo() *nodeRepo {
 	}
 }
 
-func (ndr *nodeRepo) GetPages(size int) int {
+func (ndr *nodeRepo) GetPages(p adapter.Page) int {
 	temp := []model.Node{}
-	result := ndr.db.Find(&temp)
-	count := int(result.RowsAffected)
-	return (count / size) + 1
+	if p.Sink != 0 {
+		result := ndr.db.Where("sink_id=?", p.Sink).Find(&temp)
+		count := int(result.RowsAffected)
+		return (count / p.Size) + 1
+	} else {
+		result := ndr.db.Find(&temp)
+		count := int(result.RowsAffected)
+		return (count / p.Size) + 1
+	}
 }
 
 func (ndr *nodeRepo) FindsWithSensorsValues() (nl []model.Node, err error) {

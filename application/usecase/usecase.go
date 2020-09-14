@@ -15,7 +15,7 @@ type RegistUsecase interface {
 	RegistSink(s *model.Sink) error
 	UnregistSink(s *model.Sink) error
 
-	GetNodePageCount(size int) int
+	GetNodePageCount(p adapter.Page) int
 	GetNodes() ([]model.Node, error)
 	GetNodesPage(p adapter.Page) ([]model.Node, error)
 	GetNodesSquare(sq adapter.Square) ([]model.Node, error)

@@ -32,7 +32,7 @@ func (sq Square) IsBinded() bool {
 
 type Page struct {
 	Page int `form:"page" json:"page"`
-	Sink int `form:"sink_id" json:"sink_id"`
+	Sink int `form:"sink" json:"sink"`
 	Size int `form:"size" json:"size"`
 }
 

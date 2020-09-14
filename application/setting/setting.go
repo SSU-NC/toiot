@@ -47,7 +47,7 @@ func (ds *Database) Getenv() {
 	}
 	ds.Server = os.Getenv("DB_SERVER")
 	if ds.Server == "" {
-		ds.Server = "172.20.2.90:3306"
+		ds.Server = "localhost:3306"
 	}
 	ds.User = os.Getenv("DB_USER")
 	if ds.User == "" {
@@ -73,6 +73,9 @@ type Topic struct {
 
 func (ts *Topic) Getenv() {
 	ts.Name = os.Getenv("TOPIC_NAME")
+	if ts.Name == "" {
+		ts.Name = "sensor-data"
+	}
 	GetenvInt(&ts.Partitions, 1, "TOPIC_PARTITIONS")
 	GetenvInt(&ts.Replications, 1, "TOPIC_REPLICATIONS")
 }

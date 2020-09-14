@@ -90,7 +90,7 @@ func (h *Handler) ListNodes(c *gin.Context) {
 			return
 		}
 		if page.Page == 1 {
-			pages = h.ru.GetNodePageCount(page.Size)
+			pages = h.ru.GetNodePageCount(page)
 		}
 		c.JSON(http.StatusOK, gin.H{"nodes": nodes, "pages": pages})
 		return

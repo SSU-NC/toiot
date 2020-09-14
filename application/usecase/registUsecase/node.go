@@ -33,8 +33,8 @@ func (ru *registUsecase) UnregistSink(s *model.Sink) error {
 	return ru.sir.Delete(s)
 }
 
-func (ru *registUsecase) GetNodePageCount(size int) int {
-	return ru.ndr.GetPages(size)
+func (ru *registUsecase) GetNodePageCount(p adapter.Page) int {
+	return ru.ndr.GetPages(p)
 }
 
 func (ru *registUsecase) GetNodes() ([]model.Node, error) {

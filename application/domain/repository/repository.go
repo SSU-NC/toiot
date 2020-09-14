@@ -16,7 +16,7 @@ type SinkRepo interface {
 }
 
 type NodeRepo interface {
-	GetPages(size int) int
+	GetPages(p adapter.Page) int
 	FindsWithSensorsValues() ([]model.Node, error)
 	FindsPage(p adapter.Page) (nl []model.Node, err error)
 	FindsSquare(sq adapter.Square) (nl []model.Node, err error)
