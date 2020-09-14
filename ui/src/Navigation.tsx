@@ -67,6 +67,36 @@ class Navigation extends Component {
 										className="nav-item nav-link dropdown-toggle"
 										role="button"
 										data-toggle="dropdown"
+										to="/kafka"
+									>
+										KAFKA
+									</NavLink>
+									<div
+										className="dropdown-menu"
+										aria-labelledby="navbarDropdown"
+										style={{ background: 'pink' }}
+									>
+										<Link
+											className="dropdown-item"
+											to="/topic"
+											style={{ background: 'pink' }}
+										>
+											Topic
+										</Link>
+										{/* <Link
+											className="dropdown-item"
+											to="/logicService"
+											style={{ background: 'pink' }}
+										>
+											Logic Service
+										</Link> */}
+									</div>
+								</li>
+								<li className="nav-item dropdown">
+									<NavLink
+										className="nav-item nav-link dropdown-toggle"
+										role="button"
+										data-toggle="dropdown"
 										to="/management"
 									>
 										SERVICE

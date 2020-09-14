@@ -4,7 +4,7 @@ import { SENSOR_URL } from '../../defineUrl';
 // add, delete input : https://codesandbox.io/s/00xq32n3pn?from-embed=&file=/src/index.js
 
 interface RegisterSensorState {
-	value_list: Array<value_list_elem>;
+	sensor_values: Array<value_list_elem>;
 	name: string;
 	nameValid: boolean;
 	valueValid: boolean;
@@ -20,7 +20,7 @@ RegisterSensor
 */
 class RegisterSensor extends Component<{}, RegisterSensorState> {
 	state: RegisterSensorState = {
-		value_list: [{ value_name: '' }],
+		sensor_values: [{ value_name: '' }],
 		name: '',
 		nameValid: false,
 		valueValid: false,
@@ -48,7 +48,7 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 	) => {
 		// Value list is updated dynamic. Its element can be added or removed freely.
 		// so find changing field by using received idx and change state.
-		const newvalue_list = this.state.value_list.map(
+		const newsensor_values = this.state.sensor_values.map(
 			(value: value_list_elem, sidx: number) => {
 				if (idx !== sidx) return value;
 				return { ...value, value_name: e.target.value };
@@ -57,13 +57,13 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 
 		// value list valid check : User should enter more than a value and each value input field should be filled
 		if (
-			newvalue_list !== null &&
-			!newvalue_list.some((value) => value.value_name === '') && // find empty field
-			newvalue_list[idx].value_name.length > 0
+			newsensor_values !== null &&
+			!newsensor_values.some((value) => value.value_name === '') && // find empty field
+			newsensor_values[idx].value_name.length > 0
 		) {
-			this.setState({ value_list: newvalue_list, valueValid: true });
+			this.setState({ sensor_values: newsensor_values, valueValid: true });
 		} else {
-			this.setState({ value_list: newvalue_list, valueValid: false });
+			this.setState({ sensor_values: newsensor_values, valueValid: false });
 		}
 	};
 
@@ -71,7 +71,7 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 	handleAddClick = () => {
 		// Add a value list elem
 		this.setState({
-			value_list: [...this.state.value_list, { value_name: '' }],
+			sensor_values: [...this.state.sensor_values, { value_name: '' }],
 		});
 	};
 
@@ -79,7 +79,7 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 	handleRemoveClick = (idx: number) => () => {
 		// Remove #idx value list elem which user picked
 		this.setState({
-			value_list: this.state.value_list.filter(
+			sensor_values: this.state.sensor_values.filter(
 				(s: any, sidx: number) => idx !== sidx
 			),
 		});
@@ -161,7 +161,7 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 									</div>
 									<div className="form-group">
 										<label>Value name</label>
-										{this.state.value_list.map(
+										{this.state.sensor_values.map(
 											(value: value_list_elem, idx: number) => (
 												<div className="input-group mb-3">
 													<div className="input-group-prepend">
@@ -170,7 +170,7 @@ class RegisterSensor extends Component<{}, RegisterSensorState> {
 													<input
 														type="text"
 														className="form-control"
-														name="value_list"
+														name="sensor_values"
 														placeholder={'Enter value name'}
 														value={value.value_name}
 														onChange={this.handleValueChange(idx)}

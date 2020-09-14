@@ -88,7 +88,7 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 		}
 	};
 
-	// Handle LarLng change by pick lat, lon at map
+	// Handle LarLng change by pick lat, lng at map
 	handleLarLngChange = (location: locationElem) => {
 		this.setState({
 			location,
@@ -162,7 +162,7 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 			JSON.stringify({
 				name: data.node_name,
 				lat: data.location.lat,
-				lon: data.location.lng,
+				lng: data.location.lng,
 				sensors: sensor_id,
 			})
 		);
@@ -171,10 +171,8 @@ class RegisterNode extends Component<{}, RegisterNodeState> {
 			method: 'POST', // or 'PUT'
 			body: JSON.stringify({
 				name: data.node_name,
-				location: {
-					lat: data.location.lat,
-					lon: data.location.lng,
-				},
+				lat: data.location.lat,
+				lng: data.location.lng,
 				sink_id: data.sink_id,
 				sensors: sensor_id,
 			}),
