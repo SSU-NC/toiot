@@ -29,7 +29,9 @@ class SinkTable extends Component<{}, SinkTableState> {
 
 		fetch(url)
 			.then((res) => res.json())
-			.then((data) => this.setState({ sinkList: data }))
+			.then((data) => page === 1
+			? this.setState({ sinkList: data.sinks, pages: data.pages })
+			: this.setState({ sinkList: data.sinks }))
 			.catch((error) => console.error('Error:', error));
 	}
 

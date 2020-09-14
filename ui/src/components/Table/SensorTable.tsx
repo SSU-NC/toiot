@@ -36,7 +36,9 @@ class SensorTable extends Component<{}, SensorTableState> {
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) => {
-				this.setState({ sensorList: data.sensors, pages: data.pages });
+				page === 1
+					? this.setState({ sensorList: data.sensors, pages: data.pages })
+					: this.setState({ sensorList: data.sensors });
 			})
 			.catch((error) => console.error('Error:', error));
 	}

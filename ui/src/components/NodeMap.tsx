@@ -23,12 +23,20 @@ interface NodeMapProps {
 interface NodeMapState {
 	nodeList: Array<nodeListElem>;
 	map: any;
+	left: number;
+	right: number;
+	up: number;
+	down: number;
 }
 
 class NodeMap extends Component<NodeMapProps, NodeMapState> {
 	state: NodeMapState = {
 		nodeList: [],
 		map: {},
+		left: 126.93120847993194,
+		right: 126.9814068917757,
+		up: 37.504736714448086,
+		down: 37.48669801512536,
 	};
 	componentDidMount = () => {
 		var mapContainer = document.getElementById('node_map'); // 지도를 표시할 div
@@ -44,32 +52,44 @@ class NodeMap extends Component<NodeMapProps, NodeMapState> {
 		var map = new window.kakao.maps.Map(mapContainer, mapOption);
 		this.setState({ map: map });
 
-		// 지도의 현재 영역을 얻어옵니다
-		var bounds = map.getBounds();
+		// 드래그가 끝날 때 or 확대 수준이 변경되면
+		window.kakao.maps.event.addListener(map, 'bounds_changed', () => {
+			// 지도의 현재 영역을 얻어옵니다
+			var bounds = map.getBounds();
 
-		// 영역의 남서쪽 좌표를 얻어옵니다
-		var swLatLng = bounds.getSouthWest();
+			// 영역의 남서쪽 좌표를 얻어옵니다
+			var swLatLng = bounds.getSouthWest();
 
-		// 영역의 북동쪽 좌표를 얻어옵니다
-		var neLatLng = bounds.getNorthEast();
+			// 영역의 북동쪽 좌표를 얻어옵니다
+			var neLatLng = bounds.getNorthEast();
 
-		// longitude 1 , longitude 2, latitude 1, latitude2
-		this.getnodeList(
-			swLatLng.getLng(),
-			neLatLng.getLng(),
-			neLatLng.getLat(),
-			swLatLng.getLat()
-		);
+			this.setState({
+				left: swLatLng.getLng(), // left
+				right: neLatLng.getLng(), // right
+				up: neLatLng.getLat(), // up
+				down: swLatLng.getLat(), // down
+			});
+
+			this.getnodeList(
+				swLatLng.getLng(), // left
+				neLatLng.getLng(), // right
+				neLatLng.getLat(), // up
+				swLatLng.getLat() // down
+			);
+		});
 	};
 	// Get node list from backend
-	getnodeList(
-		longitude_1: number,
-		longitude_2: number,
-		latitude_1: number,
-		latitude_2: number
-	) {
-		var url = NODE_URL;
-
+	getnodeList(left: number, right: number, up: number, down: number) {
+		var url =
+			NODE_URL +
+			'?left=' +
+			left +
+			'&right=' +
+			right +
+			'&up=' +
+			up +
+			'&down=' +
+			down;
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) => this.setState({ nodeList: data }))
@@ -84,7 +104,7 @@ class NodeMap extends Component<NodeMapProps, NodeMapState> {
 			position: position.latlng, // 마커의 위치
 		});
 
-		// 마커에 표시할 인포윈도우를 생성합니다
+		// 마커에 표시할 custom overlay를 생성합니다
 		var customOverlay = new window.kakao.maps.CustomOverlay({
 			position: marker.getPosition(),
 		});

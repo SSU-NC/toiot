@@ -45,7 +45,9 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 		fetch(url)
 			.then((res) => res.json())
 			.then((data) =>
-				this.setState({ nodeList: data.nodes, pages: data.pages })
+				page === 1
+					? this.setState({ nodeList: data.nodes, pages: data.pages })
+					: this.setState({ nodeList: data.nodes })
 			)
 			.catch((error) => console.error('Error:', error));
 	}
