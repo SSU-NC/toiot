@@ -3,12 +3,11 @@ package sarama
 import (
 	"context"
 	"encoding/json"
-	//"fmt"
 	"log"
 
-	"github.com/KumKeeHyun/PDK/logic-core/adapter"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
+	"github.com/KumKeeHyun/toiot/logic-core/adapter"
+	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
+	"github.com/KumKeeHyun/toiot/logic-core/setting"
 	"github.com/Shopify/sarama"
 )
 
@@ -21,13 +20,11 @@ type group struct {
 
 func NewKafkaConsumer() *group {
 	var err error
-
 	if kafkaConsumer != nil {
 		return kafkaConsumer
 	}
 
 	outBufSize := setting.Kafkasetting.ChanBufSize
-
 	kafkaConsumer = &group{
 		out: make(chan model.KafkaData, outBufSize),
 	}
@@ -86,14 +83,14 @@ func (consumer *consumer) Cleanup(sarama.ConsumerGroupSession) error {
 func (consumer *consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
 		//fmt.Printf("sarama\nkey : %s, Value : %s\n", string(message.Key), string(message.Value))
-		ad := adapter.KafkaData{
-			Key: string(message.Key),
-		}
-		if err := json.Unmarshal(message.Value, &ad.Value); err != nil {
+		ad := adapter.KafkaData{}
+		if err := json.Unmarshal(message.Value, &ad); err != nil {
 			continue
 		}
-		d := adapter.AppToKafka(&ad)
-		// TODO : check valid
+		d, err := adapter.KafkaToModel(&ad)
+		if err != nil {
+			continue
+		}
 		consumer.out <- d
 	}
 

@@ -1,59 +1,48 @@
 package adapter
 
-import "github.com/KumKeeHyun/PDK/application/domain/model"
+import "github.com/KumKeeHyun/toiot/application/domain/model"
 
 type Node struct {
-	UUID     string         `json:"uuid"`
+	ID       int            `json:"id"`
 	Name     string         `json:"name"`
-	Group    string         `json:"group"`
-	Location Loc            `json:"location"`
-	SinkID   uint           `json:"sink_id"`
+	Location Location       `json:"location"`
+	SinkID   int            `json:"sink_id"`
+	Sink     model.Sink     `json:"sink"`
 	Sensors  []model.Sensor `json:"sensors"`
 }
 
-type Loc struct {
+type Location struct {
 	Lat float64 `json:"lat"`
 	Lon float64 `json:"lon"`
 }
 
-func ModelsToNodes(n []model.Node) []Node {
-	res := make([]Node, len(n))
-	for i, node := range n {
-		res[i] = ModelToNode(&node)
-	}
-	return res
+type Square struct {
+	Left  float64 `form:"left" json:"left"`
+	Right float64 `form:"right" json:"right"`
+	Up    float64 `form:"up" json:"up"`
+	Down  float64 `form:"down" json:"down"`
 }
 
-func ModelToNode(n *model.Node) Node {
-	return Node{
-		UUID:  n.UUID,
-		Name:  n.Name,
-		Group: n.Group,
-		Location: Loc{
-			Lat: n.LocLat,
-			Lon: n.LocLon,
-		},
-		SinkID:  n.SinkID,
-		Sensors: n.Sensors,
+func (sq Square) IsBinded() bool {
+	if sq.Left != 0 || sq.Right != 0 || sq.Up != 0 || sq.Down != 0 {
+		return true
 	}
+	return false
 }
 
-func NodesToModels(n []Node) []model.Node {
-	res := make([]model.Node, len(n))
-	for i, node := range n {
-		res[i] = NodeToModel(&node)
-	}
-	return res
+type Page struct {
+	Page int `form:"page" json:"page"`
+	Sink int `form:"sink" json:"sink"`
+	Size int `form:"size" json:"size"`
 }
 
-func NodeToModel(n *Node) model.Node {
-	return model.Node{
-		UUID:    n.UUID,
-		Name:    n.Name,
-		Group:   n.Group,
-		LocLat:  n.Location.Lat,
-		LocLon:  n.Location.Lon,
-		SinkID:  n.SinkID,
-		Sensors: n.Sensors,
+func (p Page) IsBinded() bool {
+	if p.Page != 0 {
+		return true
 	}
+	return false
+}
+
+func (p Page) GetOffset() int {
+	return (p.Page - 1) * p.Size
 }

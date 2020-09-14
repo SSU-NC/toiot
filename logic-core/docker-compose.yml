@@ -1,26 +1,15 @@
 version: '3.2'
 
 services:
-    db:
-        hostname:
-            mongodb
-        image: mongo:latest
-        restart: always
-        environment: 
-            MONGO_INITDB_DATABASE: logic-core
-        ports:
-            - 27017:27017
-        volumes:
-            - ./mongo/data:/data/db
     logic:
         hostname: 
             logic
         image:
-            kbzjung359/pdk-logic:0.3
+            kbzjung359/pdk-logic:
         environment: 
             LOGIC_SERVER: 0.0.0.0:8082
             MONGO_ADDR: db
-            APP_SERVER: toiot.ssu.ac.kr 
+            APP_SERVER: localhost:8081 
         ports:
             - 8082:8082
         depends_on: 

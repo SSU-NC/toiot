@@ -39,6 +39,19 @@ func (ls *Logic) Getenv() {
 
 var Logicsetting = &Logic{}
 
+type App struct {
+	Server string
+}
+
+func (as *App) Getenv() {
+	as.Server = os.Getenv("APP_SERVER")
+	if as.Server == "" {
+		as.Server = "220.70.2.160:8081"
+	}
+}
+
+var Appsetting = &App{}
+
 type Kafka struct {
 	Broker      string   `toml:"broker"`
 	GroupID     string   `toml:"group_id"`
@@ -80,34 +93,11 @@ func (es *Elastic) Getenv() {
 
 var Elasticsetting = &Elastic{}
 
-type MongoDB struct {
-	Address string `toml:"address"`
-	Port    string `toml:"port"`
-}
-
-func (ms *MongoDB) Getenv() {
-	GetenvStr(&ms.Address, "127.0.0.1", "MONGO_ADDR")
-	GetenvStr(&ms.Port, "27017", "MONGO_PORT")
-}
-
-var MongoDbSetting = &MongoDB{}
-
-type App struct {
-	Server string `toml:"address`
-}
-
-func (as *App) Getenv() {
-	GetenvStr(&as.Server, "220.70.2.160:8081", "APP_SERVER")
-}
-
-var Appsetting = &App{}
-
 func init() {
 	Logicsetting.Getenv()
 	Kafkasetting.Getenv()
 	Elasticsetting.Getenv()
 	Appsetting.Getenv()
-	MongoDbSetting.Getenv()
 
-	fmt.Println(Logicsetting, Kafkasetting, Elasticsetting, Appsetting)
+	fmt.Println(Logicsetting, Kafkasetting, Elasticsetting)
 }

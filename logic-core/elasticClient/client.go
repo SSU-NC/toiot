@@ -4,13 +4,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
+	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
+	"github.com/KumKeeHyun/toiot/logic-core/setting"
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
 var elasticClient *client
-
 
 type client struct {
 	es *elasticsearch.Client
@@ -111,7 +110,6 @@ func (ec *client) GetInput() chan<- model.Document {
 	}
 	return nil
 }
-
 
 func (ec *client) insertDoc(d *model.Document) {
 	ec.docBuf = append(ec.docBuf, d)
