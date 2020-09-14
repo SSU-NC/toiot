@@ -88,7 +88,7 @@ func RegistLogicService(ls usecase.EventUsecase) {
 	)
 
 	client := resty.New()
-	client.SetRetryCount(5).SetRetryWaitTime(5 * time.Second).SetRetryMaxWaitTime(30 * time.Second)
+	client.SetRetryCount(5).SetRetryWaitTime(10 * time.Second).SetRetryMaxWaitTime(30 * time.Second)
 	resp, err := client.R().SetResult(&sinks).SetBody(regist).Post(url)
 	if err != nil || !resp.IsSuccess() {
 		panic(fmt.Errorf("can't regist logicService"))
