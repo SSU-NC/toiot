@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import { SINK_URL } from '../../defineUrl';
+import Select from 'react-select';
+import { SINK_URL, TOPIC_URL } from '../../defineUrl';
+import { topicListElem, topicOptionsElem } from '../../ElemInterface/ElementsInterface';
 // form : https://getbootstrap.com/docs/4.0/components/forms/?
 // add, delete input : https://codesandbox.io/s/00xq32n3pn?from-embed=&file=/src/index.js
 
 interface RegisterSinkState {
+	topicList: Array<topicListElem>;
 	name: string;
+	topic_id: number;
 	ip: string;
 	nameValid: boolean;
+	topicValid: boolean;
 	ipValid: boolean;
 }
 
@@ -16,11 +21,28 @@ RegisterSink
 */
 class RegisterSink extends Component<{}, RegisterSinkState> {
 	state: RegisterSinkState = {
+		topicList: [],
 		name: '',
+		topic_id: 0,
 		ip: '',
 		nameValid: false,
+		topicValid: false,
 		ipValid: false,
 	};
+
+	componentDidMount() {
+		this.gettopicList();
+	}
+
+	// Get topic list from backend
+	gettopicList() {
+		var url = TOPIC_URL;
+
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => this.setState({ topicList: data }))
+			.catch((error) => console.error('Error:', error));
+	}
 
 	// Handle node name change by typing
 	handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +56,22 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 			this.setState({
 				name: e.target.value,
 				nameValid: false,
+			});
+		}
+	};
+
+	// Handle selected sensor change by selecting sensors
+	handleTopicChange = (topic: any) => {
+		// sensor valid check : user should select sensor
+		if (topic !== null) {
+			this.setState({
+				topic_id: topic.id,
+				topicValid: true,
+			});
+		} else {
+			this.setState({
+				topic_id: topic.id,
+				topicValid: false,
 			});
 		}
 	};
@@ -70,6 +108,10 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 			alert('Please enter sink.');
 			return;
 		}
+		if (!this.state.topicValid) {
+			alert('Please select topic.');
+			return;
+		}
 		if (!this.state.ipValid) {
 			alert('Please enter valid type of ip:port.');
 			return;
@@ -84,7 +126,11 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 
 		fetch(url, {
 			method: 'POST', // or 'PUT'
-			body: JSON.stringify(data),
+			body: JSON.stringify({
+				name: this.state.name,
+				addr: this.state.ip,
+				topic_id: this.state.topic_id,
+			}),
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -96,6 +142,14 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 	};
 
 	render() {
+		let topicOptions: Array<topicOptionsElem>;
+		topicOptions = this.state.topicList.map((val: topicListElem) => {
+			return {
+				label: val.name,
+				value: val.name,
+				id: val.id,
+			};
+		});
 		return (
 			<>
 				<div
@@ -122,7 +176,7 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 							<form>
 								<div className="modal-body">
 									<div className="form-group">
-										<label>sink name</label>
+										<label>Sink name</label>
 										<input
 											type="text"
 											className="form-control"
@@ -130,6 +184,15 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 											placeholder="name"
 											value={this.state.name}
 											onChange={this.handleNameChange}
+										/>
+									</div>
+									<div className="form-group">
+										<label>Select topic</label>
+										<Select
+											name="topic"
+											options={topicOptions}
+											classNamePrefix="select"
+											onChange={this.handleTopicChange}
 										/>
 									</div>
 									<div className="form-group">

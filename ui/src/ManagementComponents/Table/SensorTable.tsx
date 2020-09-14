@@ -31,7 +31,7 @@ class SensorTable extends Component<{}, SensorTableState> {
 
 	// Get sensor list from backend per page
 	getsensorList(page: number) {
-		var url = SENSOR_URL + '?page=(' + page + ')';
+		var url = SENSOR_URL + '?page=' + page;
 
 		fetch(url)
 			.then((res) => res.json())
@@ -80,12 +80,12 @@ class SensorTable extends Component<{}, SensorTableState> {
 						{this.state.sensorList.map(
 							(sensor: sensorListElem, idx: number) => (
 								<tr>
-									<th scope="row">{idx}</th>
+									<th scope="row">{idx + 10 * (this.state.currentPage - 1)}</th>
 									<td>{sensor.name}</td>
 									<td>{sensor.id}</td>
 									<td>
 										{sensor.sensor_values.map(
-											(value: value_list_elem) => value.value_name
+											(value: value_list_elem) => value.value_name +', '
 										)}
 									</td>
 									<td>

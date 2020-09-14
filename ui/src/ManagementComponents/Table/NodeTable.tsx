@@ -1,43 +1,60 @@
 import React, { Component } from 'react';
-import { sinkListElem } from '../../ElemInterface/ElementsInterface';
-import { SINK_URL } from '../../defineUrl';
+import {
+	nodeListElem,
+	nodeHealthCheckElem,
+} from '../../ElemInterface/ElementsInterface';
+import { NODE_URL } from '../../defineUrl';
 import Pagination from '../Pagination';
 
-interface SinkTableState {
-	sinkList: Array<sinkListElem>;
+enum HealthColor {
+	'red',
+	'#FACC2E',
+	'lime',
+}
+
+interface NodeTableProps {
+	sink_id: number;
+	nodeState: Array<nodeHealthCheckElem>;
+}
+interface NodeTableState {
+	nodeList: Array<nodeListElem>;
 	currentPage: number;
 	pages: number; // num of total pages
 }
-
 /*
-SinkTable
-- Show up sink list.
+NodeTable
+- Show up node list.
 */
-class SinkTable extends Component<{}, SinkTableState> {
-	state: SinkTableState = {
-		sinkList: [],
+
+class NodeTable extends Component<NodeTableProps, NodeTableState> {
+	state: NodeTableState = {
+		nodeList: [],
 		currentPage: 1,
 		pages: 0,
 	};
+
 	componentDidMount() {
-		this.getsinkList(this.state.currentPage);
+		this.getnodeList(this.state.currentPage);
 	}
 
-	// Get sink list from backend
-	getsinkList(page: number) {
-		var url = SINK_URL + '?page=(' + page + ')';
+	// Get node list from backend
+	getnodeList(page: number) {
+		var url =
+			NODE_URL + '?sink=' + this.props.sink_id + '&page=' + page;
 
 		fetch(url)
 			.then((res) => res.json())
-			.then((data) => page === 1
-			? this.setState({ sinkList: data.sinks, pages: data.pages })
-			: this.setState({ sinkList: data.sinks }))
+			.then((data) =>
+				page === 1
+					? this.setState({ nodeList: data.nodes, pages: data.pages })
+					: this.setState({ nodeList: data.nodes })
+			)
 			.catch((error) => console.error('Error:', error));
 	}
 
 	// Handle click event of the Remove button
-	handleRemoveClick = (sink_id: number) => () => {
-		var url = SINK_URL + '/' + sink_id;
+	handleRemoveClick = (node_id: number) => () => {
+		var url = NODE_URL + '/' + node_id;
 
 		fetch(url, {
 			method: 'DELETE',
@@ -50,9 +67,27 @@ class SinkTable extends Component<{}, SinkTableState> {
 			.then(() => window.location.reload(false));
 	};
 
+	// Find node state(health) and represent as colors (red - yellow - green, gray)
+	findNodeState = (id: number) => {
+		for (let prop in this.props.nodeState) {
+			if (this.props.nodeState[prop].n_id === id) {
+				return (
+					<td
+						style={{
+							color: HealthColor[this.props.nodeState[prop].state],
+						}}
+					>
+						●
+					</td>
+				);
+			}
+		}
+		return <td style={{ color: 'gray' }}>●</td>;
+	};
+
 	handlePageChange = (page: number) => {
 		this.setState({ currentPage: page });
-		this.getsinkList(page);
+		this.getnodeList(page);
 	};
 
 	render() {
@@ -64,23 +99,25 @@ class SinkTable extends Component<{}, SinkTableState> {
 							<th scope="col">#</th>
 							<th scope="col">name</th>
 							<th scope="col">id</th>
-							<th scope="col">address</th>
+							<th scope="col">sensors</th>
+							<th scope="col">health</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
-						{this.state.sinkList.map((sink: sinkListElem, idx: number) => (
+						{this.state.nodeList.map((node: nodeListElem, idx: number) => (
 							<tr>
 								<th scope="row">{idx}</th>
-								<td>{sink.name}</td>
-								<td>{sink.id}</td>
-								<td>{sink.addr}</td>
+								<td>{node.name}</td>
+								<td>{node.id}</td>
+								<td>{node.sensors.map((sensor: any) => sensor.name + ', ')}</td>
+								{this.findNodeState(node.id)}
 								<td>
 									<button
 										className="btn btn-default btn-sm"
 										type="button"
 										id="button-delete"
-										onClick={this.handleRemoveClick(sink.id)}
+										onClick={this.handleRemoveClick(node.id)}
 									>
 										<svg
 											width="1em"
@@ -91,7 +128,7 @@ class SinkTable extends Component<{}, SinkTableState> {
 											xmlns="http://www.w3.org/2000/svg"
 										>
 											<path
-												fill-rule="evenodd"
+												fillRule="evenodd"
 												d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"
 											/>
 										</svg>
@@ -111,4 +148,4 @@ class SinkTable extends Component<{}, SinkTableState> {
 	}
 }
 
-export default SinkTable;
+export default NodeTable;

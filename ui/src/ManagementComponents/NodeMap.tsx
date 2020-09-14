@@ -52,6 +52,13 @@ class NodeMap extends Component<NodeMapProps, NodeMapState> {
 		var map = new window.kakao.maps.Map(mapContainer, mapOption);
 		this.setState({ map: map });
 
+		this.getnodeList(
+			this.state.left,
+			this.state.right,
+			this.state.up,
+			this.state.down,
+		);
+
 		// 드래그가 끝날 때 or 확대 수준이 변경되면
 		window.kakao.maps.event.addListener(map, 'bounds_changed', () => {
 			// 지도의 현재 영역을 얻어옵니다

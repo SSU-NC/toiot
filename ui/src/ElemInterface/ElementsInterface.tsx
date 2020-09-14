@@ -78,6 +78,12 @@ export interface sinkOptionsElem {
 	id: number;
 }
 
+export interface topicOptionsElem {
+	label: string;
+	value: string;
+	id: number;
+}
+
 // node health check
 export interface nodeHealthCheckElem {
 	n_id: number;
