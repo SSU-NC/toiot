@@ -29,7 +29,7 @@ func main() {
 	tpr := sql.NewTopicRepo()
 
 	ru := registUsecase.NewRegistUsecase(sir, ndr, snr, lgr, lsr, tpr)
-	eu := eventUsecase.NewEventUsecase(lsr)
+	eu := eventUsecase.NewEventUsecase(sir, lsr)
 
 	h := handler.NewHandler(ru, eu)
 

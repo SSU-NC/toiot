@@ -21,6 +21,10 @@ func (ru *registUsecase) GetSinksByTopicID(tid int) ([]model.Sink, error) {
 	return ru.sir.FindsByTopicIDWithNodesSensorsValuesLogics(tid)
 }
 
+func (ru *registUsecase) GetSinkByID(sid int) (*model.Sink, error) {
+	return ru.sir.FindByIDWithNodesSensorsValuesTopic(sid)
+}
+
 func (ru *registUsecase) RegistSink(s *model.Sink) error {
 	return ru.sir.Create(s)
 }

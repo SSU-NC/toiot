@@ -11,6 +11,7 @@ type RegistUsecase interface {
 	GetSinks() ([]model.Sink, error)
 	GetSinksPage(p adapter.Page) ([]model.Sink, error)
 	GetSinksByTopicID(tid int) ([]model.Sink, error)
+	GetSinkByID(sid int) (*model.Sink, error)
 	RegistSink(s *model.Sink) error
 	UnregistSink(s *model.Sink) error
 
@@ -50,4 +51,6 @@ type EventUsecase interface {
 	DeleteSensorEvent(s *model.Sensor) error
 	CreateLogicEvent(l *model.Logic) error
 	DeleteLogicEvent(l *model.Logic) error
+
+	PostToSink(sid int) error
 }

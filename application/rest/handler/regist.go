@@ -126,6 +126,7 @@ func (h *Handler) RegistNode(c *gin.Context) {
 	}
 
 	h.eu.CreateNodeEvent(&node)
+	go h.eu.PostToSink(node.SinkID)
 	c.JSON(http.StatusOK, node)
 
 }
@@ -145,6 +146,7 @@ func (h *Handler) UnregistNode(c *gin.Context) {
 	}
 
 	h.eu.DeleteNodeEvent(&node)
+	go h.eu.PostToSink(node.SinkID)
 	c.JSON(http.StatusOK, node)
 }
 

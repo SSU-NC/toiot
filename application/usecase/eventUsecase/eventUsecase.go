@@ -7,16 +7,19 @@ import (
 
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 	"github.com/KumKeeHyun/toiot/application/domain/repository"
+	"github.com/go-resty/resty/v2"
 )
 
 type eventUsecase struct {
 	requestRetry []pingRequest
+	sir          repository.SinkRepo
 	lsr          repository.LogicServiceRepo
 }
 
-func NewEventUsecase(lsr repository.LogicServiceRepo) *eventUsecase {
+func NewEventUsecase(sir repository.SinkRepo, lsr repository.LogicServiceRepo) *eventUsecase {
 	eu := &eventUsecase{
 		requestRetry: []pingRequest{},
+		sir:          sir,
 		lsr:          lsr,
 	}
 	tick := time.Tick(10 * time.Second)
@@ -93,4 +96,16 @@ func (pr *pingRequest) ping() error {
 		return nil
 	}
 	return fmt.Errorf("ping fail : %v", *pr)
+}
+
+func (eu *eventUsecase) PostToSink(sid int) error {
+	if sink, err := eu.sir.FindByIDWithNodesSensorsValuesTopic(sid); err != nil {
+		return err
+	} else {
+		url := fmt.Sprintf("http://%s:5000/topics", sink.Addr)
+		client := resty.New()
+		client.R().SetBody(*sink).Post(url)
+		return nil
+	}
+
 }
