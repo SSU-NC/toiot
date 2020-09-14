@@ -97,7 +97,7 @@ type Node struct {
 	ID      int      `json:"id"`
 	Name    string   `json:"name"`
 	LocLat  float64  `json:"lat"`
-	LocLon  float64  `json:"lon"`
+	LocLon  float64  `json:"lng"`
 	SinkID  int      `json:"sink_id"`
 	Sink    Sink     `json:"sink"`
 	Sensors []Sensor `json:"sensors"`

@@ -7,19 +7,23 @@ import (
 
 // for ui registration
 type RegistUsecase interface {
+	GetSinkPageCount(size int) int
 	GetSinks() ([]model.Sink, error)
+	GetSinksPage(p adapter.Page) ([]model.Sink, error)
 	GetSinksByTopicID(tid int) ([]model.Sink, error)
 	RegistSink(s *model.Sink) error
 	UnregistSink(s *model.Sink) error
 
-	GetPageCount(size int) int
+	GetNodePageCount(size int) int
 	GetNodes() ([]model.Node, error)
 	GetNodesPage(p adapter.Page) ([]model.Node, error)
 	GetNodesSquare(sq adapter.Square) ([]model.Node, error)
 	RegistNode(n *model.Node) error
 	UnregistNode(n *model.Node) error
 
+	GetSensorPageCount(size int) int
 	GetSensors() ([]model.Sensor, error)
+	GetSensorsPage(p adapter.Page) ([]model.Sensor, error)
 	RegistSensor(s *model.Sensor) error
 	UnregistSensor(s *model.Sensor) error
 

@@ -3,6 +3,9 @@ package main
 import (
 	"log"
 
+	"github.com/KumKeeHyun/toiot/application/domain/repository"
+
+	"github.com/KumKeeHyun/toiot/application/domain/model"
 	"github.com/KumKeeHyun/toiot/application/usecase/eventUsecase"
 
 	"github.com/KumKeeHyun/toiot/application/dataService/sql"
@@ -28,8 +31,6 @@ func main() {
 	ru := registUsecase.NewRegistUsecase(sir, ndr, snr, lgr, lsr, tpr)
 	eu := eventUsecase.NewEventUsecase(lsr)
 
-	// TODO : init Topic table according to the setting value (example : Topic{"sensors", 3, 3})
-
 	h := handler.NewHandler(ru, eu)
 
 	r := gin.Default()
@@ -40,6 +41,7 @@ func main() {
 
 	setRegistrationRoute(r, h)
 	setEventRoute(r, h)
+	initTopic(tpr)
 
 	log.Fatal(r.Run(setting.Appsetting.Server))
 }
@@ -89,5 +91,16 @@ func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 			topic.POST("", h.RegistTopic)
 			topic.DELETE("/:id", h.UnregistTopic)
 		}
+	}
+}
+
+func initTopic(tpr repository.TopicRepo) {
+	if setting.Topicsetting.Name != "" {
+		t := model.Topic{
+			Name:         setting.Topicsetting.Name,
+			Partitions:   setting.Topicsetting.Partitions,
+			Replications: setting.Topicsetting.Replications,
+		}
+		tpr.Create(&t)
 	}
 }

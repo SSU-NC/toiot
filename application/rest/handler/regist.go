@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -11,12 +10,35 @@ import (
 )
 
 func (h *Handler) ListSinks(c *gin.Context) {
-	sinks, err := h.ru.GetSinks()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	var (
+		err   error
+		sinks []model.Sink
+		page  adapter.Page
+		pages int
+	)
+
+	if c.Bind(&page); page.IsBinded() {
+		if page.Size == 0 {
+			page.Size = 10
+		}
+		if sinks, err = h.ru.GetSinksPage(page); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if page.Page == 1 {
+			pages = h.ru.GetSinkPageCount(page.Size)
+		}
+		c.JSON(http.StatusOK, gin.H{"sinks": sinks, "pages": pages})
+		return
+	} else {
+		sinks, err := h.ru.GetSinks()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, sinks)
 		return
 	}
-	c.JSON(http.StatusOK, sinks)
 }
 
 func (h *Handler) RegistSink(c *gin.Context) {
@@ -59,9 +81,7 @@ func (h *Handler) ListNodes(c *gin.Context) {
 		square adapter.Square
 	)
 
-	if temp := c.Query("page"); temp != "" {
-		c.ShouldBind(&page)
-		fmt.Println(page)
+	if c.Bind(&page); page.IsBinded() {
 		if page.Size == 0 {
 			page.Size = 10
 		}
@@ -70,12 +90,11 @@ func (h *Handler) ListNodes(c *gin.Context) {
 			return
 		}
 		if page.Page == 1 {
-			pages = h.ru.GetPageCount(page.Size)
+			pages = h.ru.GetNodePageCount(page.Size)
 		}
 		c.JSON(http.StatusOK, gin.H{"nodes": nodes, "pages": pages})
 		return
-	} else if temp := c.Query("left"); temp != "" {
-		c.ShouldBind(&square)
+	} else if c.Bind((&square)); square.IsBinded() {
 		if nodes, err = h.ru.GetNodesSquare(square); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -130,12 +149,36 @@ func (h *Handler) UnregistNode(c *gin.Context) {
 }
 
 func (h *Handler) ListSensors(c *gin.Context) {
-	sensors, err := h.ru.GetSensors()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	var (
+		err     error
+		sensors []model.Sensor
+		page    adapter.Page
+		pages   int
+	)
+
+	if c.Bind(&page); page.IsBinded() {
+		if page.Size == 0 {
+			page.Size = 10
+		}
+		if sensors, err = h.ru.GetSensorsPage(page); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if page.Page == 1 {
+			pages = h.ru.GetSensorPageCount(page.Size)
+		}
+		c.JSON(http.StatusOK, gin.H{"sensors": sensors, "pages": pages})
+		return
+	} else {
+		sensors, err := h.ru.GetSensors()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, sensors)
 		return
 	}
-	c.JSON(http.StatusOK, sensors)
+
 }
 
 func (h *Handler) RegistSensor(c *gin.Context) {

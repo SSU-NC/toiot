@@ -6,7 +6,9 @@ import (
 )
 
 type SinkRepo interface {
+	GetPages(size int) int
 	FindsWithTopic() ([]model.Sink, error)
+	FindsPage(p adapter.Page) ([]model.Sink, error)
 	FindsByTopicIDWithNodesSensorsValuesLogics(tid int) (sl []model.Sink, err error)
 	FindByIDWithNodesSensorsValuesTopic(id int) (*model.Sink, error)
 	Create(*model.Sink) error
@@ -23,7 +25,9 @@ type NodeRepo interface {
 }
 
 type SensorRepo interface {
+	GetPages(size int) int
 	FindsWithValues() ([]model.Sensor, error)
+	FindsPage(p adapter.Page) ([]model.Sensor, error)
 	Create(*model.Sensor) error
 	Delete(*model.Sensor) error
 }

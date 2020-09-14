@@ -1,9 +1,20 @@
 package registUsecase
 
-import "github.com/KumKeeHyun/toiot/application/domain/model"
+import (
+	"github.com/KumKeeHyun/toiot/application/adapter"
+	"github.com/KumKeeHyun/toiot/application/domain/model"
+)
+
+func (ru *registUsecase) GetSensorPageCount(size int) int {
+	return ru.snr.GetPages(size)
+}
 
 func (ru *registUsecase) GetSensors() ([]model.Sensor, error) {
 	return ru.snr.FindsWithValues()
+}
+
+func (ru *registUsecase) GetSensorsPage(p adapter.Page) ([]model.Sensor, error) {
+	return ru.snr.FindsPage(p)
 }
 
 func (ru *registUsecase) RegistSensor(s *model.Sensor) error {

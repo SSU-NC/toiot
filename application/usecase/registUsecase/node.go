@@ -5,8 +5,16 @@ import (
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 )
 
+func (ru *registUsecase) GetSinkPageCount(size int) int {
+	return ru.sir.GetPages(size)
+}
+
 func (ru *registUsecase) GetSinks() ([]model.Sink, error) {
 	return ru.sir.FindsWithTopic()
+}
+
+func (ru *registUsecase) GetSinksPage(p adapter.Page) ([]model.Sink, error) {
+	return ru.sir.FindsPage(p)
 }
 
 func (ru *registUsecase) GetSinksByTopicID(tid int) ([]model.Sink, error) {
@@ -21,7 +29,7 @@ func (ru *registUsecase) UnregistSink(s *model.Sink) error {
 	return ru.sir.Delete(s)
 }
 
-func (ru *registUsecase) GetPageCount(size int) int {
+func (ru *registUsecase) GetNodePageCount(size int) int {
 	return ru.ndr.GetPages(size)
 }
 

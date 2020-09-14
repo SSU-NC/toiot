@@ -17,16 +17,30 @@ type Location struct {
 }
 
 type Square struct {
-	Left  float64 `json:"left"`
-	Right float64 `json:"right"`
-	Up    float64 `json:"up"`
-	Down  float64 `json:"down"`
+	Left  float64 `form:"left" json:"left"`
+	Right float64 `form:"right" json:"right"`
+	Up    float64 `form:"up" json:"up"`
+	Down  float64 `form:"down" json:"down"`
+}
+
+func (sq Square) IsBinded() bool {
+	if sq.Left != 0 || sq.Right != 0 || sq.Up != 0 || sq.Down != 0 {
+		return true
+	}
+	return false
 }
 
 type Page struct {
-	Page int `json:"page"`
-	Sink int `json:"sink_id"`
-	Size int
+	Page int `form:"page" json:"page"`
+	Sink int `form:"sink_id" json:"sink_id"`
+	Size int `form:"size" json:"size"`
+}
+
+func (p Page) IsBinded() bool {
+	if p.Page != 0 {
+		return true
+	}
+	return false
 }
 
 func (p Page) GetOffset() int {

@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"github.com/KumKeeHyun/toiot/application/adapter"
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -16,8 +17,20 @@ func NewSinkRepo() *sinkRepo {
 	}
 }
 
+func (sir *sinkRepo) GetPages(size int) int {
+	temp := []model.Sink{}
+	result := sir.db.Find(&temp)
+	count := int(result.RowsAffected)
+	return (count / size) + 1
+}
+
 func (sir *sinkRepo) FindsWithTopic() (sl []model.Sink, err error) {
 	return sl, sir.db.Preload("Topic").Find(&sl).Error
+}
+
+func (sir *sinkRepo) FindsPage(p adapter.Page) (sl []model.Sink, err error) {
+	offset := p.GetOffset()
+	return sl, sir.db.Offset(offset).Limit(p.Size).Preload("Topic").Find(&sl).Error
 }
 
 func (sir *sinkRepo) FindsByTopicIDWithNodesSensorsValuesLogics(tid int) (sl []model.Sink, err error) {
