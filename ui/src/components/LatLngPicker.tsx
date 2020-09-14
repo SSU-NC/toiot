@@ -72,6 +72,7 @@ class LarLngPicker extends Component<LarLngPickerProps, {}> {
 					<em>Click map!</em>
 				</p>
 				<div id="clickLatlng"></div>
+				<br />
 			</div>
 		);
 	}

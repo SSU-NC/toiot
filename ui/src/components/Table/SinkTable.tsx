@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { sinkListElem } from '../../ElemInterface/ElementsInterface';
 import { SINK_URL } from '../../defineUrl';
-
+import Pagination from '../Pagination';
 
 interface SinkTableState {
 	sinkList: Array<sinkListElem>;
+	currentPage: number;
+	pages: number; // num of total pages
 }
 
 /*
@@ -14,18 +16,22 @@ SinkTable
 class SinkTable extends Component<{}, SinkTableState> {
 	state: SinkTableState = {
 		sinkList: [],
+		currentPage: 1,
+		pages: 0,
 	};
 	componentDidMount() {
-		this.getsinkList();
+		this.getsinkList(this.state.currentPage);
 	}
 
 	// Get sink list from backend
-	getsinkList() {
-		var url = SINK_URL;
+	getsinkList(page: number) {
+		var url = SINK_URL + '?page=(' + page + ')';
 
 		fetch(url)
 			.then((res) => res.json())
-			.then((data) => this.setState({ sinkList: data }))
+			.then((data) => page === 1
+			? this.setState({ sinkList: data.sinks, pages: data.pages })
+			: this.setState({ sinkList: data.sinks }))
 			.catch((error) => console.error('Error:', error));
 	}
 
@@ -44,6 +50,11 @@ class SinkTable extends Component<{}, SinkTableState> {
 			.then(() => window.location.reload(false));
 	};
 
+	handlePageChange = (page: number) => {
+		this.setState({ currentPage: page });
+		this.getsinkList(page);
+	};
+
 	render() {
 		return (
 			<>
@@ -53,7 +64,6 @@ class SinkTable extends Component<{}, SinkTableState> {
 							<th scope="col">#</th>
 							<th scope="col">name</th>
 							<th scope="col">id</th>
-							<th scope="col">location</th>
 							<th scope="col">address</th>
 							<th scope="col"></th>
 						</tr>
@@ -64,7 +74,6 @@ class SinkTable extends Component<{}, SinkTableState> {
 								<th scope="row">{idx}</th>
 								<td>{sink.name}</td>
 								<td>{sink.id}</td>
-								<td>{sink.location}</td>
 								<td>{sink.addr}</td>
 								<td>
 									<button
@@ -92,6 +101,11 @@ class SinkTable extends Component<{}, SinkTableState> {
 						))}
 					</tbody>
 				</table>
+				<Pagination
+					pages={this.state.pages}
+					currentPage={this.state.currentPage}
+					onPageChange={this.handlePageChange}
+				></Pagination>
 			</>
 		);
 	}

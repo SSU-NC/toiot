@@ -8,7 +8,7 @@ import { logicElem } from '../ElemInterface/LcElementsInterface';
 import './LogicCore.css';
 import InputSensorCard from './InputCards/InputSensorCard';
 import InputValueCard from './InputCards/InputValueCard';
-import InputGroupCard from './InputCards/InputGroupCard';
+//import InputGroupCard from './InputCards/InputGroupCard';
 import InputTimeCard from './InputCards/InputTimeCard';
 import InputActionCard from './InputCards/InputActionCard';
 import { LOGICCORE_URL, SENSOR_URL, NODE_URL } from '../defineUrl';
@@ -319,10 +319,10 @@ class RegisterLogic extends Component<{}, RegisterLogicState> {
 						sensorList={this.state.sensorList}
 						handleInputSensorCardChange={this.handleSensorCardChange}
 					/>
-					<InputGroupCard
+					{/* <InputGroupCard
 						nodeList={this.state.nodeList}
 						handleInputGroupCardChange={this.handleGroupCardChange}
-					/>
+					/> */}
 					<InputTimeCard
 						handleInputTimeCardChange={this.handleTimeCardChange}
 					/>

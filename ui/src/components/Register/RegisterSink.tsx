@@ -5,7 +5,6 @@ import { SINK_URL } from '../../defineUrl';
 
 interface RegisterSinkState {
 	name: string;
-	location: string;
 	ip: string;
 	nameValid: boolean;
 	ipValid: boolean;
@@ -18,7 +17,6 @@ RegisterSink
 class RegisterSink extends Component<{}, RegisterSinkState> {
 	state: RegisterSinkState = {
 		name: '',
-		location: '',
 		ip: '',
 		nameValid: false,
 		ipValid: false,
@@ -40,12 +38,6 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 		}
 	};
 
-	// Handle location change by typing
-	handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({
-			location: e.target.value,
-		});
-	};
 
 	// Handle ip:port change by typing
 	handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,17 +130,6 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 											placeholder="name"
 											value={this.state.name}
 											onChange={this.handleNameChange}
-										/>
-									</div>
-									<div className="form-group">
-										<label>location</label>
-										<input
-											type="text"
-											className="form-control"
-											name="location"
-											placeholder="location"
-											value={this.state.location}
-											onChange={this.handleLocationChange}
 										/>
 									</div>
 									<div className="form-group">

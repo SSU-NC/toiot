@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { logicListElem, logicElem } from '../ElemInterface/LcElementsInterface';
 import ShowValueCard from './ShowCards/ShowValueCard';
-import ShowGroupCard from './ShowCards/ShowGroupCard';
+//import ShowGroupCard from './ShowCards/ShowGroupCard';
 import ShowActionCard from './ShowCards/ShowActionCard';
 import ShowTimeCard from './ShowCards/ShowTimeCard';
 import ShowSensorCard from './ShowCards/ShowSensorCard';
@@ -53,13 +53,13 @@ class ShowLogic extends Component<ShowLogicProps, {}> {
 							</div>
 							<div className="modal-body">
 								<ShowSensorCard sensor_id={this.props.logic.sensor_id} />
-								{this.props.logic.elems
+								{/* {this.props.logic.elems
 									.filter(function (element) {
 										return element.elem === 'group';
 									})
 									.map((groupCard: logicElem) => (
 										<ShowGroupCard logic_elem={groupCard} />
-									))}
+									))} */}
 								{this.props.logic.elems
 									.filter(function (element) {
 										return element.elem === 'time';

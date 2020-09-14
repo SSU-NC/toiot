@@ -24,6 +24,7 @@ interface InputGroupCardState {
 InputGroupCard
 - Get input of group element
 */
+/*
 class InputGroupCard extends Component<
 	InputGroupCardProps,
 	InputGroupCardState
@@ -34,7 +35,7 @@ class InputGroupCard extends Component<
 			group: [],
 		},
 	};
-
+ 
 	// Handle group change by selecting
 	handleGroupChange = async (selectedOptions?: any) => {
 		// Modify groupOptionsElem format as Array format
@@ -93,3 +94,4 @@ class InputGroupCard extends Component<
 }
 
 export default InputGroupCard;
+*/
