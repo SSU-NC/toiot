@@ -32,7 +32,7 @@ func NewElasticClient() *client {
 	}
 	cli, err := elasticsearch.NewClient(config)
 	if err != nil {
-		return nil
+		panic(err)
 	}
 
 	elasticClient = &client{
