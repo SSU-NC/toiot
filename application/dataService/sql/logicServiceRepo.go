@@ -28,6 +28,11 @@ func (lsr *logicServiceRepo) FindsByTopicID(TopicID int) (ll []model.LogicServic
 	return ll, lsr.db.Where("topic_id=?", TopicID).Find(&ll).Error
 }
 
+func (lsr *logicServiceRepo) FindByAddr(addr string) (l *model.LogicService, err error) {
+	l = &model.LogicService{}
+	return l, lsr.db.Where("addr=?", addr).Find(l).Error
+}
+
 func (lsr *logicServiceRepo) Create(l *model.LogicService) error {
 	return lsr.db.Transaction(func(tx *gorm.DB) error {
 		t := model.Topic{}

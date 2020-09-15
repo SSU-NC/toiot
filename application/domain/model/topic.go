@@ -15,7 +15,7 @@ func (Topic) TableName() string {
 
 type LogicService struct {
 	ID      int    `json:"id" gorm:"primaryKey"`
-	Addr    string `json:"addr" gorm:"type:varchar(32);not null"`
+	Addr    string `json:"addr" gorm:"type:varchar(32);unique;not null"`
 	TopicID int    `json:"topic_id" gorm:"not null"`
 	Topic   Topic  `json:"topic" gorm:"foreignKey:TopicID"`
 }

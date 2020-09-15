@@ -28,7 +28,14 @@ func NewLogicCoreUsecase(rr repository.RegistRepo,
 
 	go func() {
 		for rawData := range in {
+			// debug
+			//fmt.Printf("kafka : %v\n", rawData)
+
 			ld, err := lcu.ToLogicData(&rawData)
+
+			// debug
+			//fmt.Printf("logic : %v\n", ld)
+
 			if err != nil {
 				continue
 			}

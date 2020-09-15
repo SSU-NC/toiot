@@ -28,6 +28,7 @@ func GetenvStr(target *string, init, env string) {
 
 type Logic struct {
 	Server string
+	Listen string
 }
 
 func (ls *Logic) Getenv() {
@@ -35,6 +36,8 @@ func (ls *Logic) Getenv() {
 	if ls.Server == "" {
 		ls.Server = "220.70.2.160:8082"
 	}
+	GetenvStr(&ls.Server, "220.70.2.160:8082", "LOGIC_SERVER")
+	GetenvStr(&ls.Listen, ls.Server, "Logic_LISTEN")
 }
 
 var Logicsetting = &Logic{}
@@ -64,7 +67,7 @@ func (ks *Kafka) Getenv() {
 	GetenvStr(&ks.GroupID, "logic", "KAFKA_GROUP")
 	ks.Topics = []string{os.Getenv("KAFKA_TOPIC")}
 	if ks.Topics[0] == "" {
-		ks.Topics = []string{"sensors"}
+		ks.Topics = []string{"sensor-data"}
 	}
 	GetenvInt(&ks.ChanBufSize, 500, "KAFKA_BUFSIZE")
 }

@@ -121,10 +121,11 @@ func (ec *client) insertDoc(d *model.Document) {
 func (ec *client) bulk() {
 	if len(ec.docBuf) > 0 {
 		bulkStr := strings.Join(docsToSlice(ec.docBuf), "")
+		// debug
+		//fmt.Printf("elastic : %v\n", bulkStr)
+
 		res, _ := ec.es.Bulk(strings.NewReader(bulkStr))
 		res.Body.Close()
-
-		//fmt.Println(bulkStr)
 		ec.docBuf = make([]*model.Document, 0, ec.bufSize)
 	}
 }
