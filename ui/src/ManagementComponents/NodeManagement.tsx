@@ -6,10 +6,10 @@ import {
 	nodeHealthCheckElem,
 } from '../ElemInterface/ElementsInterface';
 import { HEALTHCHECK_URL, SINK_URL } from '../defineUrl';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
+// import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import NodeMap from './NodeMap';
 
-const client = new W3CWebSocket(HEALTHCHECK_URL);
+// const client = new W3CWebSocket(HEALTHCHECK_URL);
 
 interface NodeManagementState {
 	sinkList: Array<sinkListElem>;
@@ -31,17 +31,17 @@ class NodeManagement extends Component<{}, NodeManagementState> {
 	};
 
 	// Conect web socket
-	componentWillMount() {
-		client.onopen = () => {
-			console.log('WebSocket Client for Health Check Connected');
-		};
-		client.onmessage = (message: any) => {
-			console.log(message);
-			this.setState({
-				nodeState: JSON.parse(message.data),
-			});
-		};
-	}
+	// componentWillMount() {
+	// 	client.onopen = () => {
+	// 		console.log('WebSocket Client for Health Check Connected');
+	// 	};
+	// 	client.onmessage = (message: any) => {
+	// 		console.log(message);
+	// 		this.setState({
+	// 			nodeState: JSON.parse(message.data),
+	// 		});
+	// 	};
+	// }
 
 	componentDidMount() {
 		this.getsinkList();
