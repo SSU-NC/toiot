@@ -32,6 +32,19 @@ services:
             - db
         links:
             - db
+    ui:
+        hostname: ui
+        image: iamhge/toiot-ui:0.0.1
+        ports:
+            - 3000:3000
+        environment: 
+            - NODE_ENV=development
+            - CHOIDAR_USEPOLLING=true
+            - REACT_APP_DB_IP=app
+            - REACT_APP_DB_PORT=8081
+            - REACT_APP_KIBANA_IP=kibana
+            - REACT_APP_KIBANA_PORT=5601
+        
     logic:
         hostname: logic
         image: kbzjung359/toiot-logic:0.0.1
@@ -73,8 +86,9 @@ services:
             - ALLOW_PLAINTEXT_LISTENER=yes
             - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
             - KAFKA_HEAP_OPTS=-Xmx256m -Xms256m
-            - KAFKA_LISTENERS=PLAINTEXT://:9092
-            - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+            # - KAFKA_LISTENERS=PLAINTEXT://:9092
+            # - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+        command: "bash -c 'kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1 --topic sensor-data'"
         depends_on:
             - zookeeper
     elasticsearch:
@@ -96,3 +110,4 @@ services:
             - 5601:5601
         environment: 
             SERVER_NAME: kibana
+            elasticsearch.url: http://elasticsearch:9200

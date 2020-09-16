@@ -60,7 +60,7 @@ type Kafka struct {
 
 func (ks *Kafka) Getenv() {
 	GetenvStr(&ks.Broker, "localhost:9092", "KAFKA_BROKER")
-	GetenvStr(&ks.GroupID, "logic", "KAFKA_GROUP")
+	GetenvStr(&ks.GroupID, "logic1", "KAFKA_GROUP")
 	ks.Topics = []string{os.Getenv("KAFKA_TOPIC")}
 	if ks.Topics[0] == "" {
 		ks.Topics = []string{"sensor-data"}

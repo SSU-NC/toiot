@@ -7,9 +7,51 @@ import (
 	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
 	"github.com/KumKeeHyun/toiot/logic-core/setting"
 	"github.com/elastic/go-elasticsearch/v8"
+	"github.com/go-resty/resty/v2"
 )
 
-var elasticClient *client
+var (
+	elasticClient *client
+	template      = `
+{
+	"index_patterns": [
+	  "toiot*"
+	],
+	"settings": {
+	  "number_of_shards": 1
+	},
+	"mappings" : {
+	  "properties" : {
+		"name" : {
+		  "type" : "keyword"
+		},
+		"node" : {
+		  "properties" : {
+			"sink_name" : {
+			  "type" : "keyword"
+			},
+			"location" : {
+			  "type": "geo_point"
+			},
+			"name" : {
+			  "type" : "keyword"
+			}
+		  }
+		},
+		"sensor_id" : {
+		  "type" : "long"
+		},
+		"sensor_name" : {
+		  "type" : "keyword"
+		},
+		"timestamp" : {
+		  "type" : "date"
+		}
+	  }
+	}
+}
+`
+)
 
 type client struct {
 	es *elasticsearch.Client
@@ -34,6 +76,13 @@ func NewElasticClient() *client {
 	if err != nil {
 		panic(err)
 	}
+
+	putTemplate := resty.New()
+
+	putTemplate.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody([]byte(template)).
+		Put("http://220.70.2.1:9200/_template/template_1")
 
 	elasticClient = &client{
 		es:      cli,
