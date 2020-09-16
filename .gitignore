@@ -1,26 +1,26 @@
 ### frontend ignore ###
 
 # dependencies
-/ui/pdk-ui/node_modules
-/ui/pdk-ui/.pnp
-/ui/pdk-ui/.pnp.js
+/ui/node_modules
+/ui/.pnp
+/ui/.pnp.js
 
 # testing
-/ui/pdk-ui/coverage
+/ui/coverage
 
 # production
-/ui/pdk-ui/build
+/ui/build
 
 # misc
-/ui/pdk-ui/.DS_Store
-/ui/pdk-ui/.env.local
-/ui/pdk-ui/.env.development.local
-/ui/pdk-ui/.env.test.local
-/ui/pdk-ui/.env.production.local
+/ui/.DS_Store
+/ui/.env.local
+/ui/.env.development.local
+/ui/.env.test.local
+/ui/.env.production.local
 
-/ui/pdk-ui/npm-debug.log*
-/ui/pdk-ui/yarn-debug.log*
-/ui/pdk-ui/yarn-error.log*
+/ui/npm-debug.log*
+/ui/yarn-debug.log*
+/ui/yarn-error.log*
 
 # url
-/ui/pdk-ui/.env.development
+/ui/.env.development

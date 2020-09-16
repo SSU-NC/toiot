@@ -1,46 +1,35 @@
 package sql
 
 import (
+	"errors"
 	"fmt"
-	"log"
-	"time"
 
-	"github.com/KumKeeHyun/PDK/application/domain/model"
-	"github.com/KumKeeHyun/PDK/application/setting"
-	"github.com/jinzhu/gorm"
+	"github.com/KumKeeHyun/toiot/application/domain/model"
+	"github.com/KumKeeHyun/toiot/application/setting"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var dbConn *gorm.DB
 
 func Setup() {
-	conn := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", setting.Databasesetting.User, setting.Databasesetting.Pass, setting.Databasesetting.Server, setting.Databasesetting.Database)
-	dbConn, _ = gorm.Open(setting.Databasesetting.Driver, conn)
+	var err error
 
-	retry := 30
-	for {
-		err := dbConn.DB().Ping()
-		if err != nil {
-			dbConn, _ = gorm.Open(setting.Databasesetting.Driver, conn)
-			if retry == 0 {
-				log.Fatalf("Not able to establish connection to database")
-			}
-			log.Printf(fmt.Sprintf("Could not connect to database. Wait 2 seconds. %d retries left...", retry))
-			retry--
-			time.Sleep(2 * time.Second)
-		} else {
-			break
-		}
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", setting.Databasesetting.User, setting.Databasesetting.Pass, setting.Databasesetting.Server, setting.Databasesetting.Database)
+	dbConn, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic(errors.New("DB connection fail"))
 	}
 
 	dbConn.AutoMigrate(
-		&model.Sink{},
-		&model.Node{},
-		&model.Sensor{},
-		&model.NodeSensor{},
-		&model.SensorValue{},
+		&model.Topic{}, &model.LogicService{},
+		&model.Sink{}, &model.Node{},
+		&model.Sensor{}, &model.SensorValue{}, &model.Logic{},
 	)
-	dbConn.Model(&model.Node{}).AddForeignKey("sink_id", "sinks(id)", "CASCADE", "CASCADE")
-	dbConn.Model(&model.NodeSensor{}).AddForeignKey("node_uuid", "nodes(uuid)", "CASCADE", "CASCADE")
-	dbConn.Model(&model.NodeSensor{}).AddForeignKey("sensor_uuid", "sensors(uuid)", "CASCADE", "CASCADE")
-	dbConn.Model(&model.SensorValue{}).AddForeignKey("sensor_uuid", "sensors(uuid)", "CASCADE", "CASCADE")
+
+	// dbConn.Model(&model.LogicService{}).AddForeignKey("topic_id", "topics(id)", "CASCADE", "CASCADE")
+	// dbConn.Model(&model.Sink{}).AddForeignKey("topic_id", "topics(id)", "CASCADE", "CASCADE")
+	// dbConn.Model(&model.Node{}).AddForeignKey("sink_id", "sinks(id)", "CASCADE", "CASCADE")
+	// dbConn.Model(&model.SensorValue{}).AddForeignKey("sensor_id", "sensors(id)", "CASCADE", "CASCADE")
+	// dbConn.Model(&model.Logic{}).AddForeignKey("sensor_id", "sensors(id)", "CASCADE", "CASCADE")
 }

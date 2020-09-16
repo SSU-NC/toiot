@@ -1,19 +1,14 @@
 package usecase
 
-import "github.com/KumKeeHyun/PDK/logic-core/domain/model"
+import "github.com/KumKeeHyun/toiot/logic-core/adapter"
 
-// type ConsumerManageUsecase interface {
-// 	SetNumOfConsumers(int) (int, error)
-// }
-
-type LogicCoreUsecase interface {
-	SetLogicChain(r *model.ChainRequest) error
-	RemoveLogicChain(lname string) error
+type EventUsecase interface {
+	DeleteSink(nl []adapter.Node) error
+	CreateNode(n *adapter.Node, sn string) error
+	DeleteNode(n *adapter.Node) error
+	DeleteSensor(s *adapter.Sensor) error
+	CreateLogic(l *adapter.Logic) error
+	DeleteLogic(l *adapter.Logic) error
 }
 
-type MetaDataUsecase interface {
-	NewNode(key string, n *model.Node) (*model.Node, error)
-	NewSensor(key string, s *model.Sensor) (*model.Sensor, error)
-	DeleteNode(key string) error
-	DeleteSensor(key string) error
-}
+type LogicCoreUsecase interface{}

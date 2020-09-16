@@ -19,14 +19,16 @@ services:
         hostname: 
             app
         image: 
-            kbzjung359/pdk-app:dev
+            kbzjung359/pdk-app
         environment: 
             APP_SERVER: 0.0.0.0:8080
+            REACT_SERVER: 0.0.0.0:3000
             DB_DRIVE: mysql
             DB_SERVER: db:3306
             DB_USER: pdk
             DB_PASS: pdk1234
             DB_DATABASE: pdk
+            TOPIC_NAME: sensor-data
         ports:
             - 80:8080
         depends_on: 

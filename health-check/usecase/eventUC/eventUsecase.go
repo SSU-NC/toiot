@@ -1,13 +1,12 @@
 package eventUC
 
 import (
-	"strings"
 	"time"
 
 	"github.com/KumKeeHyun/PDK/health-check/domain/model"
 	"github.com/KumKeeHyun/PDK/health-check/setting"
 
-	"github.com/KumKeeHyun/PDK/health-check/adapter.go"
+	"github.com/KumKeeHyun/PDK/health-check/adapter"
 	"github.com/KumKeeHyun/PDK/health-check/domain/repository"
 	"github.com/KumKeeHyun/PDK/health-check/domain/service"
 )
@@ -15,20 +14,17 @@ import (
 type eventUsecase struct {
 	sr    repository.StatusRepo
 	ks    service.KafkaConsumer
-	es    service.ElasticClient
 	event chan struct{}
 }
 
-func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es service.ElasticClient, e chan struct{}) *eventUsecase {
+func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, e chan struct{}) *eventUsecase {
 	eu := &eventUsecase{
 		sr:    sr,
 		ks:    ks,
-		es:    es,
 		event: e,
 	}
 
 	in := eu.ks.GetOutput()
-	out := eu.es.GetInput()
 
 	go func() {
 		for states := range in {
@@ -51,15 +47,6 @@ func NewEventUsecase(sr repository.StatusRepo, ks service.KafkaConsumer, es serv
 				}
 				change = status.Event(s.State, StrToTime(states.Timestamp))
 				eu.sr.Update(n.UUID, status)
-
-				out <- adapter.Document{
-					Index: "hc-" + strings.ReplaceAll(n.Group, " ", "-"),
-					Doc: adapter.StateDoc{
-						Node:      n,
-						Status:    status,
-						Timestamp: states.Timestamp,
-					},
-				}
 			}
 			if change {
 				eu.event <- struct{}{}

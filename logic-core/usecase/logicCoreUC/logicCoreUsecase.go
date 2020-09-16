@@ -1,21 +1,23 @@
 package logicCoreUC
 
 import (
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/repository"
-	"github.com/KumKeeHyun/PDK/logic-core/domain/service"
+	"github.com/KumKeeHyun/toiot/logic-core/domain/repository"
+	"github.com/KumKeeHyun/toiot/logic-core/domain/service"
 )
 
 type logicCoreUsecase struct {
-	mr repository.MetaRepo
+	rr repository.RegistRepo
 	ks service.KafkaConsumerGroup
 	es service.ElasticClient
-	ls service.LogicCore
+	ls service.LogicService
 }
 
-func NewLogicCoreUsecase(mr repository.MetaRepo, ks service.KafkaConsumerGroup, es service.ElasticClient, ls service.LogicCore) *logicCoreUsecase {
+func NewLogicCoreUsecase(rr repository.RegistRepo,
+	ks service.KafkaConsumerGroup,
+	es service.ElasticClient,
+	ls service.LogicService) *logicCoreUsecase {
 	lcu := &logicCoreUsecase{
-		mr: mr,
+		rr: rr,
 		ks: ks,
 		es: es,
 		ls: ls,
@@ -31,26 +33,15 @@ func NewLogicCoreUsecase(mr repository.MetaRepo, ks service.KafkaConsumerGroup, 
 				continue
 			}
 
-			lchs := lcu.ls.GetLogicChans(rawData.Key)
-			if lchs != nil {
+			lchs, err := lcu.ls.GetLogicChans(ld.SensorID)
+			if err == nil {
 				for _, ch := range lchs {
 					ch <- ld
 				}
 			}
-
 			out <- lcu.ToDocument(&ld)
 		}
 	}()
 
 	return lcu
-}
-
-func (lu *logicCoreUsecase) SetLogicChain(r *model.ChainRequest) error {
-	// TODO : check chain request validate
-	lu.ls.CreateAndStartLogic(r)
-	return nil
-}
-
-func (lu *logicCoreUsecase) RemoveLogicChain(lname string) error {
-	return lu.ls.RemoveLogic(lname)
 }

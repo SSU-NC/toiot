@@ -3,7 +3,21 @@ package setting
 import (
 	"log"
 	"os"
+	"strconv"
 )
+
+func GetenvInt(target *int, init int, env string) {
+	var err error
+
+	temp := os.Getenv(env)
+	if temp == "" {
+		*target = init
+	} else {
+		if *target, err = strconv.Atoi(temp); err != nil {
+			*target = init
+		}
+	}
+}
 
 type App struct {
 	Server string
@@ -12,7 +26,7 @@ type App struct {
 func (as *App) Getenv() {
 	as.Server = os.Getenv("APP_SERVER")
 	if as.Server == "" {
-		as.Server = "0.0.0.0:8080"
+		as.Server = "0.0.0.0:8081"
 	}
 }
 
@@ -51,9 +65,27 @@ func (ds *Database) Getenv() {
 
 var Databasesetting = &Database{}
 
+type Topic struct {
+	Name         string
+	Partitions   int
+	Replications int
+}
+
+func (ts *Topic) Getenv() {
+	ts.Name = os.Getenv("TOPIC_NAME")
+	if ts.Name == "" {
+		ts.Name = "sensor-data"
+	}
+	GetenvInt(&ts.Partitions, 1, "TOPIC_PARTITIONS")
+	GetenvInt(&ts.Replications, 1, "TOPIC_REPLICATIONS")
+}
+
+var Topicsetting = &Topic{}
+
 func init() {
 	Appsetting.Getenv()
 	Databasesetting.Getenv()
+	Topicsetting.Getenv()
 
 	log.Printf("app : %v\ndb : %v\n", Appsetting, Databasesetting)
 }

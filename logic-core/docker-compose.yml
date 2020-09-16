@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+    logic:
+        hostname: 
+            logic
+        image:
+            kbzjung359/pdk-logic:
+        environment: 
+            LOGIC_SERVER: 0.0.0.0:8082
+            MONGO_ADDR: db
+            APP_SERVER: localhost:8081 
+        ports:
+            - 8082:8082
+        depends_on: 
+            - db
+        links:
+            - db
+    

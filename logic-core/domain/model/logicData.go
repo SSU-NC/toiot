@@ -1,22 +1,25 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type LogicData struct {
-	SID       string             `json:"s_id"`
-	SName     string             `json:"name"`
-	Values    map[string]float64 `json:"values"`
-	NodeInfo  Node               `json:"node"`
-	Timestamp time.Time          `json:"timestamp"`
+	SensorID   int                `json:"sensor_id"`
+	SensorName string             `json:"sensor_name"`
+	Values     map[string]float64 `json:"values"`
+	Node       Node               `json:"node"`
+	Timestamp  time.Time          `json:"timestamp"`
 }
 
-type LogicRing struct {
-	Logic string                 `json:"logic"`
-	Arg   map[string]interface{} `json:"arg"`
+type Logic struct {
+	ID        int       `json:"id"`
+	LogicName string    `json:"logic_name"`
+	Elems     []Element `json:"elems"`
+	SensorID  int       `json:"sensor_id"`
 }
 
-type ChainRequest struct {
-	SID   string      `json:"s_id"`
-	Name  string      `json:"name"`
-	Rings []LogicRing `json:"rings"`
+type Element struct {
+	Elem string                 `json:"elem"`
+	Arg  map[string]interface{} `json:"arg"`
 }

@@ -11,7 +11,6 @@ import (
 	"github.com/KumKeeHyun/PDK/health-check/usecase/websocketUC"
 
 	"github.com/KumKeeHyun/PDK/health-check/dataService/memory"
-	"github.com/KumKeeHyun/PDK/health-check/elasticClient"
 	"github.com/KumKeeHyun/PDK/health-check/kafkaConsumer"
 	"github.com/KumKeeHyun/PDK/health-check/usecase/eventUC"
 	"github.com/KumKeeHyun/PDK/health-check/usecase/statusCheckUC"
@@ -23,11 +22,10 @@ import (
 func main() {
 	sr := memory.NewStatusRepo()
 	ks := kafkaConsumer.NewKafkaConsumer()
-	es := elasticClient.NewElasticClient()
 
 	event := make(chan struct{}, 2)
 	_ = statusCheckUC.NewStatusCheckUsecase(sr, event)
-	_ = eventUC.NewEventUsecase(sr, ks, es, event)
+	_ = eventUC.NewEventUsecase(sr, ks, event)
 	wu := websocketUC.NewWebsocketUsecase(sr, event)
 
 	r := gin.New()
@@ -51,7 +49,7 @@ func main() {
 		fmt.Println("disconnect websocket!")
 	})
 
-	go log.Fatal(r.Run(setting.Appsetting.Server))
+	go log.Fatal(r.Run(setting.Healthsetting.Server))
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)

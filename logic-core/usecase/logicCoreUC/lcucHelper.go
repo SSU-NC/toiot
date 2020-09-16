@@ -3,36 +3,35 @@ package logicCoreUC
 import (
 	"strings"
 
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
 )
 
 func (lcuc *logicCoreUsecase) ToLogicData(kd *model.KafkaData) (model.LogicData, error) {
-	n, err := lcuc.mr.GetNode(kd.Value.NID)
+	n, err := lcuc.rr.FindNode(kd.NodeID)
 	if err != nil {
 		return model.LogicData{}, err
 	}
-	s, err := lcuc.mr.GetSensor(kd.Key)
+	s, err := lcuc.rr.FindSensor(kd.SensorID)
 	if err != nil {
 		return model.LogicData{}, err
 	}
 
-	v := map[string]float64{}
-	for i, vn := range s.ValueNames {
-		v[vn] = kd.Value.Values[i]
+	vl := map[string]float64{}
+	for i, v := range s.SensorValues {
+		vl[v] = kd.Values[i]
 	}
-
 	return model.LogicData{
-		SID:       kd.Key,
-		SName:     s.Name,
-		Values:    v,
-		NodeInfo:  *n,
-		Timestamp: kd.Value.Timestamp,
+		SensorID:   kd.SensorID,
+		SensorName: s.Name,
+		Values:     vl,
+		Node:       *n,
+		Timestamp:  kd.Timestamp,
 	}, nil
 }
 
 func (lcuc *logicCoreUsecase) ToDocument(ld *model.LogicData) model.Document {
 	return model.Document{
-		Index: "pdk-" + strings.ReplaceAll(ld.SName, " ", "-") + "-" + ld.NodeInfo.Group,
+		Index: "toiot-" + strings.ReplaceAll(ld.SensorName, " ", "-") + "-" + ld.Node.SinkName,
 		Doc:   *ld,
 	}
 }
