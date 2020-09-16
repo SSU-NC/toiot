@@ -7,9 +7,51 @@ import (
 	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
 	"github.com/KumKeeHyun/toiot/logic-core/setting"
 	"github.com/elastic/go-elasticsearch/v8"
+	"github.com/go-resty/resty/v2"
 )
 
-var elasticClient *client
+var (
+	elasticClient *client
+	template      = `
+{
+	"index_patterns": [
+	  "toiot*"
+	],
+	"settings": {
+	  "number_of_shards": 1
+	},
+	"mappings" : {
+	  "properties" : {
+		"name" : {
+		  "type" : "keyword"
+		},
+		"node" : {
+		  "properties" : {
+			"sink_name" : {
+			  "type" : "keyword"
+			},
+			"location" : {
+			  "type": "geo_point"
+			},
+			"name" : {
+			  "type" : "keyword"
+			}
+		  }
+		},
+		"sensor_id" : {
+		  "type" : "long"
+		},
+		"sensor_name" : {
+		  "type" : "keyword"
+		},
+		"timestamp" : {
+		  "type" : "date"
+		}
+	  }
+	}
+}
+`
+)
 
 type client struct {
 	es *elasticsearch.Client
@@ -32,8 +74,15 @@ func NewElasticClient() *client {
 	}
 	cli, err := elasticsearch.NewClient(config)
 	if err != nil {
-		return nil
+		panic(err)
 	}
+
+	putTemplate := resty.New()
+
+	putTemplate.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody([]byte(template)).
+		Put("http://220.70.2.1:9200/_template/template_1")
 
 	elasticClient = &client{
 		es:      cli,
@@ -121,10 +170,11 @@ func (ec *client) insertDoc(d *model.Document) {
 func (ec *client) bulk() {
 	if len(ec.docBuf) > 0 {
 		bulkStr := strings.Join(docsToSlice(ec.docBuf), "")
+		// debug
+		//fmt.Printf("elastic : %v\n", bulkStr)
+
 		res, _ := ec.es.Bulk(strings.NewReader(bulkStr))
 		res.Body.Close()
-
-		//fmt.Println(bulkStr)
 		ec.docBuf = make([]*model.Document, 0, ec.bufSize)
 	}
 }

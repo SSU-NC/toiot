@@ -69,7 +69,7 @@ func SetEventRoute(r *gin.Engine, h *handler.Handler) {
 		e.POST("/sink/delete", h.DeleteSink)
 		e.POST("/node/create", h.CreateNode)
 		e.POST("/node/delete", h.DeleteNode)
-		e.POST("/sink/delete", h.DeleteSensor)
+		e.POST("/sensor/delete", h.DeleteSensor)
 		e.POST("/logic/create", h.CreateLogic)
 		e.POST("/logic/delete", h.DeleteLogic)
 	}
@@ -80,7 +80,7 @@ func RegistLogicService(ls usecase.EventUsecase) {
 		sinks  []adapter.Sink
 		url    = fmt.Sprintf("http://%s/event", setting.Appsetting.Server)
 		regist = adapter.LogicService{
-			Addr: setting.Logicsetting.Server,
+			Addr: setting.Logicsetting.Listen,
 			Topic: adapter.Topic{
 				Name: setting.Kafkasetting.Topics[0],
 			},

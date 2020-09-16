@@ -41,6 +41,14 @@ func NewEventUsecase(sir repository.SinkRepo, lsr repository.LogicServiceRepo) *
 // 	}
 // }`
 func (eu *eventUsecase) RegistLogicService(l *model.LogicService) error {
+	if temp, err := eu.lsr.FindByAddr(l.Addr); temp.ID != 0 || err != nil {
+		sinks, err := eu.sir.FindsByTopicIDWithNodesSensorsValuesLogics(temp.TopicID)
+		if err != nil {
+			return err
+		}
+		l.Topic.Sinks = sinks
+		return nil
+	}
 	return eu.lsr.Create(l)
 }
 

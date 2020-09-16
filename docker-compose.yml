@@ -1,0 +1,113 @@
+version: '3.2'
+
+services: 
+    db:
+        hostname: mysql
+        image: mysql:5.7.31
+        restart: always
+        ports: 
+            - 3307:3306
+        volumes:
+            - ./mysql/data:/var/lib/mysql
+        environment: 
+            MYSQL_ROOT_PASSWORD: toiot1234
+            MYSQL_USER: toiot
+            MYSQL_PASSWORD: toiot1234
+            MYSQL_DATABASE: toiot
+    app:
+        hostname: app
+        image : kbzjung359/toiot-app:0.0.1
+        restart: always
+        ports:
+            - 8081:8081
+        environment: 
+            APP_SERVER: 0.0.0.0:8081
+            DB_DRIVE: mysql
+            DB_SERVER: db:3306
+            DB_USER: toiot
+            DB_PASS: toiot1234
+            DB_DATABASE: toiot
+            TOPIC_NAME: sensor-data
+        depends_on: 
+            - db
+        links:
+            - db
+    ui:
+        hostname: ui
+        image: iamhge/toiot-ui:0.0.1
+        ports:
+            - 3000:3000
+        environment: 
+            - NODE_ENV=development
+            - CHOIDAR_USEPOLLING=true
+            - REACT_APP_DB_IP=app
+            - REACT_APP_DB_PORT=8081
+            - REACT_APP_KIBANA_IP=kibana
+            - REACT_APP_KIBANA_PORT=5601
+        
+    logic:
+        hostname: logic
+        image: kbzjung359/toiot-logic:0.0.1
+        restart: always
+        ports: 
+            - 8082:8082
+        environment: 
+            LOGIC_SERVER: 0.0.0.0:8082
+            LOGIC_LISTEN: logic:8082
+            APP_SERVER: app:8081
+            KAFKA_BROKER: kafka:9092
+            KAFKA_GROUP: logic1
+            KAFKA_TOPIC: sensor-data
+            ELASTIC_SERVER: elasticsearch:9200
+        depends_on: 
+            - app
+        links:
+            - app
+    zookeeper:
+        hostname: zookeeper
+        image: bitnami/zookeeper:3.6.1
+        ports:
+            - 2181:2181
+        volumes: 
+            - ./zookeeper/data:/zookeeper/data
+            - ./zookeeper/datalog:/zookeeper/datalog
+            - ZOO_HEAP_SIZE=-Xmx128m -Xms128m
+        environment: 
+            - ALLOW_ANONYMOUS_LOGIN=yes
+    kafka:
+        hostname: kafka
+        image: bitnami/kafka:2.5.0
+        ports:
+            - 9092:9092
+        volumes: 
+            - ./kafka/data:/kafka/data
+        environment: 
+            - KAFKA_BROKER_ID=1
+            - ALLOW_PLAINTEXT_LISTENER=yes
+            - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+            - KAFKA_HEAP_OPTS=-Xmx256m -Xms256m
+            # - KAFKA_LISTENERS=PLAINTEXT://:9092
+            # - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+        command: "bash -c 'kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1 --topic sensor-data'"
+        depends_on:
+            - zookeeper
+    elasticsearch:
+        hostname: elasticsearch
+        image: elasticsearch:7.6.1
+        ports:
+            - 9200:9200
+        volumes: 
+            - ./elasticsearch/data:/elasticsearch/data
+        environment: 
+            - cluster.name=elasticsearch
+            - node.name=es
+            - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+            - discovery.type=single-node
+    kibana:
+        hostname: kibana
+        image: kibana:7.6.1
+        ports: 
+            - 5601:5601
+        environment: 
+            SERVER_NAME: kibana
+            elasticsearch.url: http://elasticsearch:9200

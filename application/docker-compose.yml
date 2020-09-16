@@ -19,10 +19,9 @@ services:
         hostname: 
             app
         image: 
-            kbzjung359/pdk-app
+            kbzjung359/toiot-app:0.0.1
         environment: 
-            APP_SERVER: 0.0.0.0:8080
-            REACT_SERVER: 0.0.0.0:3000
+            APP_SERVER: 0.0.0.0:8081
             DB_DRIVE: mysql
             DB_SERVER: db:3306
             DB_USER: pdk
@@ -30,7 +29,8 @@ services:
             DB_DATABASE: pdk
             TOPIC_NAME: sensor-data
         ports:
-            - 80:8080
+            - 8081:8081
+        restart: always
         depends_on: 
             - db
         links:

@@ -28,13 +28,12 @@ func GetenvStr(target *string, init, env string) {
 
 type Logic struct {
 	Server string
+	Listen string
 }
 
 func (ls *Logic) Getenv() {
-	ls.Server = os.Getenv("LOGIC_SERVER")
-	if ls.Server == "" {
-		ls.Server = "220.70.2.160:8082"
-	}
+	GetenvStr(&ls.Server, "localhost:8082", "LOGIC_SERVER")
+	GetenvStr(&ls.Listen, ls.Server, "LOGIC_LISTEN")
 }
 
 var Logicsetting = &Logic{}
@@ -46,7 +45,7 @@ type App struct {
 func (as *App) Getenv() {
 	as.Server = os.Getenv("APP_SERVER")
 	if as.Server == "" {
-		as.Server = "220.70.2.160:8081"
+		as.Server = "localhost:8081"
 	}
 }
 
@@ -60,11 +59,11 @@ type Kafka struct {
 }
 
 func (ks *Kafka) Getenv() {
-	GetenvStr(&ks.Broker, "220.70.2.1:9092", "KAFKA_BROKER")
-	GetenvStr(&ks.GroupID, "logic", "KAFKA_GROUP")
+	GetenvStr(&ks.Broker, "localhost:9092", "KAFKA_BROKER")
+	GetenvStr(&ks.GroupID, "logic1", "KAFKA_GROUP")
 	ks.Topics = []string{os.Getenv("KAFKA_TOPIC")}
 	if ks.Topics[0] == "" {
-		ks.Topics = []string{"sensors"}
+		ks.Topics = []string{"sensor-data"}
 	}
 	GetenvInt(&ks.ChanBufSize, 500, "KAFKA_BUFSIZE")
 }
@@ -82,7 +81,7 @@ type Elastic struct {
 func (es *Elastic) Getenv() {
 	temp := os.Getenv("ELASTIC_SERVER")
 	if temp == "" {
-		temp = "220.70.2.1:9200"
+		temp = "localhost:9200"
 	}
 	es.Addresses = []string{fmt.Sprintf("http://%s", temp)}
 	GetenvInt(&es.RequestRetry, 3, "ELASTIC_RETRY")

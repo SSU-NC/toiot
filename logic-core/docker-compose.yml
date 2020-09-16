@@ -5,15 +5,15 @@ services:
         hostname: 
             logic
         image:
-            kbzjung359/pdk-logic:
+            kbzjung359/toiot-logic:0.0.1
         environment: 
             LOGIC_SERVER: 0.0.0.0:8082
-            MONGO_ADDR: db
-            APP_SERVER: localhost:8081 
+            LOGIC_LISTEN: localhost:8082
+            APP_SERVER: localhost:8081
+            KAFKA_BROKER: localhost:9092
+            KAFKA_GROUP: logic1
+            KAFKA_TOPIC: sensor-data
+            ELASTIC_SERVER: localhost:9200
         ports:
             - 8082:8082
-        depends_on: 
-            - db
-        links:
-            - db
     
