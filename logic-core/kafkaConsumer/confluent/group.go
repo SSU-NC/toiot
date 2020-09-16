@@ -1,41 +1,41 @@
-/*
-TODO : change kafka module confluent to sarama
-*/
+// /*
+// TODO : change kafka module confluent to sarama
+// */
 
 package confluent
 
-import (
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
-	"github.com/KumKeeHyun/PDK/logic-core/setting"
-)
+// import (
+// 	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+// 	"github.com/KumKeeHyun/PDK/logic-core/setting"
+// )
 
-var kafkaConsumer *group
+// var kafkaConsumer *group
 
-type group struct {
-	c   *consumer
-	out chan model.KafkaData
-}
+// type group struct {
+// 	c   *consumer
+// 	out chan model.KafkaData
+// }
 
-func NewKafkaConsumer() *group {
-	if kafkaConsumer != nil {
-		return kafkaConsumer
-	}
+// func NewKafkaConsumer() *group {
+// 	if kafkaConsumer != nil {
+// 		return kafkaConsumer
+// 	}
 
-	outBufSize := setting.Kafkasetting.ChanBufSize
+// 	outBufSize := setting.Kafkasetting.ChanBufSize
 
-	kafkaConsumer = &group{
-		out: make(chan model.KafkaData, outBufSize),
-	}
+// 	kafkaConsumer = &group{
+// 		out: make(chan model.KafkaData, outBufSize),
+// 	}
 
-	kafkaConsumer.c = NewConsumer()
-	go kafkaConsumer.c.run(kafkaConsumer.out)
+// 	kafkaConsumer.c = NewConsumer()
+// 	go kafkaConsumer.c.run(kafkaConsumer.out)
 
-	return kafkaConsumer
-}
+// 	return kafkaConsumer
+// }
 
-func (g *group) GetOutput() <-chan model.KafkaData {
-	if g != nil {
-		return g.out
-	}
-	return nil
-}
+// func (g *group) GetOutput() <-chan model.KafkaData {
+// 	if g != nil {
+// 		return g.out
+// 	}
+// 	return nil
+// }

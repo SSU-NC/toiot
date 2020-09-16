@@ -228,24 +228,24 @@ class RegisterLogic extends Component<{}, RegisterLogicState> {
 
 	handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		let logic_array: Array<logicElem> = [
+		let elems: Array<logicElem> = [
 			this.state.selected_group,
 			this.state.selected_time,
 		];
-		logic_array = logic_array.concat(
+		elems = elems.concat(
 			this.state.selected_value,
 			this.state.selected_action
 		);
 
 		// Filter elem: 'empty' field
-		logic_array = logic_array.filter(function (logic) {
+		elems = elems.filter(function (logic) {
 			return logic.elem !== 'empty';
 		});
 
 		var request_msg = {
 			sensor_id: this.state.sensor_info.id,
 			logic_name: this.state.logic_name,
-			logic: logic_array,
+			elems: elems,
 		};
 		var url = LOGICCORE_URL;
 

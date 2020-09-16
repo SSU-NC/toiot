@@ -3,37 +3,35 @@ package adapter
 import (
 	"time"
 
-	"github.com/KumKeeHyun/PDK/logic-core/domain/model"
+	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
 )
 
-var loc *time.Location
+var (
+	loc     *time.Location
+	timeFmt string
+)
 
-type SensorData struct {
-	NID       string    `json:"nid"`
+func init() {
+	loc, _ = time.LoadLocation("Asia/Seoul")
+	timeFmt = "2006-01-02 15:04:05"
+}
+
+type KafkaData struct {
+	SensorID  int       `json:"sensor_id"`
+	NodeID    int       `json:"node_id"`
 	Values    []float64 `json:"values"`
 	Timestamp string    `json:"timestamp"`
 }
 
-type KafkaData struct {
-	Key   string     `json:"key"`
-	Value SensorData `json:"value"`
-}
-
-func AppToKafka(kd *KafkaData) model.KafkaData {
-	t, err := time.ParseInLocation("2006-01-02 15:04:05", kd.Value.Timestamp, loc)
+func KafkaToModel(d *KafkaData) (model.KafkaData, error) {
+	t, err := time.ParseInLocation(timeFmt, d.Timestamp, loc)
 	if err != nil {
-		return model.KafkaData{}
+		return model.KafkaData{}, err
 	}
 	return model.KafkaData{
-		Key: kd.Key,
-		Value: model.SensorData{
-			NID:       kd.Value.NID,
-			Values:    kd.Value.Values,
-			Timestamp: t,
-		},
-	}
-}
-
-func init() {
-	loc, _ = time.LoadLocation("Asia/Seoul")
+		SensorID:  d.SensorID,
+		NodeID:    d.NodeID,
+		Values:    d.Values,
+		Timestamp: t,
+	}, nil
 }
