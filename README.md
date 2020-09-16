@@ -50,6 +50,19 @@ $ docker-compose up
 $ docker-compose down
 ```
 
+#### Port Forwarding
+|Host|Container|Service|
+|:---:|:---:|:---:|
+|3307|3306|mysql|
+|8081|8081|application|
+|8082|8082|logic|
+|8083|8083|health check|
+|3000|3000|ui|
+|2181|2181|zookeeper|
+|9092|9092|kafka|
+|9200|9200|elasticsearch|
+|5601|5601|kibana|
+
 Installation & Run
 =======
 This document describes how to personally set up and use this platform. You can launch applications on multiple servers, or you can set various options to make use of a lot of computing resources.  
