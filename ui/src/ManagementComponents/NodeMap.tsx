@@ -60,7 +60,7 @@ class NodeMap extends Component<NodeMapProps, NodeMapState> {
 		);
 
 		// 드래그가 끝날 때 or 확대 수준이 변경되면
-		window.kakao.maps.event.addListener(map, 'bounds_changed', () => {
+		window.kakao.maps.event.addListener(map, 'idle', () => {
 			// 지도의 현재 영역을 얻어옵니다
 			var bounds = map.getBounds();
 
