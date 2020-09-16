@@ -64,7 +64,6 @@ class MapNodeTable extends Component<MapNodeTableProps, {}> {
 							<th scope="col">name</th>
 							<th scope="col">id</th>
 							<th scope="col">sensors</th>
-							<th scope="col">group</th>
 							<th scope="col">health</th>
 							<th scope="col"></th>
 						</tr>
