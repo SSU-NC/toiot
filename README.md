@@ -52,6 +52,7 @@ $ docker-compose down
 
 Installation & Run
 =======
+This document describes how to personally set up and use this platform. You can launch applications on multiple servers, or you can set various options to make use of a lot of resources.  
 * [User Interface](./ui/README.md)
 * [Backend Server](./application/README.md)
 
