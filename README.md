@@ -25,7 +25,8 @@ Output
 - Sink and Sensor Mangement
 ![sink_register](https://user-images.githubusercontent.com/38535571/92531650-ae6ba700-f269-11ea-8cd4-b9ba0e04c24f.png)<br>
 ![sensor_register](https://user-images.githubusercontent.com/38535571/92531663-b9263c00-f269-11ea-9896-25ba747deb55.png)<br>
-![sensor_table](https://user-images.githubusercontent.com/38535571/92531768-e7a41700-f269-11ea-80b7-a0f8c37ccaf2.png)
+![sensor_table](https://user-images.githubusercontent.com/38535571/92531768-e7a41700-f269-11ea-80b7-a0f8c37ccaf2.png)<br>
+![register_node_ex](https://user-images.githubusercontent.com/59961690/93308957-e8c2de80-f83d-11ea-8fb7-97688f9be285.png)
 - Service
 ![service](https://user-images.githubusercontent.com/38535571/92531789-f5599c80-f269-11ea-963a-269f53424760.gif)
 
