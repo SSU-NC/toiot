@@ -11,6 +11,7 @@ Table of contents
 =================
 <!--ts-->
    * [Output](#Output)
+   * [Quickstart](#Quickstart)
    * [Installation & Run](#Installation--Run)
    * [Detail](#Detail)
    * [Help](#Help)
@@ -28,6 +29,26 @@ Output
 - Service
 ![service](https://user-images.githubusercontent.com/38535571/92531789-f5599c80-f269-11ea-963a-269f53424760.gif)
 
+
+
+Quickstart
+======= 
+This feature is used to `lightly` run this application. All platform elements run on a single server. If you want to run enterprise-class, please refer to [Installation & Run](#Installation--Run) and customize.
+
+#### Installation
+```bash
+$ git clone https://github.com/SSU-NC/toiot
+```
+
+#### Run
+```sh
+$ docker-compose up
+```
+
+#### Stop
+```sh
+$ docker-compose down
+```
 
 Installation & Run
 =======
