@@ -82,7 +82,7 @@ yoonje.choi.dev@gmail.com
 License
 =======
 ```
-Copyright 2020 Keehyun Kum, Haegyeong Im, Jungsu Kim, Sehee Jung, Yoonje Choi
+Copyright 2020 Keehyun Kum, Haegyeong Im, Jungsu Kim, Sehee Jeong, Yoonje Choi
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
