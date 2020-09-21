@@ -1,17 +1,17 @@
-version: "3.2"
+version: '3.2'
 
 services:
   ui:
-    container_name: ui # container 이름
+    container_name: toiot-ui # container 이름
     build:
-      context: ./ui # ui DIR 하위에 있는 Dockerfile을 사용
+      context: ./toiot-ui # ui DIR 하위에 있는 Dockerfile을 사용
       dockerfile: Dockerfile
-    image: iamhge/ui:0.1.3
+    image: iamhge/toiot-ui:0.0.1
     volumes: # if you only download docker image, you should remove volumes field
-      - "./ui:/app" # 소스 디렉토리 공유
-      - "/app/node_modules"
+      - './ui:/app' # 소스 디렉토리 공유
+      - '/app/node_modules'
     ports:
-      - "3001:3000"
+      - '3001:3000'
     environment:
       - NODE_ENV=development
       - CHOIDAR_USEPOLLING=true # app이 수정되었을 경우 reload 가능하도록
