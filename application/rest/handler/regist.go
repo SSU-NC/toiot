@@ -9,6 +9,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ListSinks ...
+// @Summary List sink node(raspi info)
+// @Description get sinks list
+// @Tags sink
+// @Param  page query int false "page num"
+// @Param  size query int false "page size(row)"
+// @Produce  json
+// @Success 200 {array} model.Sink "default, return all sinks."
+// @Success 201 {object} adapter.SinkPage "if page query is exist, return pagenation result. pages only valid when page is 1."
+// @Router /regist/sink [get]
 func (h *Handler) ListSinks(c *gin.Context) {
 	var (
 		err   error
@@ -41,6 +51,15 @@ func (h *Handler) ListSinks(c *gin.Context) {
 	}
 }
 
+// RegistSink ...
+// @Summary Add sink node(raspi info)
+// @Description Add sink node
+// @Tags sink
+// @Param  sink body model.Sink true "name, address(only ip address, don't include port)"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Sink "include topic info"
+// @Router /regist/sink [post]
 func (h *Handler) RegistSink(c *gin.Context) {
 	var sink model.Sink
 	if err := c.ShouldBindJSON(&sink); err != nil {
@@ -55,6 +74,15 @@ func (h *Handler) RegistSink(c *gin.Context) {
 	c.JSON(http.StatusOK, sink)
 }
 
+// UnregistSink ...
+// @Summary Delete sink node(raspi info)
+// @Description Delete sink node
+// @Tags sink
+// @Param  id path int true "sink's id"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Sink "include topic, nodes info"
+// @Router /regist/sink [delete]
 func (h *Handler) UnregistSink(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -72,6 +100,21 @@ func (h *Handler) UnregistSink(c *gin.Context) {
 	c.JSON(http.StatusOK, sink)
 }
 
+// ListNodes ...
+// @Summary List sensor node
+// @Description get nodes list
+// @Tags node
+// @Param  page query int false "page num"
+// @Param  size query int false "page size(row)"
+// @Param  sink query int false "sink filter"
+// @Param  left query float32 false "location(longitude) filter"
+// @Param  right query float32 false "location(longitude) filter"
+// @Param  up query float32 false "location(Latitude) filter"
+// @Param  down query float32 false "location(Latitude) filter"
+// @Produce  json
+// @Success 200 {array} model.Node "default, return all nodes. if location query is exist, return location filter result(square)."
+// @Success 201 {object} adapter.NodePage "if page query is exist, return pagenation result. pages only valid when page is 1."
+// @Router /regist/node [get]
 func (h *Handler) ListNodes(c *gin.Context) {
 	var (
 		err    error
@@ -113,6 +156,15 @@ func (h *Handler) ListNodes(c *gin.Context) {
 
 }
 
+// RegistNode ...
+// @Summary Add sensor node
+// @Description Add sensor node
+// @Tags node
+// @Param  node body model.Node true "name, lat, lng, sink_id"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Node "include sink, sink.topic, sensors, sensors.logics info"
+// @Router /regist/node [post]
 func (h *Handler) RegistNode(c *gin.Context) {
 	var node model.Node
 	if err := c.ShouldBindJSON(&node); err != nil {
@@ -131,6 +183,15 @@ func (h *Handler) RegistNode(c *gin.Context) {
 
 }
 
+// UnregistNode ...
+// @Summary Delete sensor node
+// @Description Delete sensor node
+// @Tags node
+// @Param  id path int true "node's id"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Node "include sink, sink.topic info"
+// @Router /regist/node [delete]
 func (h *Handler) UnregistNode(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -150,6 +211,16 @@ func (h *Handler) UnregistNode(c *gin.Context) {
 	c.JSON(http.StatusOK, node)
 }
 
+// ListSensors ...
+// @Summary List sensor info
+// @Description get sensors list
+// @Tags sensor
+// @Param  page query int false "page num"
+// @Param  size query int false "page size(row)"
+// @Produce  json
+// @Success 200 {array} model.Sensor "default, return all sensors."
+// @Success 201 {object} adapter.SensorPage "if page query is exist, return pagenation result. pages only valid when page is 1."
+// @Router /regist/sensor [get]
 func (h *Handler) ListSensors(c *gin.Context) {
 	var (
 		err     error
@@ -183,6 +254,15 @@ func (h *Handler) ListSensors(c *gin.Context) {
 
 }
 
+// RegistSensor ...
+// @Summary Add sensor info
+// @Description Add sensor info
+// @Tags sensor
+// @Param  sensor body model.Sensor true "name, sensorValues(only value name)"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Node "include sensorValues info"
+// @Router /regist/sensor [post]
 func (h *Handler) RegistSensor(c *gin.Context) {
 	var sensor model.Sensor
 	if err := c.ShouldBindJSON(&sensor); err != nil {
@@ -198,6 +278,15 @@ func (h *Handler) RegistSensor(c *gin.Context) {
 	c.JSON(http.StatusOK, sensor)
 }
 
+// UnregistSensor ...
+// @Summary Delete sensor
+// @Description Delete sensor
+// @Tags sensor
+// @Param  id path int true "sensor's id"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Sensor "include logics info"
+// @Router /regist/sensor [delete]
 func (h *Handler) UnregistSensor(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -216,6 +305,13 @@ func (h *Handler) UnregistSensor(c *gin.Context) {
 	c.JSON(http.StatusOK, sensor)
 }
 
+// ListLogics ...
+// @Summary List logics info
+// @Description get logics list
+// @Tags logic
+// @Produce  json
+// @Success 200 {array} model.Logic "return all logics info."
+// @Router /regist/logic [get]
 func (h *Handler) ListLogics(c *gin.Context) {
 	logics, err := h.ru.GetLogics()
 	if err != nil {
@@ -226,6 +322,15 @@ func (h *Handler) ListLogics(c *gin.Context) {
 	c.JSON(http.StatusOK, aLogics)
 }
 
+// RegistLogic ...
+// @Summary Add logic info
+// @Description Add logic info
+// @Tags logic
+// @Param  logic body adapter.Logic true "logic_name, elems"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} adapter.Logic "include sensor info"
+// @Router /regist/logic [post]
 func (h *Handler) RegistLogic(c *gin.Context) {
 	var aLogic adapter.Logic
 	if err := c.ShouldBindJSON(&aLogic); err != nil {
@@ -248,6 +353,15 @@ func (h *Handler) RegistLogic(c *gin.Context) {
 	c.JSON(http.StatusOK, resLogic)
 }
 
+// UnregistLogic ...
+// @Summary Delete logic
+// @Description Delete logic
+// @Tags logic
+// @Param  id path int true "logic's id"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Logic "include sensor info"
+// @Router /regist/logic [delete]
 func (h *Handler) UnregistLogic(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -267,6 +381,13 @@ func (h *Handler) UnregistLogic(c *gin.Context) {
 	c.JSON(http.StatusOK, resLogic)
 }
 
+// ListLogicServices ...
+// @Summary List LogicServices info
+// @Description get LogicServices list
+// @Tags LogicService
+// @Produce  json
+// @Success 200 {array} model.LogicService "return all logics info."
+// @Router /regist/logic-service [get]
 func (h *Handler) ListLogicServices(c *gin.Context) {
 	logicServices, err := h.ru.GetLogicServices()
 	if err != nil {
@@ -276,6 +397,15 @@ func (h *Handler) ListLogicServices(c *gin.Context) {
 	c.JSON(http.StatusOK, logicServices)
 }
 
+// UnregistLogicService ...
+// @Summary Delete LogicService
+// @Description Delete LogicService
+// @Tags logicService
+// @Param  id path int true "logicSerivce's id"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Logic "include topic info"
+// @Router /regist/logic-service [delete]
 func (h *Handler) UnregistLogicService(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -292,6 +422,13 @@ func (h *Handler) UnregistLogicService(c *gin.Context) {
 	c.JSON(http.StatusOK, logicService)
 }
 
+// ListTopics ...
+// @Summary List topics info
+// @Description get topics list
+// @Tags topic
+// @Produce  json
+// @Success 200 {array} model.Topic "return all topics info."
+// @Router /regist/topic [get]
 func (h *Handler) ListTopics(c *gin.Context) {
 	topics, err := h.ru.GetTopics()
 	if err != nil {
@@ -301,6 +438,15 @@ func (h *Handler) ListTopics(c *gin.Context) {
 	c.JSON(http.StatusOK, topics)
 }
 
+// RegistTopic ...
+// @Summary Add topic info
+// @Description Add topic info
+// @Tags topic
+// @Param  logic body model.Logic true "name, partitions, replications"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Topic
+// @Router /regist/topic [post]
 func (h *Handler) RegistTopic(c *gin.Context) {
 	var topic model.Topic
 	if err := c.ShouldBindJSON(&topic); err != nil {
@@ -316,6 +462,15 @@ func (h *Handler) RegistTopic(c *gin.Context) {
 	c.JSON(http.StatusOK, topic)
 }
 
+// UnregistTopic ...
+// @Summary Delete topic(kafka topic for logicservices)
+// @Description Delete topic(kafka topic for logicservices)
+// @Tags topic
+// @Param  id path int true "topic's id"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.Topic "include logicService info"
+// @Router /regist/topic [delete]
 func (h *Handler) UnregistTopic(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

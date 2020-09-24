@@ -46,3 +46,18 @@ func (p Page) IsBinded() bool {
 func (p Page) GetOffset() int {
 	return (p.Page - 1) * p.Size
 }
+
+type SinkPage struct {
+	Sinks []model.Sink `json:"sinks"`
+	Pages int          `json:"pages"`
+}
+
+type NodePage struct {
+	Nodes []model.Node `json:"nodes"`
+	Pages int          `json:"pages"`
+}
+
+type SensorPage struct {
+	Sensors []model.Sensor `json:"sensors"`
+	Pages   int            `json:"pages"`
+}
