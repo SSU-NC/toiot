@@ -6,18 +6,19 @@
 
 # Installation
 ```bash
-$ go get github.com/KumKeeHyun/PDK
+$ go get github.com/KumKeeHyun/toiot
 ```
 or
 ```bash
 // toiot/application
-$ go get github.com/KumKeeHyun/PDK/application
+$ go get github.com/KumKeeHyun/toiot/application
 
 // toiot/logic-core
-$ go get github.com/KumKeeHyun/PDK/logic-core
+$ go get github.com/KumKeeHyun/toiot/logic-core
 
+// not yet
 // toiot/health-check
-$ go get github.com/KumKeeHyun/PDK/health-check
+$ go get github.com/KumKeeHyun/toiot/health-check
 ```
 
 ## docker
@@ -25,13 +26,14 @@ $ go get github.com/KumKeeHyun/PDK/health-check
 // latest tag is 0.3
 
 // toiot/application
-$ docker pull kbzjung359/pdk-app
+$ docker pull kbzjung359/toiot-app
 
 // toiot/logic-core
-$ docker pull kbzjung359/pdk-logic
+$ docker pull kbzjung359/toiot-logic
 
+// not yet
 // toiot/health-check
-$ docker pull kbzjung359/pdk-health
+$ docker pull kbzjung359/toiot-health
 ```
 
 or
@@ -60,12 +62,14 @@ The setting value of each microservice is set by reading environment variables.
 |Key|Example|Explain|
 |------|------|------|
 |APP_SERVER|127.0.0.1:8081|Registration microservice address|
-|LOGIC_SERVER|127.0.0.1:8082|Logic microservice address|
 |DB_DRIVER|mysql|DBMS type|
 |DB_SERVER|localhost:3306|DBMS address|
 |DB_USER|pdk|User name|
 |DB_PASS|pdk1234|User password|
 |DB_DATABASE|pdk-db|mysql database name|
+|TOPIC_NAME|sensor-data|default kafka topic for registration info|
+|TOPIC_PARTITIONS|1|topic's partitions|
+|TOPIC_RePLICATIONS|1|topic's replications|
 
 - Currently DBMS only supports mysql
 
@@ -83,8 +87,6 @@ The setting value of each microservice is set by reading environment variables.
 |ELASTIC_BUFSIZE|500|channel size of stream process in goroutines|
 |ELASTIC_BATCHTICKER|5|Bulk Indexing interval second|
 |ELASTIC_BATCHSIZE|400|Bulk Indexing documents size|
-|MONGO_ADDR|127.0.0.1|MongoDB address for logic repository|
-|MONGO_PORT|27017|MongoDB port|
 
 
 ### toiot/health-check (Health Check)
