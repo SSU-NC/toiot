@@ -1,17 +1,10 @@
 package repository
 
 import (
-	"github.com/KumKeeHyun/PDK/health-check/adapter"
-	"github.com/KumKeeHyun/PDK/health-check/domain/model"
+	"github.com/KumKeeHyun/toiot/health-check/adapter"
+	"github.com/KumKeeHyun/toiot/health-check/domain/model"
 )
 
 type StatusRepo interface {
-	StartAtomic()
-	EndAtomic()
-	GetKeys() []string
-	Create(key string, value model.Status) error
-	Delete(key string) error
-	Get(key string) (model.Status, error)
-	Update(key string, value model.Status) error
-	GetHealthInfo() []adapter.HealthInfo
+	UpdateTable(sinkID int, states adapter.States) []model.NodeStatus
 }

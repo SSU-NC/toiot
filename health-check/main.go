@@ -7,26 +7,20 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/KumKeeHyun/PDK/health-check/setting"
-	"github.com/KumKeeHyun/PDK/health-check/usecase/websocketUC"
-
-	"github.com/KumKeeHyun/PDK/health-check/dataService/memory"
-	"github.com/KumKeeHyun/PDK/health-check/kafkaConsumer"
-	"github.com/KumKeeHyun/PDK/health-check/usecase/eventUC"
-	"github.com/KumKeeHyun/PDK/health-check/usecase/statusCheckUC"
-
+	"github.com/KumKeeHyun/toiot/health-check/dataService/memory"
+	"github.com/KumKeeHyun/toiot/health-check/setting"
+	"github.com/KumKeeHyun/toiot/health-check/usecase/healthCheckUC"
+	"github.com/KumKeeHyun/toiot/health-check/usecase/websocketUC"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
 
 func main() {
 	sr := memory.NewStatusRepo()
-	ks := kafkaConsumer.NewKafkaConsumer()
 
-	event := make(chan struct{}, 2)
-	_ = statusCheckUC.NewStatusCheckUsecase(sr, event)
-	_ = eventUC.NewEventUsecase(sr, ks, event)
-	wu := websocketUC.NewWebsocketUsecase(sr, event)
+	event := make(chan interface{}, 10)
+	_ = healthCheckUC.NewHealthCheckUsecase(sr, event)
+	wu := websocketUC.NewWebsocketUsecase(event)
 
 	r := gin.New()
 
@@ -40,8 +34,6 @@ func main() {
 			log.Printf("upgrade: %s", err.Error())
 		}
 		fmt.Println("connect websocket!")
-
-		conn.WriteJSON(sr.GetHealthInfo())
 
 		for data := range listen {
 			conn.WriteJSON(data)
