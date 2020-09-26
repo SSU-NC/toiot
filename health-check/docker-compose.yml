@@ -5,7 +5,7 @@ services:
         hostname:
             health
         image:
-            kbzjung359/pdk-health:0.3
+            kbzjung359/toiot-health:0.0.1
         environment: 
             HEALTH_SERVER: 0.0.0.0:8083
             APP_SERVER: localhost:8081

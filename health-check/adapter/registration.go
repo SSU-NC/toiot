@@ -10,3 +10,9 @@ type Node struct {
 	} `json:"location"`
 	// SinkID uint `json:"sink_id"`
 }
+
+type Sink struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Addr string `json:"addr"`
+}
