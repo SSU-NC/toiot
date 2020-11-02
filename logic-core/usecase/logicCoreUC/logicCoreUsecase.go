@@ -28,13 +28,8 @@ func NewLogicCoreUsecase(rr repository.RegistRepo,
 
 	go func() {
 		for rawData := range in {
-			// debug
-			//fmt.Printf("kafka : %v\n", rawData)
-
 			ld, err := lcu.ToLogicData(&rawData)
-
-			// debug
-			//fmt.Printf("logic : %v\n", ld)
+			// log.Println("add metadata :", ld)
 
 			if err != nil {
 				continue
@@ -43,7 +38,9 @@ func NewLogicCoreUsecase(rr repository.RegistRepo,
 			lchs, err := lcu.ls.GetLogicChans(ld.SensorID)
 			if err == nil {
 				for _, ch := range lchs {
-					ch <- ld
+					if len(ch) != cap(ch) {
+						ch <- ld
+					}
 				}
 			}
 			out <- lcu.ToDocument(&ld)

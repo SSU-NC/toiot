@@ -22,11 +22,12 @@ func (ve *ValueElement) Exec(d *model.LogicData) {
 	}
 	isRange := false
 	for _, rg := range ve.Range {
-		if rg.Min <= v || v < rg.Max {
+		if rg.Min <= v && v < rg.Max {
 			isRange = true
 		}
 	}
 	if isRange {
+		// log.Println("filter :", d.Node.Name, ve.Value, v)
 		ve.BaseElement.Exec(d)
 	}
 }
@@ -50,7 +51,7 @@ func (te *TimeElement) Exec(d *model.LogicData) {
 			isRange = true
 		}
 	}
-	if isRange {
+	if isRange || len(te.Range) == 0 {
 		te.BaseElement.Exec(d)
 	}
 }
