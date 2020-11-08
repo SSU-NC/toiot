@@ -5,7 +5,7 @@
 # Toiot
 Internet of Things platform for device management, data collection, analytics and visualization and more. Toiot provides a powerful enterprise-class platform for those with little web skills, and provides drivers for sensors and hardware boards.
 
-<img width="1837" alt="toiot_arch" src="https://user-images.githubusercontent.com/38535571/98469814-297b1a80-2225-11eb-906a-1fd57f321994.png">
+<img width="1856" alt="toiot_arch" src="https://user-images.githubusercontent.com/38535571/98469939-d48bd400-2225-11eb-9dd7-ccbce2ebe750.png">
 
 
 Table of contents
