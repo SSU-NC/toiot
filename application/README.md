@@ -16,23 +16,21 @@ $ go get github.com/KumKeeHyun/toiot/application
 // toiot/logic-core
 $ go get github.com/KumKeeHyun/toiot/logic-core
 
-// not yet
-// toiot/health-check
+// toiot/health-check (will be implemented in later version)
 $ go get github.com/KumKeeHyun/toiot/health-check
 ```
 
 ## docker
 ```bash
-// latest tag is 0.3
+// latest tag is 0.0.1
 
 // toiot/application
-$ docker pull kbzjung359/toiot-app
+$ docker pull kbzjung359/toiot-app:0.0.1
 
 // toiot/logic-core
-$ docker pull kbzjung359/toiot-logic
+$ docker pull kbzjung359/toiot-logic:0.0.1
 
-// not yet
-// toiot/health-check
+// toiot/health-check (will be implemented in later version)
 $ docker pull kbzjung359/toiot-health
 ```
 
@@ -61,7 +59,7 @@ The setting value of each microservice is set by reading environment variables.
 ### toiot/application (Registration)
 |Key|Example|Explain|
 |------|------|------|
-|APP_SERVER|127.0.0.1:8081|Registration microservice address|
+|APP_SERVER|0.0.0.0:8081|Registration microservice address|
 |DB_DRIVER|mysql|DBMS type|
 |DB_SERVER|localhost:3306|DBMS address|
 |DB_USER|pdk|User name|
@@ -72,11 +70,13 @@ The setting value of each microservice is set by reading environment variables.
 |TOPIC_RePLICATIONS|1|topic's replications|
 
 - Currently DBMS only supports mysql
+- This service does not create Kafka topics to Kafka Automatically. Just register DB information for logic-service.
 
-### toiot/logic-core (Logic)
+### toiot/logic-core (Sensor Data Stream Processing)
 |Key|Example|Explain|
 |------|------|------|
-|LOGIC_SERVER|127.0.0.1:8082|Logic microservice address|
+|LOGIC_SERVER|0.0.0.0:8082|Logic microservice address|
+|LOGIC_LISTEN|10.5.110.1:8082|Externally accessible address|
 |APP_SERVER|127.0.0.1:8081|Registration microservice server address|
 |KAFKA_BROKER|localhost:9092|Kafka Cluster address|
 |KAFKA_GROUP|logic-core|Kafka consumer group id|
@@ -88,16 +88,5 @@ The setting value of each microservice is set by reading environment variables.
 |ELASTIC_BATCHTICKER|5|Bulk Indexing interval second|
 |ELASTIC_BATCHSIZE|400|Bulk Indexing documents size|
 
-
-### toiot/health-check (Health Check)
-|Key|Example|Explain|
-|------|------|------|
-|HEALTH_SERVER|127.0.0.1:8083|Health microservice address|
-|LOGIC_SERVER|127.0.0.1:8081|Logic microservice address|
-|KAFKA_BROKER|localhost:9092|Kafka Cluster address|
-|KAFKA_GROUP|health-check|Kafka consumer group id|
-|KAFKA_TOPIC|health-data|Kafka topic to steam sensor data|
-|KAFKA_BUFSIZE|100|channel size for stream process in goroutines|
-|STATUS_COUNT|5|count to judge health state|
-|STATUS_TICK|30| interval second to subtract|
-|STATUS_DROP|12|drop metadata in repository interval hour when red state is maintained|
+- Kafka topics must be prepared before running the service.
+- Because LOGIC_LISTEN is used when calling from the application service to this service, external access must be possible.
