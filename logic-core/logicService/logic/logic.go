@@ -70,7 +70,7 @@ func GetElementer(elem string) Elementer {
 	case "time":
 		return &TimeElement{}
 	case "email":
-		return &EmailElement{}
+		return &EmailElement{Interval: make(map[string]bool)}
 	default:
 		return nil
 	}

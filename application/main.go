@@ -3,19 +3,19 @@ package main
 import (
 	"log"
 
-	"github.com/KumKeeHyun/toiot/application/domain/repository"
-
-	"github.com/KumKeeHyun/toiot/application/domain/model"
-	"github.com/KumKeeHyun/toiot/application/usecase/eventUsecase"
-
 	"github.com/KumKeeHyun/toiot/application/dataService/sql"
+	"github.com/KumKeeHyun/toiot/application/docs"
+	"github.com/KumKeeHyun/toiot/application/domain/model"
+	"github.com/KumKeeHyun/toiot/application/domain/repository"
 	"github.com/KumKeeHyun/toiot/application/rest/handler"
 	"github.com/KumKeeHyun/toiot/application/setting"
+	"github.com/KumKeeHyun/toiot/application/usecase/eventUsecase"
 	"github.com/KumKeeHyun/toiot/application/usecase/registUsecase"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-
 	_ "github.com/go-sql-driver/mysql"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 func main() {
@@ -38,6 +38,12 @@ func main() {
 	config.AllowOrigins = []string{"*"}
 	config.AllowCredentials = true
 	r.Use(cors.New(config))
+
+	// swagger
+	docs.SwaggerInfo.Title = "ToIoT application API"
+	docs.SwaggerInfo.Description = "This is a registration server for ToIoT UI."
+	docs.SwaggerInfo.Version = "0.1"
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	setRegistrationRoute(r, h)
 	setEventRoute(r, h)

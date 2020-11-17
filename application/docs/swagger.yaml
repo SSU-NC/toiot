@@ -1,0 +1,536 @@
+definitions:
+  adapter.Element:
+    properties:
+      arg:
+        additionalProperties: true
+        type: object
+      elem:
+        type: string
+    type: object
+  adapter.Logic:
+    properties:
+      elems:
+        items:
+          $ref: '#/definitions/adapter.Element'
+        type: array
+      id:
+        type: integer
+      logic_name:
+        type: string
+      sensor:
+        $ref: '#/definitions/model.Sensor'
+      sensor_id:
+        type: integer
+    type: object
+  adapter.NodePage:
+    properties:
+      nodes:
+        items:
+          $ref: '#/definitions/model.Node'
+        type: array
+      pages:
+        type: integer
+    type: object
+  adapter.SensorPage:
+    properties:
+      pages:
+        type: integer
+      sensors:
+        items:
+          $ref: '#/definitions/model.Sensor'
+        type: array
+    type: object
+  adapter.SinkPage:
+    properties:
+      pages:
+        type: integer
+      sinks:
+        items:
+          $ref: '#/definitions/model.Sink'
+        type: array
+    type: object
+  model.Logic:
+    properties:
+      elems:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      sensor:
+        $ref: '#/definitions/model.Sensor'
+      sensor_id:
+        type: integer
+    type: object
+  model.LogicService:
+    properties:
+      addr:
+        type: string
+      id:
+        type: integer
+      topic:
+        $ref: '#/definitions/model.Topic'
+      topic_id:
+        type: integer
+    type: object
+  model.Node:
+    properties:
+      id:
+        type: integer
+      lat:
+        type: number
+      lng:
+        type: number
+      name:
+        type: string
+      sensors:
+        items:
+          $ref: '#/definitions/model.Sensor'
+        type: array
+      sink:
+        $ref: '#/definitions/model.Sink'
+      sink_id:
+        type: integer
+    type: object
+  model.Sensor:
+    properties:
+      id:
+        type: integer
+      logics:
+        items:
+          $ref: '#/definitions/model.Logic'
+        type: array
+      name:
+        type: string
+      nodes:
+        items:
+          $ref: '#/definitions/model.Node'
+        type: array
+      sensor_values:
+        items:
+          $ref: '#/definitions/model.SensorValue'
+        type: array
+    type: object
+  model.SensorValue:
+    properties:
+      index:
+        type: integer
+      sensor_id:
+        type: integer
+      value_name:
+        type: string
+    type: object
+  model.Sink:
+    properties:
+      addr:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      nodes:
+        items:
+          $ref: '#/definitions/model.Node'
+        type: array
+      topic:
+        $ref: '#/definitions/model.Topic'
+      topic_id:
+        type: integer
+    type: object
+  model.Topic:
+    properties:
+      id:
+        type: integer
+      logic_services:
+        items:
+          $ref: '#/definitions/model.LogicService'
+        type: array
+      name:
+        type: string
+      partitions:
+        type: integer
+      replications:
+        type: integer
+      sinks:
+        items:
+          $ref: '#/definitions/model.Sink'
+        type: array
+    type: object
+info:
+  contact: {}
+paths:
+  /regist/logic:
+    delete:
+      consumes:
+      - application/json
+      description: Delete logic
+      parameters:
+      - description: logic's id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include sensor info
+          schema:
+            $ref: '#/definitions/model.Logic'
+      summary: Delete logic
+      tags:
+      - logic
+    get:
+      description: get logics list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: return all logics info.
+          schema:
+            items:
+              $ref: '#/definitions/model.Logic'
+            type: array
+      summary: List logics info
+      tags:
+      - logic
+    post:
+      consumes:
+      - application/json
+      description: Add logic info
+      parameters:
+      - description: logic_name, elems
+        in: body
+        name: logic
+        required: true
+        schema:
+          $ref: '#/definitions/adapter.Logic'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include sensor info
+          schema:
+            $ref: '#/definitions/adapter.Logic'
+      summary: Add logic info
+      tags:
+      - logic
+  /regist/logic-service:
+    delete:
+      consumes:
+      - application/json
+      description: Delete LogicService
+      parameters:
+      - description: logicSerivce's id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include topic info
+          schema:
+            $ref: '#/definitions/model.Logic'
+      summary: Delete LogicService
+      tags:
+      - logicService
+    get:
+      description: get LogicServices list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: return all logics info.
+          schema:
+            items:
+              $ref: '#/definitions/model.LogicService'
+            type: array
+      summary: List LogicServices info
+      tags:
+      - LogicService
+  /regist/node:
+    delete:
+      consumes:
+      - application/json
+      description: Delete sensor node
+      parameters:
+      - description: node's id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include sink, sink.topic info
+          schema:
+            $ref: '#/definitions/model.Node'
+      summary: Delete sensor node
+      tags:
+      - node
+    get:
+      description: get nodes list
+      parameters:
+      - description: page num
+        in: query
+        name: page
+        type: integer
+      - description: page size(row)
+        in: query
+        name: size
+        type: integer
+      - description: sink filter
+        in: query
+        name: sink
+        type: integer
+      - description: location(longitude) filter
+        in: query
+        name: left
+        type: number
+      - description: location(longitude) filter
+        in: query
+        name: right
+        type: number
+      - description: location(Latitude) filter
+        in: query
+        name: up
+        type: number
+      - description: location(Latitude) filter
+        in: query
+        name: down
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: default, return all nodes. if location query is exist, return location filter result(square).
+          schema:
+            items:
+              $ref: '#/definitions/model.Node'
+            type: array
+        "201":
+          description: if page query is exist, return pagenation result. pages only valid when page is 1.
+          schema:
+            $ref: '#/definitions/adapter.NodePage'
+      summary: List sensor node
+      tags:
+      - node
+    post:
+      consumes:
+      - application/json
+      description: Add sensor node
+      parameters:
+      - description: name, lat, lng, sink_id
+        in: body
+        name: node
+        required: true
+        schema:
+          $ref: '#/definitions/model.Node'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include sink, sink.topic, sensors, sensors.logics info
+          schema:
+            $ref: '#/definitions/model.Node'
+      summary: Add sensor node
+      tags:
+      - node
+  /regist/sensor:
+    delete:
+      consumes:
+      - application/json
+      description: Delete sensor
+      parameters:
+      - description: sensor's id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include logics info
+          schema:
+            $ref: '#/definitions/model.Sensor'
+      summary: Delete sensor
+      tags:
+      - sensor
+    get:
+      description: get sensors list
+      parameters:
+      - description: page num
+        in: query
+        name: page
+        type: integer
+      - description: page size(row)
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: default, return all sensors.
+          schema:
+            items:
+              $ref: '#/definitions/model.Sensor'
+            type: array
+        "201":
+          description: if page query is exist, return pagenation result. pages only valid when page is 1.
+          schema:
+            $ref: '#/definitions/adapter.SensorPage'
+      summary: List sensor info
+      tags:
+      - sensor
+    post:
+      consumes:
+      - application/json
+      description: Add sensor info
+      parameters:
+      - description: name, sensorValues(only value name)
+        in: body
+        name: sensor
+        required: true
+        schema:
+          $ref: '#/definitions/model.Sensor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include sensorValues info
+          schema:
+            $ref: '#/definitions/model.Node'
+      summary: Add sensor info
+      tags:
+      - sensor
+  /regist/sink:
+    delete:
+      consumes:
+      - application/json
+      description: Delete sink node
+      parameters:
+      - description: sink's id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include topic, nodes info
+          schema:
+            $ref: '#/definitions/model.Sink'
+      summary: Delete sink node(raspi info)
+      tags:
+      - sink
+    get:
+      description: get sinks list
+      parameters:
+      - description: page num
+        in: query
+        name: page
+        type: integer
+      - description: page size(row)
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: default, return all sinks.
+          schema:
+            items:
+              $ref: '#/definitions/model.Sink'
+            type: array
+        "201":
+          description: if page query is exist, return pagenation result. pages only valid when page is 1.
+          schema:
+            $ref: '#/definitions/adapter.SinkPage'
+      summary: List sink node(raspi info)
+      tags:
+      - sink
+    post:
+      consumes:
+      - application/json
+      description: Add sink node
+      parameters:
+      - description: name, address(only ip address, don't include port)
+        in: body
+        name: sink
+        required: true
+        schema:
+          $ref: '#/definitions/model.Sink'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include topic info
+          schema:
+            $ref: '#/definitions/model.Sink'
+      summary: Add sink node(raspi info)
+      tags:
+      - sink
+  /regist/topic:
+    delete:
+      consumes:
+      - application/json
+      description: Delete topic(kafka topic for logicservices)
+      parameters:
+      - description: topic's id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: include logicService info
+          schema:
+            $ref: '#/definitions/model.Topic'
+      summary: Delete topic(kafka topic for logicservices)
+      tags:
+      - topic
+    get:
+      description: get topics list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: return all topics info.
+          schema:
+            items:
+              $ref: '#/definitions/model.Topic'
+            type: array
+      summary: List topics info
+      tags:
+      - topic
+    post:
+      consumes:
+      - application/json
+      description: Add topic info
+      parameters:
+      - description: name, partitions, replications
+        in: body
+        name: logic
+        required: true
+        schema:
+          $ref: '#/definitions/model.Logic'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Topic'
+      summary: Add topic info
+      tags:
+      - topic
+swagger: "2.0"

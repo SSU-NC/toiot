@@ -1,6 +1,7 @@
 package logicService
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
@@ -29,6 +30,10 @@ func (m *mux) CreateAndStartLogic(l *model.Logic) error {
 	if !ok {
 		m.chTable[l.SensorID] = make(map[int]chan model.LogicData)
 		lchs, _ = m.chTable[l.SensorID]
+	}
+	if _, ok := lchs[l.ID]; ok {
+		close(listen)
+		return errors.New("already exist logic evnet")
 	}
 	lchs[l.ID] = listen
 
