@@ -1,6 +1,6 @@
 FROM golang:1.13 as builder
 
-WORKDIR $GOPATH/src/github.com/KumKeeHyun/toiot/application
+WORKDIR /go/src/github.com/KumKeeHyun/toiot/application
 COPY . .
 
 RUN go build -o main .
