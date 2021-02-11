@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"log"
 	"sync"
 	"time"
 
@@ -16,7 +17,7 @@ var (
 type statusRepo struct {
 	mu *sync.RWMutex
 	// map[sinkID]map[nodeID]
-	table map[int]map[int]model.Status
+	table map[int]map[int]model.Status // 이차원 맵 model.Status가 원소 (0,1,2)
 }
 
 var statusTable *statusRepo
@@ -41,7 +42,7 @@ func (sr *statusRepo) Unlock() {
 	sr.mu.Unlock()
 }
 
-func (sr *statusRepo) UpdateTable(sinkID int, states adapter.States) []model.NodeStatus {
+func (sr *statusRepo) UpdateTable(sinkID int, states adapter.States) []model.NodeStatus { // ID 번째 싱크를 업데이트 한다.
 	t, err := time.ParseInLocation(timeFmt, states.Timestamp, loc)
 	if err != nil {
 		t = time.Now()
@@ -56,12 +57,13 @@ func (sr *statusRepo) UpdateTable(sinkID int, states adapter.States) []model.Nod
 	return sr.updateNodeStatus(sinkID, states.State, t)
 }
 
-func (sr *statusRepo) updateNodeStatus(sinkID int, ns []adapter.NodeState, t time.Time) []model.NodeStatus {
+func (sr *statusRepo) updateNodeStatus(sinkID int, ns []adapter.NodeState, t time.Time) []model.NodeStatus { // 어답더 계층의 NodeState상태와 메모리 계층의 statusRepo의 status table을 동기화시켜 주는 것
 	res := []model.NodeStatus{}
+	rres := []model.SinkStatus{}
 	nsTable := map[int]bool{}
 
 	// update the status checked from the sink node
-	for _, v := range ns {
+	for _, v := range ns { // v는 NodeSate 배열 중 한 원소
 		nsTable[v.NodeID] = true
 		nodeState, ok := sr.table[sinkID][v.NodeID]
 		// if new nodeState, regist new state
@@ -79,6 +81,7 @@ func (sr *statusRepo) updateNodeStatus(sinkID int, ns []adapter.NodeState, t tim
 
 	// if the state is not confirmed from the sink node
 	// check timeout and drop state from table
+	// sr.table[sinkID][K]랑 nsTable[k]가 존재하지 않을 경우 제거, 존재할 경우 업데이트
 	for k, v := range sr.table[sinkID] {
 		if _, ok := nsTable[k]; !ok {
 			if v.CheckDrop() {
@@ -90,7 +93,11 @@ func (sr *statusRepo) updateNodeStatus(sinkID int, ns []adapter.NodeState, t tim
 
 		}
 	}
-	return res
+	for i, j := range sr.table {
+		log.Println(i, ":", j)
+	}
+	rres = model.SinkStatus{SinkID: sinkID, Satates: res}
+	return rres
 }
 
 // func (sr *statusRepo) GetKeys() []string {
