@@ -2,14 +2,12 @@ package model
 
 import (
 	"time"
-
-	"github.com/KumKeeHyun/PDK/health-check/setting"
 )
 
 const (
-	RED    = 0
-	YELLOW = 1
-	GREEN  = 2
+	RED    = 0 // 미동작
+	YELLOW = 1 // 형태 바뀔 경우 가운데서 중재 단계
+	GREEN  = 2 // 동작
 )
 
 type NodeStatus struct {
@@ -20,14 +18,12 @@ type NodeStatus struct {
 type Status struct {
 	State       int       `json:"state"`
 	Work        bool      `json:"work"`
-	Count       int       `json:"count"`
 	LastConnect time.Time `json:"last_connect"`
 }
 
-func NewStatus(work bool, t time.Time) Status {
+func NewStatus(work bool, t time.Time) Status { // 인자로 받은 work 여부로 Status 구조체 설정
 	res := Status{
 		Work:        work,
-		Count:       -1,
 		LastConnect: t,
 	}
 	if work {
@@ -38,24 +34,15 @@ func NewStatus(work bool, t time.Time) Status {
 	return res
 }
 
-func (s *Status) setState(v int) {
+func (s *Status) setState(v int) { // 인자로 받은 v로 Status구조체 변경
 	s.State = v
 	switch v {
 	case RED:
-		s.Count = -1
 		s.Work = false
 	case GREEN:
-		s.Count = -1
 		s.Work = true
 	case YELLOW:
-		s.Count = setting.StatusSetting.Count
 		s.Work = !s.Work
-	}
-}
-
-func (s *Status) decreaseCnt() {
-	if s.Count >= 0 {
-		s.Count--
 	}
 }
 
@@ -65,26 +52,22 @@ func (s *Status) UpdateState(work bool, t time.Time) bool {
 	if work {
 		s.LastConnect = t
 	}
-	if s.Work != work {
+	if s.State == YELLOW {
+		if work {
+			s.setState(GREEN)
+		} else {
+			s.setState(RED)
+		}
+		isChange = true
+	} else if s.Work != work {
 		s.setState(YELLOW)
 		isChange = true
-	} else {
-		s.decreaseCnt()
-		if s.Count == 0 {
-			if s.Work {
-				s.setState(GREEN)
-			} else {
-				s.setState(RED)
-			}
-			isChange = true
-		}
 	}
 	return isChange
 }
-
 func (s *Status) CheckDrop() bool {
 	s.setState(RED)
 	now := time.Now()
-	timeout := s.LastConnect.Add(time.Duration(setting.StatusSetting.Drop) * time.Hour)
+	timeout := time.Now() //s.LastConnect.Add(time.Duration(setting.StatusSetting.Drop) * time.Hour)
 	return now.After(timeout)
 }
