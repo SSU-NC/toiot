@@ -6,5 +6,5 @@ import (
 )
 
 type StatusRepo interface {
-	UpdateTable(sinkID int, states adapter.States) model.SinkStatus
+	UpdateTable(states adapter.States) model.SinkStatus
 }
