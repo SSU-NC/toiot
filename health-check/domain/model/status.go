@@ -10,10 +10,18 @@ const (
 	GREEN  = 2 // 동작
 )
 
+type SinkStatus struct {
+	SinkID		int	`json:"sid"`
+	Satates		[]NodeStatus `json:"states"`
+}
+
+
 type NodeStatus struct {
 	NodeID int `json:"nid"`
 	State  int `json:"state"`
 }
+
+
 
 type Status struct {
 	State       int       `json:"state"`

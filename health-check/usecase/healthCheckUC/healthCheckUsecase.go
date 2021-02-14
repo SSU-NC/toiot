@@ -1,9 +1,9 @@
 package healthCheckUC
 
 import (
+	"encoding/json"
 	"io"
 	"log"
-	"math"
 	"net"
 	"time"
 
@@ -52,7 +52,7 @@ func NewHealthCheckUsecase(sr repository.StatusRepo, e chan interface{}) *health
 }
 
 func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
-	recvBuf := make([]byte, 4096) // receive buffer: 4kB 현재 1바이트씩 받는데 1비트씩으로 수정해야 함
+	recvBuf := make([]byte, 4096)
 	for {
 		n, err := conn.Read(recvBuf)
 		if nil != err {
@@ -64,34 +64,20 @@ func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
 			return
 		}
 		if n > 0 {
-			data := make([]byte, n)
-			sinknum := bytetoint(recvBuf[:3]) // 앞 3자리로 싱크 번호 가져옴
-			log.Println("sinknum = ", sinknum)
-			var states []bool
-			states = []bool{}
+			var healthInfo adapter.HealthInfo
+			var states adapter.States
 
-			for i := 3; i < n; i++ {
-				data[i-3] = recvBuf[i]
-			}
-			for i := 0; i < n-3; i++ {
-				log.Println(i, "-Node's status : ", data[i]-'0')
-				var status bool // 싱크로 부터 tcp전송받은 센서들의 상태
-				if int(data[i]-'0') > 0 {
-					status = true
-				} else {
-					status = false
-				}
-				states = append(states, status)
-				//
-			}
-			res := makeStates(states)
+			recvBuf = ClearPadding(recvBuf)
+			log.Println("recv Buf :", recvBuf)
+			json.Unmarshal(recvBuf, &healthInfo)
 
+			states.State = healthInfo
+			states.Timestamp = string(time.Now().Unix())
+			log.Println("convert to json :", healthInfo)
 			//test_start
-			tmphealth := hu.sr.UpdateTable(sinknum, res)
+			tmphealth := hu.sr.UpdateTable(states) // 변화가 생긴 것들만 뭘로 변했는지 알려줌 ex : {1 [{1 1} {2 1} {8 0}]}
+			log.Println(tmphealth)
 
-			for i := 0; i < len(tmphealth); i++ {
-				log.Println("test_Result_", i, "-> Node[", tmphealth.[i].NodeID, "] : ", tmphealth[i].State) // Satates
-			}
 			hu.event <- tmphealth
 			//test_end
 
@@ -99,47 +85,14 @@ func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
 
 		}
 	}
-
-	/*
-		sinks, err := getSinkList()
-		if err != nil {
-			return
-		}
-
-		var wg sync.WaitGroup
-		for _, sink := range sinks {
-			wg.Add(1)
-			go func(s adapter.Sink) {
-				res := adapter.States{}
-				client := resty.New()
-				client.SetTimeout(500 * time.Millisecond)
-				resp, _ := client.R().SetResult(&res).Get(fmt.Sprintf("http://%s/health-check", s.Addr))
-
-				if resp.IsSuccess() {
-					hu.event <- hu.sr.UpdateTable(s.ID, res)
-				}
-				wg.Done()
-			}(sink)
-		}
-	*/
 }
-func bytetoint(data []byte) int {
-	res := 0
-	n := len(data)
-	for i := 0; i < n; i++ {
-		res += int(float64(data[i]-'0') * math.Pow(10, float64(n-1-i)))
+
+func ClearPadding(buf []byte) []byte {
+	var res []byte
+	for i := 1; i < 4096; i++ {
+		if (buf[i-1] == 9) && (buf[i] == 0) {
+			res = buf[:i]
+		}
 	}
 	return res
-}
-func makeStates(states []bool) adapter.States {
-	res := adapter.States{}
-	res.Timestamp = string(time.Now().Unix())
-	tmpState := adapter.NodeState{}
-	for i := 0; i < len(states); i++ {
-		tmpState.NodeID = i
-		tmpState.State = states[i]
-		res.State = append(res.State, tmpState)
-	}
-	return res
-
 }
