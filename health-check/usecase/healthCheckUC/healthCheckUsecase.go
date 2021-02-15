@@ -21,7 +21,7 @@ func NewHealthCheckUsecase(sr repository.StatusRepo, e chan interface{}) *health
 		sr:    sr,
 		event: e,
 	}
-	l, err := net.Listen("tcp", ":5032") // 포트정보 setting으로 옮겨야 함
+	l, err := net.Listen("tcp", "10.5.110.11:5032") // 포트정보 setting으로 옮겨야 함
 	if nil != err {
 		log.Fatalf("fail to bind address to 5032; err: %v", err)
 	}

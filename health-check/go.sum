@@ -1,6 +1,7 @@
 github.com/KumKeeHyun/PDK v0.0.0-20200925133928-52ab7f87b199 h1:oatxng65jfuNO8rbSf/Jb7oEy7yCEgvLP+cAy5fnkLU=
 github.com/KumKeeHyun/PDK/health-check v0.0.0-20200925133928-52ab7f87b199 h1:dLAJIAke48kBX/DkNB77mItO/q6LoDSFTQawG8ParHM=
 github.com/KumKeeHyun/PDK/health-check v0.0.0-20200925133928-52ab7f87b199/go.mod h1:ztuzK68BTutIOHO2Kefmo9VUGvqtOvc4YqPuREPZzEs=
+github.com/KumKeeHyun/toiot v0.0.0-20201116030134-35ec72890c25 h1:DKbvg3iJcV9cG2Xs/Ud68kt0Z8HIji5nG7YSe+nAVHE=
 github.com/Shopify/sarama v1.27.0 h1:tqo2zmyzPf1+gwTTwhI6W+EXDw4PVSczynpHKFtVAmo=
 github.com/Shopify/sarama v1.27.0/go.mod h1:aCdj6ymI8uyPEux1JJ9gcaDT6cinjGhNCAhs54taSUo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
