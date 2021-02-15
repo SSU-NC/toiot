@@ -1,7 +1,6 @@
 package setting
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 )
@@ -21,13 +20,24 @@ func GetenvInt(target *int, init int, env string) {
 
 type Health struct {
 	Server string
+	Listen string
 }
 
-func (hs *Health) Getenv() {
-	hs.Server = os.Getenv("HEALTH_SERVER")
-	if hs.Server == "" {
-		hs.Server = "0.0.0.0:8083"
+// func (hs *Health) Getenv() {
+// 	hs.Server = os.Getenv("HEALTH_SERVER")
+// 	if hs.Server == "" {
+// 		hs.Server = "0.0.0.0:8083"
+// 	}
+// }
+func GetenvStr(target *string, init, env string) {
+	*target = os.Getenv(env)
+	if *target == "" {
+		*target = init
 	}
+}
+func (hs *Health) Getenv() {
+	GetenvStr(&hs.Server, "localhost:8083", "HEALTH_SERVER")
+	GetenvStr(&hs.Listen, "localhost:8085", "HEALTH_LISTEN")
 }
 
 var Healthsetting = &Health{}
@@ -66,5 +76,5 @@ func init() {
 	Appsetting.Getenv()
 	StatusSetting.Getenv()
 
-	fmt.Printf("Health : &v\nApp : %v\nStatus : %v\n\n", Healthsetting, Appsetting, StatusSetting)
+	//fmt.Printf("Health : &v\nApp : %v\nStatus : %v\n\n", Healthsetting, Appsetting, StatusSetting)
 }

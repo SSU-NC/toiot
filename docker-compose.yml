@@ -16,7 +16,7 @@ services:
             MYSQL_DATABASE: toiot
     app:
         hostname: app
-        image : kbzjung359/toiot-app:0.0.1
+        image : ksh24865/toiot-app:0.0.1
         restart: always
         ports:
             - 8081:8081
@@ -34,7 +34,7 @@ services:
             - db
     ui:
         hostname: ui
-        image: iamhge/toiot-ui:0.0.1
+        image: ksh24865/toiot-ui:0.0.1
         ports:
             - 3000:3000
         environment: 
@@ -44,10 +44,12 @@ services:
             - REACT_APP_DB_PORT=8081
             - REACT_APP_KIBANA_IP=kibana
             - REACT_APP_KIBANA_PORT=5601
+            - REACT_APP_HEALTHCHECK_IP=health
+            - REACT_APP_HEALTHCHECK_PORT=8083
         
     logic:
         hostname: logic
-        image: kbzjung359/toiot-logic:0.0.1
+        image: ksh24865/toiot-logic:0.0.1
         restart: always
         ports: 
             - 8082:8082
@@ -63,6 +65,18 @@ services:
             - app
         links:
             - app
+            
+    health:
+        hostname: health
+        image: ksh24865/toiot-health:0.0.3
+        restart: always
+        ports: 
+            - 8083:8083
+        environment: 
+            HEALTH_SERVER: 0.0.0.0:8083
+            HEALTH__LISTEN: 0.0.0.0:8082
+            APP_SERVER: app:8081
+
     zookeeper:
         hostname: zookeeper
         image: bitnami/zookeeper:3.6.1

@@ -9,6 +9,7 @@ import (
 
 	"github.com/KumKeeHyun/toiot/health-check/adapter"
 	"github.com/KumKeeHyun/toiot/health-check/domain/repository"
+	"github.com/KumKeeHyun/toiot/health-check/setting"
 )
 
 type healthCheckUsecase struct {
@@ -21,7 +22,7 @@ func NewHealthCheckUsecase(sr repository.StatusRepo, e chan interface{}) *health
 		sr:    sr,
 		event: e,
 	}
-	l, err := net.Listen("tcp", "10.5.110.11:8083") // 포트정보 setting으로 옮겨야 함
+	l, err := net.Listen("tcp", setting.Healthsetting.Listen)
 	if nil != err {
 		log.Fatalf("fail to bind address to 5032; err: %v", err)
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	conn, err := net.Dial("tcp", "10.5.110.11:5032")
+	conn, err := net.Dial("tcp", "10.5.110.11:8085")
 	if nil != err {
 		log.Fatalf("failed to connect to server")
 	}
