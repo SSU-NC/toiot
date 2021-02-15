@@ -8,7 +8,6 @@ import (
 	"syscall"
 
 	"github.com/KumKeeHyun/toiot/health-check/dataService/memory"
-	"github.com/KumKeeHyun/toiot/health-check/setting"
 	"github.com/KumKeeHyun/toiot/health-check/usecase/healthCheckUC"
 	"github.com/KumKeeHyun/toiot/health-check/usecase/websocketUC"
 	"github.com/gin-gonic/gin"
@@ -20,6 +19,7 @@ func main() {
 
 	event := make(chan interface{}, 10)
 	_ = healthCheckUC.NewHealthCheckUsecase(sr, event)
+
 	wu := websocketUC.NewWebsocketUsecase(event)
 
 	r := gin.New()
@@ -41,9 +41,10 @@ func main() {
 		fmt.Println("disconnect websocket!")
 	})
 
-	go log.Fatal(r.Run(setting.Healthsetting.Server))
+	go log.Fatal(r.Run(":8085"))
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
 	<-sigterm
+
 }
