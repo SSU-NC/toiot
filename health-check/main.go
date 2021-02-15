@@ -41,11 +41,10 @@ func main() {
 		fmt.Println("disconnect websocket!")
 	})
 
-	go log.Fatal(r.Run(":8083"))
+	go log.Fatal(r.Run(":8085"))
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
 	<-sigterm
-	//fmt.Scanln()
 
 }

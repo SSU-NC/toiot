@@ -21,7 +21,7 @@ func NewHealthCheckUsecase(sr repository.StatusRepo, e chan interface{}) *health
 		sr:    sr,
 		event: e,
 	}
-	l, err := net.Listen("tcp", "10.5.110.11:5032") // 포트정보 setting으로 옮겨야 함
+	l, err := net.Listen("tcp", "10.5.110.11:8083") // 포트정보 setting으로 옮겨야 함
 	if nil != err {
 		log.Fatalf("fail to bind address to 5032; err: %v", err)
 	}
@@ -52,8 +52,9 @@ func NewHealthCheckUsecase(sr repository.StatusRepo, e chan interface{}) *health
 }
 
 func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
-	recvBuf := make([]byte, 4096)
+
 	for {
+		recvBuf := make([]byte, 4096)
 		n, err := conn.Read(recvBuf)
 		if nil != err {
 			if io.EOF == err {
@@ -76,9 +77,9 @@ func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
 			log.Println("convert to json :", healthInfo)
 			//test_start
 			tmphealth := hu.sr.UpdateTable(states) // 변화가 생긴 것들만 뭘로 변했는지 알려줌 ex : {1 [{1 1} {2 1} {8 0}]}
-			log.Println(tmphealth)
+			log.Println(tmphealth.Satates)
 
-			hu.event <- tmphealth
+			hu.event <- tmphealth.Satates
 			//test_end
 
 			//hu.event <- hu.sr.UpdateTable(sinknum, res)
@@ -90,8 +91,9 @@ func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
 func ClearPadding(buf []byte) []byte {
 	var res []byte
 	for i := 1; i < 4096; i++ {
-		if (buf[i-1] == 9) && (buf[i] == 0) {
+		if (buf[i-1] == 125) && (buf[i] == 0) {
 			res = buf[:i]
+			break
 		}
 	}
 	return res
