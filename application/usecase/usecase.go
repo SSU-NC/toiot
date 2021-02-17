@@ -45,6 +45,7 @@ type EventUsecase interface {
 	RegistLogicService(l *model.LogicService) error
 	CheckAndUnregistLogicServices() error
 
+	CreateSinkEvent(s *model.Sink) error
 	DeleteSinkEvent(s *model.Sink) error
 	CreateNodeEvent(n *model.Node) error
 	DeleteNodeEvent(n *model.Node) error

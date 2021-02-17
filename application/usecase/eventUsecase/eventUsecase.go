@@ -74,6 +74,7 @@ type EVENT int
 
 const (
 	DeleteSink EVENT = iota
+	CreateSink
 	CreateNode
 	DeleteNode
 	DeleteSensor
@@ -83,6 +84,7 @@ const (
 
 var EventPath = [...]string{
 	"/event/sink/delete",
+	"/event/sink/create",
 	"/event/node/create",
 	"/event/node/delete",
 	"/event/sensor/delete",

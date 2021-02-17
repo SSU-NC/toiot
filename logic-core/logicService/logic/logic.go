@@ -36,7 +36,7 @@ func BuildLogic(l *model.Logic) (Elementer, error) {
 	}
 	res := &BaseElement{}
 	res.SetNext(first)
-	for _, raw := range l.Elems[1:] {
+	for _, raw := range l.Elems[1:] { // Elem 링크드 리스트 생성 후 리턴
 		if elem, err := UnmarshalElement(&raw); err != nil {
 			return nil, err
 		} else {

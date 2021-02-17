@@ -9,6 +9,7 @@ import (
 
 	"github.com/KumKeeHyun/toiot/health-check/adapter"
 	"github.com/KumKeeHyun/toiot/health-check/domain/repository"
+	"github.com/KumKeeHyun/toiot/health-check/setting"
 )
 
 type healthCheckUsecase struct {
@@ -21,9 +22,9 @@ func NewHealthCheckUsecase(sr repository.StatusRepo, e chan interface{}) *health
 		sr:    sr,
 		event: e,
 	}
-	l, err := net.Listen("tcp", ":5032") // 포트정보 setting으로 옮겨야 함
+	l, err := net.Listen("tcp", setting.Healthsetting.Listen)
 	if nil != err {
-		log.Fatalf("fail to bind address to 5032; err: %v", err)
+		log.Fatalf("fail to bind address to Listen; err: %v", err)
 	}
 	//defer l.Close()
 
@@ -52,8 +53,9 @@ func NewHealthCheckUsecase(sr repository.StatusRepo, e chan interface{}) *health
 }
 
 func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
-	recvBuf := make([]byte, 4096)
+
 	for {
+		recvBuf := make([]byte, 4096)
 		n, err := conn.Read(recvBuf)
 		if nil != err {
 			if io.EOF == err {
@@ -90,8 +92,9 @@ func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
 func ClearPadding(buf []byte) []byte {
 	var res []byte
 	for i := 1; i < 4096; i++ {
-		if (buf[i-1] == 9) && (buf[i] == 0) {
+		if (buf[i-1] == 125) && (buf[i] == 0) {
 			res = buf[:i]
+			break
 		}
 	}
 	return res

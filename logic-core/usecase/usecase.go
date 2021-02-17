@@ -1,6 +1,8 @@
 package usecase
 
-import "github.com/KumKeeHyun/toiot/logic-core/adapter"
+import (
+	"github.com/KumKeeHyun/toiot/logic-core/adapter"
+)
 
 type EventUsecase interface {
 	DeleteSink(nl []adapter.Node) error
@@ -11,4 +13,16 @@ type EventUsecase interface {
 	DeleteLogic(l *adapter.Logic) error
 }
 
-type LogicCoreUsecase interface{}
+type LogicCoreUsecase interface {
+	AppendSinkAddr(sa *adapter.SinkAddr) error
+}
+
+// type sinkAddrRepo struct {
+// 	samu  *sync.RWMutex
+// 	addrs []model.Sink
+// }
+
+// func (sar *sinkAddrRepo) appendSinkAddr(s model.Sink) error {
+// 	sar.addrs = append(sar.addrs, s)
+// 	return nil
+// }

@@ -2,6 +2,7 @@ package memory
 
 import (
 	"errors"
+	"log"
 	"sync"
 
 	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
@@ -23,6 +24,10 @@ func NewRegistRepo() *registRepo {
 			smu:   &sync.RWMutex{},
 			sinfo: make(map[int]model.Sensor),
 		},
+		sinkAddrRepo{
+			samu:  &sync.RWMutex{},
+			addrs: make(map[int]model.Sink),
+		},
 	}
 
 	return regist
@@ -31,11 +36,17 @@ func NewRegistRepo() *registRepo {
 type registRepo struct {
 	nodeRepo
 	sensorRepo
+	sinkAddrRepo
 }
 
 type nodeRepo struct {
 	nmu   *sync.RWMutex
 	ninfo map[int]model.Node
+}
+
+type sinkAddrRepo struct {
+	samu  *sync.RWMutex
+	addrs map[int]model.Sink
 }
 
 func (nr *nodeRepo) FindNode(key int) (*model.Node, error) {
@@ -99,5 +110,18 @@ func (sr *sensorRepo) DeleteSensor(key int) error {
 		return errors.New("nodeRepo: cannot find sensor")
 	}
 	delete(sr.sinfo, key)
+	return nil
+}
+
+func (sar *sinkAddrRepo) AppendSinkAddr(sid int, s *string) error {
+
+	_, ok := sar.addrs[sid]
+	if ok {
+		return errors.New("sinkAddrRepo: already exist sink")
+	}
+	var sink model.Sink
+	sink.Addr = *s
+	sar.addrs[sid] = sink
+	log.Println("test >>>>>> in memory/appendSinkAddr, sinkID : ", sid, "sinkADDR : ", *s)
 	return nil
 }
