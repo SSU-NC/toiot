@@ -9,14 +9,21 @@ import (
 type Logic struct {
 	ID        int          `json:"id"`
 	LogicName string       `json:"logic_name"`
-	Elems     []Element    `json:"elems"`
+	Elems     []Element    `json:"elems"` // 엘렘 배열 , value time email 중 선택한거 드가있음
 	SensorID  int          `json:"sensor_id"`
 	Sensor    model.Sensor `json:"sensor"`
 }
 
+/*
+{
+  "aid": int,
+  "value": int,
+  "sleep": int
+}
+*/
 type Element struct {
-	Elem string                 `json:"elem"`
-	Arg  map[string]interface{} `json:"arg"`
+	Elem string                 `json:"elem"` //value time email 중 선택한거
+	Arg  map[string]interface{} `json:"arg"`  //거기에 맞는 Arg
 }
 
 func LogicToAdapter(ml *model.Logic) (Logic, error) {

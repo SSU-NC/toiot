@@ -15,3 +15,8 @@ type Sensor struct {
 	Name         string   `json:"name"`
 	SensorValues []string `json:"sensor_values"`
 }
+
+type Sink struct {
+	// Sid		 int 	  `json:"sid"`
+	Addr string `json:"addr"`
+}

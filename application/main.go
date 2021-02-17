@@ -66,7 +66,7 @@ func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 		{
 			sink.GET("", h.ListSinks)
 			sink.POST("", h.RegistSink)
-			sink.DELETE("/:id", h.UnregistSink)
+			sink.DELETE("/Satates:id", h.UnregistSink)
 		}
 		node := regist.Group("/node")
 		{

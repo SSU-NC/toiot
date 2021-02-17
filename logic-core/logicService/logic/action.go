@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"log"
 	"net/smtp"
 	"time"
 
@@ -42,6 +43,42 @@ func (ee *EmailElement) Exec(d *model.LogicData) {
 			ee.Interval[d.Node.Name] = true
 		}()
 	}
-
 	ee.BaseElement.Exec(d)
+}
+
+type ActuatorElement struct {
+	BaseElement
+	
+}
+type Actuator struct {
+	aid int		`json:"aid"`
+	value int	`json:"value"`
+	sleep int	`json:"sleep"`
+}
+
+func (ae *ActuatorElement) Exec(d *model.LogicData, addrs map[int]model.Sink) {
+	/*
+	Sinkaddr  돌면서 post요청 
+	*/
+	addrs:=[]string
+	actuator:=Actuator{Value:10,sleep:10}
+	//reqBody := sinkaddr
+	pbytes, _ := json.Marshal(actuator)
+	
+	buff := bytes.NewBuffer(pbytes)
+	
+	for _, a := range addrs{
+		resp, err := http.Post("http://"+a+"/act", "application/json", buff)
+		if err != nil {
+			panic(err)
+		}
+	}
+	defer resp.Body.Close()
+	// // Response 체크.
+	// respBody, err := ioutil.ReadAll(resp.Body)
+	// if err == nil {
+	// 	str := string(respBody)
+	// 	println(str)
+	// }
+
 }

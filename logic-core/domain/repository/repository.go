@@ -12,4 +12,5 @@ type RegistRepo interface {
 	FindSensor(key int) (*model.Sensor, error)
 	CreateSensor(key int, s *model.Sensor) error
 	DeleteSensor(key int) error
+	AppendSinkAddr(sid int, s *string) error
 }

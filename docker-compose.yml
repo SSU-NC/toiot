@@ -31,7 +31,7 @@ services:
         depends_on: 
             - db
         links:
-            - db
+            - db 
     ui:
         hostname: ui
         image: ksh24865/toiot-ui:0.0.1
@@ -65,7 +65,7 @@ services:
             - app
         links:
             - app
-            
+
     health:
         hostname: health
         image: ksh24865/toiot-health:0.0.3

@@ -9,6 +9,7 @@ type Sink struct {
 	Nodes   []Node `json:"nodes" gorm:"foreignKey:SinkID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
+
 func (Sink) TableName() string {
 	return "sinks"
 }

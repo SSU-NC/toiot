@@ -32,7 +32,7 @@ type Logic struct {
 }
 
 func (ls *Logic) Getenv() {
-	GetenvStr(&ls.Server, "localhost:8082", "LOGIC_SERVER")
+	GetenvStr(&ls.Server, "localhost:8084", "LOGIC_SERVER")
 	GetenvStr(&ls.Listen, ls.Server, "LOGIC_LISTEN")
 }
 
@@ -44,8 +44,13 @@ type App struct {
 
 func (as *App) Getenv() {
 	as.Server = os.Getenv("APP_SERVER")
+	/*
+		if as.Server == "" {
+			as.Server = "localhost:8081"
+		}
+	*/
 	if as.Server == "" {
-		as.Server = "localhost:8081"
+		as.Server = "220.70.2.5:8081"
 	}
 }
 
@@ -59,7 +64,7 @@ type Kafka struct {
 }
 
 func (ks *Kafka) Getenv() {
-	GetenvStr(&ks.Broker, "localhost:9092", "KAFKA_BROKER")
+	GetenvStr(&ks.Broker, "10.5.110.3:9092", "KAFKA_BROKER") //"localhost:9092", "KAFKA_BROKER")
 	GetenvStr(&ks.GroupID, "logic1", "KAFKA_GROUP")
 	ks.Topics = []string{os.Getenv("KAFKA_TOPIC")}
 	if ks.Topics[0] == "" {
@@ -81,7 +86,7 @@ type Elastic struct {
 func (es *Elastic) Getenv() {
 	temp := os.Getenv("ELASTIC_SERVER")
 	if temp == "" {
-		temp = "localhost:9200"
+		temp = "10.5.110.1:9200" //"localhost:9200"
 	}
 	es.Addresses = []string{fmt.Sprintf("http://%s", temp)}
 	GetenvInt(&es.RequestRetry, 3, "ELASTIC_RETRY")

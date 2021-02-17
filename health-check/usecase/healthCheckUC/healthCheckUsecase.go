@@ -24,7 +24,7 @@ func NewHealthCheckUsecase(sr repository.StatusRepo, e chan interface{}) *health
 	}
 	l, err := net.Listen("tcp", setting.Healthsetting.Listen)
 	if nil != err {
-		log.Fatalf("fail to bind address to 5032; err: %v", err)
+		log.Fatalf("fail to bind address to Listen; err: %v", err)
 	}
 	//defer l.Close()
 
@@ -78,9 +78,9 @@ func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
 			log.Println("convert to json :", healthInfo)
 			//test_start
 			tmphealth := hu.sr.UpdateTable(states) // 변화가 생긴 것들만 뭘로 변했는지 알려줌 ex : {1 [{1 1} {2 1} {8 0}]}
-			log.Println(tmphealth.Satates)
+			log.Println(tmphealth)
 
-			hu.event <- tmphealth.Satates
+			hu.event <- tmphealth
 			//test_end
 
 			//hu.event <- hu.sr.UpdateTable(sinknum, res)

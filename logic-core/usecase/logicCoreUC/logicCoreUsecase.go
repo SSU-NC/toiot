@@ -1,6 +1,7 @@
 package logicCoreUC
 
 import (
+	"github.com/KumKeeHyun/toiot/logic-core/adapter"
 	"github.com/KumKeeHyun/toiot/logic-core/domain/repository"
 	"github.com/KumKeeHyun/toiot/logic-core/domain/service"
 )
@@ -48,4 +49,10 @@ func NewLogicCoreUsecase(rr repository.RegistRepo,
 	}()
 
 	return lcu
+}
+
+func (lcu *logicCoreUsecase) AppendSinkAddr(sa *adapter.SinkAddr) error {
+	lcu.rr.AppendSinkAddr(sa.Sid, &sa.Addr)
+
+	return nil
 }

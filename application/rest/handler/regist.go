@@ -42,11 +42,7 @@ func (h *Handler) ListSinks(c *gin.Context) {
 		return
 	} else {
 		sinks, err := h.ru.GetSinks()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusOK, sinks)
+		if err != nil {h.eu.CreateNodeEvent(&node)
 		return
 	}
 }
@@ -62,6 +58,7 @@ func (h *Handler) ListSinks(c *gin.Context) {
 // @Router /regist/sink [post]
 func (h *Handler) RegistSink(c *gin.Context) {
 	var sink model.Sink
+	
 	if err := c.ShouldBindJSON(&sink); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -71,6 +68,10 @@ func (h *Handler) RegistSink(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	
+	
+	h.eu.CreateSinkEvent(&sink)
 	c.JSON(http.StatusOK, sink)
 }
 
@@ -102,7 +103,7 @@ func (h *Handler) UnregistSink(c *gin.Context) {
 
 // ListNodes ...
 // @Summary List sensor node
-// @Description get nodes list
+// @Description get nodes listh.eu.CreateNodeEvent(&node)
 // @Tags node
 // @Param  page query int false "page num"
 // @Param  size query int false "page size(row)"
@@ -155,7 +156,7 @@ func (h *Handler) ListNodes(c *gin.Context) {
 	}
 
 }
-
+h.eu.CreateNodeEvent(&node)
 // RegistNode ...
 // @Summary Add sensor node
 // @Description Add sensor node

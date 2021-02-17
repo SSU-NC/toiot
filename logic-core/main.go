@@ -66,6 +66,9 @@ func main() {
 func SetEventRoute(r *gin.Engine, h *handler.Handler) {
 	e := r.Group("/event")
 	{
+		e.POST("/sink/create", h.CreateSink)
+		//여기서 CreateSink 실행되면 메모리 상에 있는 []sinkAddr에 어팬드 해줘야 함.
+		// 이후 로직에 액션으로 이 []sinkAddr 돌면서 해당 주소로 액추에이터 조종 메세지 전달
 		e.POST("/sink/delete", h.DeleteSink)
 		e.POST("/node/create", h.CreateNode)
 		e.POST("/node/delete", h.DeleteNode)
@@ -95,6 +98,7 @@ func RegistLogicService(ls usecase.EventUsecase) {
 	}
 
 	for _, s := range sinks {
+		log.Println("->", s.Name)
 		for _, n := range s.Nodes {
 			ls.CreateNode(&n, s.Name)
 		}
