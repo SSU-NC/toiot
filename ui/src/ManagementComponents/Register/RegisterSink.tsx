@@ -6,9 +6,9 @@ import { topicListElem, topicOptionsElem } from '../../ElemInterface/ElementsInt
 // add, delete input : https://codesandbox.io/s/00xq32n3pn?from-embed=&file=/src/index.js
 
 interface RegisterSinkState {
-	topicList: Array<topicListElem>;
+	topicList: Array<topicListElem>;         //  topicList 중 선택해야하므로
 	name: string;
-	topic_id: number;
+	topic_id: number;                        // 선택한 topic number
 	ip: string;
 	nameValid: boolean;
 	topicValid: boolean;
@@ -80,10 +80,10 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 	// Handle ip:port change by typing
 	handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		// Regular expression of check the ip:port format
-		const ipportRegExp = /^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{4,5}/;
+		const ipportRegExp = /^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{4,5}/;      // 0~9 숫자 1-3개.0~9 숫자 1-3개. ... :0~9숫자 4-5개   (ex 0.0.0.0:8080 소수점, 숫자 형태가 반복되는 문자열)
 
 		// ip:port valid check : user should enter correct format of ip:port.
-		if (e.target.value.match(ipportRegExp)) {
+		if (e.target.value.match(ipportRegExp)) {       // 입력받은 ip주소가 ip주소 형식과 맞다면
 			this.setState({
 				ip: e.target.value,
 				ipValid: true,
@@ -126,7 +126,7 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 
 		fetch(url, {
 			method: 'POST', // or 'PUT'
-			body: JSON.stringify({
+			body: JSON.stringify({            // 왜 data를 바로 안넘겨주고 이렇게 한거지?
 				name: this.state.name,
 				addr: this.state.ip,
 				topic_id: this.state.topic_id,
@@ -143,7 +143,7 @@ class RegisterSink extends Component<{}, RegisterSinkState> {
 
 	render() {
 		let topicOptions: Array<topicOptionsElem>;
-		topicOptions = this.state.topicList.map((val: topicListElem) => {
+		topicOptions = this.state.topicList.map((val: topicListElem) => {            // topicList의 label, value, id값을 topicOptions에 저장
 			return {
 				label: val.name,
 				value: val.name,

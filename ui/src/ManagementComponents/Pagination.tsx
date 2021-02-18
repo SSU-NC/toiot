@@ -5,8 +5,8 @@ import './Pagination.css';
 // https://ing-yeo.net/2019/08/react-beginner-3/
 
 interface PaginationProps {
-	pages: number;
-	currentPage: number;
+	pages: number;            // 총 페이지 수
+	currentPage: number;      // 현재 머무르는 페이지
 	onPageChange: (page: number) => void;
 }
 const Pagination: React.FunctionComponent<PaginationProps> = (props) => {
@@ -22,7 +22,7 @@ const Pagination: React.FunctionComponent<PaginationProps> = (props) => {
 					<li
 						key={page}
 						className={
-							page === props.currentPage ? 'page-item active' : 'page-item'
+							page === props.currentPage ? 'page-item active' : 'page-item'      // className='page-item active' 로 현재 머무르는 페이지 표시
 						}
 						style={{ cursor: 'pointer' }}
 					>

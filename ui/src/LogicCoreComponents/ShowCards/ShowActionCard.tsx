@@ -41,7 +41,14 @@ class ShowActionCard extends Component<ShowActionCardProps, {}> {
 								</span>
 								<span style={{ fontSize: '15pt' }}>: {action.text}</span>
 							</div>
-						) : (
+						) : this.props.logic_elem.elem === 'motor' ? (
+							<div>
+								<span style={{ fontSize: '15pt', fontWeight: 450}}>
+									Motor control{' '}
+								</span>
+								<span style={{ fontSize: '15pt' }}>: {action.text}</span>
+							</div>
+						) :	(
 							<div></div>
 						)}
 					</div>

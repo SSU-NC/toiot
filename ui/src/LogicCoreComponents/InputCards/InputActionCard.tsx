@@ -43,7 +43,7 @@ class InputActionCard extends Component<
 		this.props.handleInputActionCardChange(this.state);
 	};
 
-	// Handle text change by typing
+	// Handle text change by typing 
 	handleTextChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		await this.setState({
 			arg: { text: e.target.value },
@@ -55,6 +55,7 @@ class InputActionCard extends Component<
 		let actionOptions: Array<actionOptionsElem> = [
 			{ label: 'alarm', value: 'alarm' },
 			{ label: 'email', value: 'email' },
+			{ label: 'motor', value: 'motor'},
 		];
 		return (
 			<div className="card form-group">
@@ -122,6 +123,18 @@ class InputActionCard extends Component<
 								<small id="emailHelp" className="form-text text-muted">
 									We'll send message to this e-mail.
 								</small>
+							</div>
+						) : this.state.elem === 'motor' ? (
+							<div>
+								<span>Motor control</span>
+								<input
+									type="text"
+									className="form-control"
+									name="moter_msg"
+									value={this.state.arg.text}
+									placeholder="Enter motor control msg"     // 추후에 수정 (모터 제어 방법 선택, 모터 제어값 입력 등등)
+									onChange={this.handleTextChange}
+								/>
 							</div>
 						) : (
 							<div></div>

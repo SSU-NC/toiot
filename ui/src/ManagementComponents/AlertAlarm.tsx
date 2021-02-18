@@ -3,7 +3,7 @@ import { alarmElem } from '../ElemInterface/ElementsInterface';
 import { Alert } from 'reactstrap';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { ALARM_URL } from '../defineUrl';
-const client = new W3CWebSocket(ALARM_URL);
+const client = new W3CWebSocket(ALARM_URL);     // 웹소켓 열기
 
 interface AlertAlarmState {
 	alarmList: Array<alarmListElem>;
@@ -27,14 +27,14 @@ class AlertAlarm extends Component<{}, AlertAlarmState> {
 		client.onopen = () => {
 			console.log('Alarm WebSocket Client Connected');
 		};
-		client.onmessage = (message: any) => {
+		client.onmessage = (message: any) => {         // 데이터 수신됨
 			// Parsing message data as json form
 			var msg_json: alarmElem = JSON.parse(message.data);
 
 			// 이미 alarm list에 alarm이 들어가있으면 pass
 			// If alarm is already in alarm list,
 			for (var alarm of this.state.alarmList) {
-				if (JSON.stringify(msg_json) === JSON.stringify(alarm.alarm)) {
+				if (JSON.stringify(msg_json) === JSON.stringify(alarm.alarm)) {     // JSON.parse()를 사용해 JSON을 Object로 변환한 msg_json을 왜 다시 JSON.stringify()를 사용해 JSON 형식으로 변환하지? 
 					return;
 				}
 			}

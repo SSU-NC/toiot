@@ -39,7 +39,7 @@ class MapNodeTable extends Component<MapNodeTableProps, {}> {
 	// Find node state(health) and represent as colors (red - yellow - green, gray)
 	findNodeState = (id: number) => {
 		for (let prop in this.props.nodeState) {
-			if (this.props.nodeState[prop].n_id === id) {
+			if (this.props.nodeState[prop].nid === id) {
 				return (
 					<td
 						style={{
@@ -52,6 +52,7 @@ class MapNodeTable extends Component<MapNodeTableProps, {}> {
 			}
 		}
 		return <td style={{ color: 'gray' }}>●</td>;
+		
 	};
 
 	render() {
