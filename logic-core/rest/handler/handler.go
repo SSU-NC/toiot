@@ -100,6 +100,7 @@ func (h *Handler) DeleteSensor(c *gin.Context) {
 
 func (h *Handler) CreateLogic(c *gin.Context) {
 	var al adapter.Logic
+	log.Println("in createLogic")
 	if err := c.ShouldBindJSON(&al); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

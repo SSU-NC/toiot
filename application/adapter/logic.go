@@ -23,7 +23,7 @@ type Logic struct {
 */
 type Element struct {
 	Elem string                 `json:"elem"` //value time email 중 선택한거
-	Arg  map[string]interface{} `json:"arg"`  //거기에 맞는 Arg
+	Arg  map[string]interface{} `json:"arg"`  //거기에 맞는 A
 }
 
 func LogicToAdapter(ml *model.Logic) (Logic, error) {

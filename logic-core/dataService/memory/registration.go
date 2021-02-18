@@ -10,9 +10,9 @@ import (
 
 var regist *registRepo
 
-func NewRegistRepo() *registRepo {
+func NewRegistRepo() (*registRepo, map[int]model.Sink) {
 	if regist != nil {
-		return regist
+		return regist, nil
 	}
 
 	regist := &registRepo{
@@ -28,20 +28,61 @@ func NewRegistRepo() *registRepo {
 			samu:  &sync.RWMutex{},
 			addrs: make(map[int]model.Sink),
 		},
+		nodeInfoRepo{
+			nmu:   &sync.RWMutex{},
+			ninfo: make(map[int]model.Nodeinfo),
+		},
 	}
 
-	return regist
+	return regist, regist.addrs
 }
 
 type registRepo struct {
 	nodeRepo
 	sensorRepo
 	sinkAddrRepo
+	nodeInfoRepo
 }
 
 type nodeRepo struct {
 	nmu   *sync.RWMutex
 	ninfo map[int]model.Node
+}
+type nodeInfoRepo struct {
+	nmu   *sync.RWMutex
+	ninfo map[int]model.Nodeinfo
+}
+
+func (nir *nodeInfoRepo) AppendNodeMap(nid int, sid int) error {
+	nir.nmu.RLock()
+	defer nir.nmu.RUnlock()
+
+	_, ok := nir.ninfo[nid]
+
+	if ok {
+		return errors.New("nodeInfoRepo: already exist nid")
+	}
+	// var ni model.Nodeinfo
+	// ni.SinkID = sid
+	ni := model.Nodeinfo{SinkID: sid}
+
+	nir.ninfo[nid] = ni
+
+	log.Println("test >>>>>> in memory/AppendNodeMap, sinkID : ", ni, "sinkADDR : ")
+	return nil
+
+}
+
+func (nir *nodeInfoRepo) GetSid(nid int) (*model.Nodeinfo, error) {
+	nir.nmu.RLock()
+	defer nir.nmu.RUnlock()
+
+	n, ok := nir.ninfo[nid]
+
+	if !ok {
+		return nil, errors.New("nodeRepo: cannot find node")
+	}
+	return &n, nil
 }
 
 type sinkAddrRepo struct {
@@ -114,7 +155,8 @@ func (sr *sensorRepo) DeleteSensor(key int) error {
 }
 
 func (sar *sinkAddrRepo) AppendSinkAddr(sid int, s *string) error {
-
+	sar.samu.RLock()
+	defer sar.samu.RUnlock()
 	_, ok := sar.addrs[sid]
 	if ok {
 		return errors.New("sinkAddrRepo: already exist sink")
@@ -125,3 +167,10 @@ func (sar *sinkAddrRepo) AppendSinkAddr(sid int, s *string) error {
 	log.Println("test >>>>>> in memory/appendSinkAddr, sinkID : ", sid, "sinkADDR : ", *s)
 	return nil
 }
+
+// func (sar *sinkAddrRepo) GetSinkAddrMap() *map[int]model.Sink {
+// 	sar.samu.RLock()
+// 	defer sar.samu.RUnlock()
+
+// 	return &sar.addrs
+// }

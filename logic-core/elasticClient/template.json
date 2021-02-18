@@ -10,6 +10,9 @@
       "name" : {
         "type" : "keyword"
       },
+      "nid" : {
+        "type" : "int"
+      },
       "node" : {
         "properties" : {
           "sink_name" : {
