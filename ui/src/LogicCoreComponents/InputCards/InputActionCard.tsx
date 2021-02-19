@@ -1,3 +1,4 @@
+import { type } from 'jquery';
 import React, { Component } from 'react';
 import Select from 'react-select';
 import { logicElem } from '../../ElemInterface/LcElementsInterface';
@@ -13,6 +14,9 @@ interface InputActionCardState {
 	elem: string;
 	arg: {
 		text: string;
+		elem: string;
+		value: number;
+		sleep: number;
 	};
 }
 interface actionOptionsElem {
@@ -30,24 +34,63 @@ class InputActionCard extends Component<
 > {
 	state: InputActionCardState = {
 		elem: '',
-		arg: { text: '' },
+		arg: { text: '', elem: '', value: 0, sleep: 0 },
 	};
 
 	// Handle action change (select alarm or email)
 	handleActionChange = async (e: any) => {
 		// Change this state and then..
-		await this.setState({
-			elem: e.value,
-		});
-		// change parent's state
+		if (e.value === 'motor' || e.value === 'switch') {
+			await this.setState({
+				arg: {
+					text: this.state.arg.text, 
+					elem: e.value,
+					value: this.state.arg.value,
+					sleep: this.state.arg.sleep
+				}
+			});
+		}
+		else {
+			await this.setState({
+				elem: e.value,
+			});
+			// change parent's state
+		}
 		this.props.handleInputActionCardChange(this.state);
 	};
 
 	// Handle text change by typing
 	handleTextChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		await this.setState({
-			arg: { text: e.target.value },
-		});
+		if (e.target.id === 'alarm_msg' || e.target.id === 'email') {
+			await this.setState({
+				arg: { 
+					text: e.target.value, 
+					elem: this.state.arg.elem,
+					value: this.state.arg.value,
+					sleep: this.state.arg.sleep
+				},
+			});
+		}	
+		else if (e.target.id === 'actuator_value') {
+			await this.setState({
+				arg: { 
+					text: this.state.arg.text, 
+					elem: this.state.arg.elem,
+					value: parseInt(e.target.value),
+					sleep: this.state.arg.sleep
+				},
+			});
+		}
+		else {
+			await this.setState({
+				arg: { 
+					text: this.state.arg.text, 
+					elem: this.state.arg.elem,
+					value: this.state.arg.value,
+					sleep: parseInt(e.target.value)
+				},
+			});
+		}
 		this.props.handleInputActionCardChange(this.state);
 	};
 
@@ -55,7 +98,13 @@ class InputActionCard extends Component<
 		let actionOptions: Array<actionOptionsElem> = [
 			{ label: 'alarm', value: 'alarm' },
 			{ label: 'email', value: 'email' },
+			{ label: 'actuator', value: 'actuator'},
 		];
+
+		let actuatorOptios: Array<actionOptionsElem> = [
+			{ label: 'motor', value: 'motor'},
+			{ label: 'switch', value: 'switch'},
+		]
 		return (
 			<div className="card form-group">
 				<div className="card-body row">
@@ -106,7 +155,7 @@ class InputActionCard extends Component<
 									placeholder="Enter alarm msg which you want to get alert"
 									onChange={this.handleTextChange}
 								/>
-							</div>
+							</div>	
 						) : this.state.elem === 'email' ? ( // If user select email
 							<div>
 								<span>Email address</span>
@@ -123,6 +172,45 @@ class InputActionCard extends Component<
 									We'll send message to this e-mail.
 								</small>
 							</div>
+						) : this.state.elem === 'actuator' ? (
+							<div>
+								<Select
+									options={actuatorOptios}
+									name="action"
+									classNamePrefix="select"
+									onChange={this.handleActionChange}          // e.value === motor || e.value === switch ? arg의 elem update 
+								/>
+								<div className="col-1"></div>
+								<div className="row">
+									<div className="col-5">
+										<span>value</span>
+										<input
+											type="number"
+											className="form-control"
+											id="actuator_value"
+											value={this.state.arg.value}
+											placeholder="Enter "
+											onChange={this.handleTextChange}
+										/>
+										
+									</div>
+								</div>
+								<div className="col-1"></div>
+								<div className="row">
+									<div className="col-5">
+										<span>sleep</span>
+										<input
+											type="number"
+											className="form-control"
+											id="actuator_sleep"
+											value={this.state.arg.sleep}
+											placeholder="Enter "
+											onChange={this.handleTextChange}
+										/>                                          								
+									</div>
+								</div>
+							</div>
+								
 						) : (
 							<div></div>
 						)}

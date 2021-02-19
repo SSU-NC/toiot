@@ -12,7 +12,7 @@ export interface timeRange {
 
 export interface logicElem {
 	elem: string;
-	arg: lcValueArg | lcTimeArg | lcGroupArg | lcActionArg;
+	arg: lcValueArg | lcTimeArg | lcGroupArg | lcActionArg | lcActuator;
 }
 
 export interface lcValueArg {
@@ -30,6 +30,12 @@ export interface lcGroupArg {
 
 export interface lcActionArg {
 	text: string;
+}
+
+export interface lcActuator {
+	elem: string;
+	value: number;
+	sleep: number;
 }
 
 export interface logicListElem {
