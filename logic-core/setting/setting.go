@@ -32,7 +32,7 @@ type Logic struct {
 }
 
 func (ls *Logic) Getenv() {
-	GetenvStr(&ls.Server, "localhost:8084", "LOGIC_SERVER")
+	GetenvStr(&ls.Server, "10.5.110.11:8084", "LOGIC_SERVER")
 	GetenvStr(&ls.Listen, ls.Server, "LOGIC_LISTEN")
 }
 

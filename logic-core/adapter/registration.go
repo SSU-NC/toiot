@@ -104,6 +104,7 @@ type Node struct {
 }
 
 func NodeToModel(n *Node, sn string) (model.Node, []Sensor) {
+
 	return model.Node{
 		Name: n.Name,
 		Location: model.Location{
@@ -111,6 +112,8 @@ func NodeToModel(n *Node, sn string) (model.Node, []Sensor) {
 			Lon: n.LocLon,
 		},
 		SinkName: sn,
+		Sid:      n.SinkID,
+		Nid:      n.ID,
 	}, n.Sensors
 }
 

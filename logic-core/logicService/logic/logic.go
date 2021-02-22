@@ -71,6 +71,8 @@ func GetElementer(elem string) Elementer {
 		return &TimeElement{}
 	case "email":
 		return &EmailElement{Interval: make(map[string]bool)}
+	case "actuator":
+		return &ActuatorElement{Interval: make(map[string]bool)}
 	default:
 		return nil
 	}

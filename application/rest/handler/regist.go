@@ -26,7 +26,6 @@ func (h *Handler) ListSinks(c *gin.Context) {
 		page  adapter.Page
 		pages int
 	)
-
 	if c.Bind(&page); page.IsBinded() {
 		if page.Size == 0 {
 			page.Size = 10
@@ -42,7 +41,11 @@ func (h *Handler) ListSinks(c *gin.Context) {
 		return
 	} else {
 		sinks, err := h.ru.GetSinks()
-		if err != nil {h.eu.CreateNodeEvent(&node)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, sinks)
 		return
 	}
 }
@@ -58,7 +61,7 @@ func (h *Handler) ListSinks(c *gin.Context) {
 // @Router /regist/sink [post]
 func (h *Handler) RegistSink(c *gin.Context) {
 	var sink model.Sink
-	
+
 	if err := c.ShouldBindJSON(&sink); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -68,9 +71,6 @@ func (h *Handler) RegistSink(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	
-	
 	h.eu.CreateSinkEvent(&sink)
 	c.JSON(http.StatusOK, sink)
 }
@@ -156,7 +156,7 @@ func (h *Handler) ListNodes(c *gin.Context) {
 	}
 
 }
-h.eu.CreateNodeEvent(&node)
+
 // RegistNode ...
 // @Summary Add sensor node
 // @Description Add sensor node

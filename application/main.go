@@ -83,7 +83,7 @@ func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 		logic := regist.Group("/logic")
 		{
 			logic.GET("", h.ListLogics)
-			logic.POST("", h.RegistLogic)
+			logic.POST("", h.RegistLogic) // << 프론트에서
 			logic.DELETE("/:id", h.UnregistLogic)
 		}
 		logicService := regist.Group("/logic-service")

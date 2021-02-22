@@ -43,7 +43,8 @@ func main() {
 		trace.Stop()
 	}()
 
-	rr := memory.NewRegistRepo()
+	rr, AddrMap := memory.NewRegistRepo()
+	adapter.AddrMap = &AddrMap
 	ks := sarama.NewKafkaConsumer()
 	es := elasticClient.NewElasticClient()
 	ls := logicService.NewLogicService()

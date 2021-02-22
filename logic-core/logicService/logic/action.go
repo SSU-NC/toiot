@@ -1,11 +1,15 @@
 package logic
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"net/smtp"
 	"time"
 
+	"github.com/KumKeeHyun/toiot/logic-core/adapter"
 	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
 )
 
@@ -24,6 +28,7 @@ type EmailElement struct {
 
 func (ee *EmailElement) Exec(d *model.LogicData) {
 	ok, exist := ee.Interval[d.Node.Name]
+	log.Println("in Email's Exec")
 	if !exist {
 		ee.Interval[d.Node.Name] = true
 	}
@@ -48,32 +53,56 @@ func (ee *EmailElement) Exec(d *model.LogicData) {
 
 type ActuatorElement struct {
 	BaseElement
-	
-}
-type Actuator struct {
-	aid int		`json:"aid"`
-	value int	`json:"value"`
-	sleep int	`json:"sleep"`
+	Aid      int      `json:"aid"`
+	Values   []Values `json:"values"`
+	Sleep    int      `json:"sleep"`
+	Interval map[string]bool
 }
 
-func (ae *ActuatorElement) Exec(d *model.LogicData, addrs map[int]model.Sink) {
+type Actuator struct {
+	Nid    int      `json;"nid"`
+	Aid    int      `json:"aid"`
+	Values []Values `json:"values"`
+}
+type Values struct {
+	Value int `json:"value"`
+	Sleep int `json:"sleep"`
+}
+
+func (ae *ActuatorElement) Exec(d *model.LogicData) {
 	/*
-	Sinkaddr  돌면서 post요청 
+		Sinkaddr  돌면서 post요청
 	*/
-	addrs:=[]string
-	actuator:=Actuator{Value:10,sleep:10}
-	//reqBody := sinkaddr
-	pbytes, _ := json.Marshal(actuator)
-	
-	buff := bytes.NewBuffer(pbytes)
-	
-	for _, a := range addrs{
-		resp, err := http.Post("http://"+a+"/act", "application/json", buff)
+	//
+
+	ok, exist := ae.Interval[d.Node.Name]
+	if !exist {
+		ae.Interval[d.Node.Name] = true
+	}
+	if ok {
+		ae.Interval[d.Node.Name] = false
+
+		res := Actuator{
+			Nid:    d.Node.Nid,
+			Aid:    ae.Aid,
+			Values: ae.Values,
+		}
+		pbytes, _ := json.Marshal(res)
+		buff := bytes.NewBuffer(pbytes)
+		addr := (*adapter.AddrMap)[d.Node.Sid]
+		log.Println("FLAG : logic-action - ActuatorElement - Exec")
+		resp, err := http.Post("http://"+addr.Addr+"/actuator", "application/json", buff)
 		if err != nil {
 			panic(err)
 		}
+		defer resp.Body.Close()
+		tick := time.Tick(3 * time.Minute)
+		go func() {
+			<-tick
+			ae.Interval[d.Node.Name] = true
+		}()
 	}
-	defer resp.Body.Close()
+	ae.BaseElement.Exec(d)
 	// // Response 체크.
 	// respBody, err := ioutil.ReadAll(resp.Body)
 	// if err == nil {

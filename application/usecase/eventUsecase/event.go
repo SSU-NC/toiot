@@ -36,22 +36,12 @@ func (eu *eventUsecase) DeleteSinkEvent(s *model.Sink) error {
 	// var wg sync.WaitGroup
 	// for _, l := range ll {
 	// 	wg.Add(1)
-	// 	go func() {func waitRespGroup(e EVENT, body interface{}, ll []model.LogicService) (prl []pingRequest) {
-	var wg sync.WaitGroup
-	for _, l := range ll {
-		wg.Add(1)
-		go func(_l model.LogicService) {
-			url := makeUrl(_l.Addr, EventPath[e])
-			resp, _ := eventClient.R().SetBody(body).Post(url)
-			if !resp.IsSuccess() {
-				prl = append(prl, pingRequest{_l, e, body})
-			}
-			wg.Done()
-		}(l)
-	}
-	wg.Wait()
-	return
-}
+	// 	go func() {
+	// 		url := makeUrl(l.Addr, path)
+	// 		eventClient.R().SetBody(s.Nodes).Post(url)
+	// 	}()
+	// }
+	// wg.Wait()
 
 	return nil
 }
@@ -70,11 +60,6 @@ func (eu *eventUsecase) CreateSinkEvent(s *model.Sink) error {
 
 	return nil
 }
-
-
-
-
-
 
 func (eu *eventUsecase) CreateNodeEvent(n *model.Node) error {
 	e := CreateNode
