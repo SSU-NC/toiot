@@ -3,6 +3,8 @@ import '../LogicCore.css';
 import {
 	logicElem,
 	lcActionArg,
+	lcActuator,
+	control,
 } from '../../ElemInterface/LcElementsInterface';
 
 interface ShowActionCardProps {
@@ -16,6 +18,8 @@ ShowActionCard
 class ShowActionCard extends Component<ShowActionCardProps, {}> {
 	render() {
 		var action = this.props.logic_elem.arg as lcActionArg;
+		var motion_name = (this.props.logic_elem.arg as lcActuator).elem;
+		var control = (this.props.logic_elem.arg as lcActuator).motion;
 
 		return (
 			<div className="card margin-bottom">
@@ -40,6 +44,20 @@ class ShowActionCard extends Component<ShowActionCardProps, {}> {
 									Email address{' '}
 								</span>
 								<span style={{ fontSize: '15pt' }}>: {action.text}</span>
+							</div>
+						) : this.props.logic_elem.elem === 'actuator' ? (
+							<div>
+								{control.map((control: control, idx: number) => (
+									<div>
+										<span style={{ fontSize: '15pt', fontWeight: 450}}>
+											[actuator #{idx}]
+										</span>
+										<br />
+										<span style={{ fontSize: '15pt'}}>
+											motion: {motion_name} /  value: {control.value} /  sleep: {control.sleep} 
+										</span>
+									</div>
+								))}
 							</div>
 						) : (
 							<div></div>

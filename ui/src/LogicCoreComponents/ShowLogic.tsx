@@ -76,7 +76,7 @@ class ShowLogic extends Component<ShowLogicProps, {}> {
 									))}
 								{this.props.logic.elems
 									.filter(function (element) {
-										return element.elem === 'alarm' || element.elem === 'email';
+										return element.elem === 'alarm' || element.elem === 'email' || element.elem === 'actuator';
 									})
 									.map((actionCard: logicElem, idx: number) => (
 										<ShowActionCard index={idx} logic_elem={actionCard} />

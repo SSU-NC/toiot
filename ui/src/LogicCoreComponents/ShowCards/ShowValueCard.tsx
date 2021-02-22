@@ -33,7 +33,7 @@ class ShowValueCard extends Component<ShowValueCardProps, {}> {
 						{range.map((range: numRange, idx: number) => (
 							<div>
 								<span style={{ fontSize: '15pt', fontWeight: 450 }}>
-									range #{idx}
+									[range #{idx}]
 								</span>
 								<br />
 								<span style={{ fontSize: '15pt' }}>

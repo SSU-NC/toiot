@@ -86,8 +86,9 @@ export interface topicOptionsElem {
 
 // node health check
 export interface nodeHealthCheckElem {
-	n_id: number;
+	nid: number;
 	state: number;
+	battery: number;
 }
 
 // alarm

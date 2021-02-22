@@ -146,6 +146,7 @@ class RegisterLogic extends Component<{}, RegisterLogicState> {
 	handleActionCardChange = (idx: number) => (selectedAction: logicElem) => {
 		// Action card is updated dynamic. It can be added or removed freely.
 		// so find changing field by using received idx and change state.
+		console.log(selectedAction.elem + "!!!!");
 		const new_selected_action = this.state.selected_action.map(
 			(action: logicElem, sidx: number) => {
 				if (idx !== sidx) return action;
@@ -237,7 +238,9 @@ class RegisterLogic extends Component<{}, RegisterLogicState> {
 			this.state.selected_action
 		);
 
-		// Filter elem: 'empty' field
+		console.log(this.state.selected_action[0] + "!@!@!@!!@@!@");
+
+		// Filter elem: 'empty' fie ld
 		elems = elems.filter(function (logic) {
 			return logic.elem !== 'empty';
 		});
