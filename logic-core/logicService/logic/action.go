@@ -53,16 +53,20 @@ func (ee *EmailElement) Exec(d *model.LogicData) {
 
 type ActuatorElement struct {
 	BaseElement
-	aid      int `json:"aid"`
-	value    int `json:"value"`
-	sleep    int `json:"sleep"`
+	Aid      int      `json:"aid"`
+	Values   []Values `json:"values"`
+	Sleep    int      `json:"sleep"`
 	Interval map[string]bool
 }
+
 type Actuator struct {
-	nid   int `json: "nid"`
-	aid   int `json:"aid"`
-	value int `json:"value"`
-	sleep int `json:"sleep"`
+	Nid    int      `json;"nid"`
+	Aid    int      `json:"aid"`
+	Values []Values `json:"values"`
+}
+type Values struct {
+	Value int `json:"value"`
+	Sleep int `json:"sleep"`
 }
 
 func (ae *ActuatorElement) Exec(d *model.LogicData) {
@@ -79,16 +83,15 @@ func (ae *ActuatorElement) Exec(d *model.LogicData) {
 		ae.Interval[d.Node.Name] = false
 
 		res := Actuator{
-			nid:   d.Node.Nid,
-			aid:   ae.aid,
-			value: ae.value,
-			sleep: ae.sleep,
+			Nid:    d.Node.Nid,
+			Aid:    ae.Aid,
+			Values: ae.Values,
 		}
 		pbytes, _ := json.Marshal(res)
 		buff := bytes.NewBuffer(pbytes)
 		addr := (*adapter.AddrMap)[d.Node.Sid]
 		log.Println("FLAG : logic-action - ActuatorElement - Exec")
-		resp, err := http.Post("http://"+addr.Addr+"/act", "application/json", buff)
+		resp, err := http.Post("http://"+addr.Addr+"/actuator", "application/json", buff)
 		if err != nil {
 			panic(err)
 		}

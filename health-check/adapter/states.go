@@ -8,6 +8,7 @@ type States struct {
 type NodeState struct {
 	NodeID int  `json:"nid"`
 	State  bool `json:"state"`
+	Battery int `json:"battery"`
 }
 type HealthInfo struct {
 	SinkID int         `json:"sid"`

@@ -11,17 +11,15 @@ const (
 )
 
 type SinkStatus struct {
-	SinkID		int	`json:"sid"`
-	Satates		[]NodeStatus `json:"states"`
+	SinkID  int          `json:"sid"`
+	Satates []NodeStatus `json:"states"`
 }
-
 
 type NodeStatus struct {
-	NodeID int `json:"nid"`
-	State  int `json:"state"`
+	NodeID  int `json:"nid"`
+	State   int `json:"state"`
+	Battery int `json:"battery"`
 }
-
-
 
 type Status struct {
 	State       int       `json:"state"`
