@@ -62,6 +62,7 @@ func setEventRoute(r *gin.Engine, h *handler.Handler) {
 func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 	regist := r.Group("/regist")
 	{
+		log.Println("in /regist")
 		sink := regist.Group("/sink")
 		{
 			sink.GET("", h.ListSinks)

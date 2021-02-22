@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"log"
 	"time"
 
 	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
@@ -21,6 +22,7 @@ func (ve *ValueElement) Exec(d *model.LogicData) {
 		return
 	}
 	isRange := false
+	log.Println("in ValueElement.Exec")
 	for _, rg := range ve.Range {
 		if rg.Min <= v && v < rg.Max {
 			isRange = true
@@ -43,6 +45,7 @@ type TimeElement struct {
 func (te *TimeElement) Exec(d *model.LogicData) {
 	timeFmt := "15:04:05"
 	isRange := false
+	log.Println("in Filter.Exec")
 	t, _ := time.Parse(timeFmt, d.Timestamp.Format(timeFmt))
 	for _, rg := range te.Range {
 		st, _ := time.Parse("15:04:05", rg.Start)

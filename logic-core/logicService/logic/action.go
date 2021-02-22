@@ -54,8 +54,7 @@ func (ee *EmailElement) Exec(d *model.LogicData) {
 type ActuatorElement struct {
 	BaseElement
 	Aid      int      `json:"aid"`
-	Values   []Values `json:"values"`
-	Sleep    int      `json:"sleep"`
+	motion   []Values `json:"motion"`
 	Interval map[string]bool
 }
 
@@ -74,7 +73,7 @@ func (ae *ActuatorElement) Exec(d *model.LogicData) {
 		Sinkaddr  돌면서 post요청
 	*/
 	//
-
+	log.Println("in Act.Exec")
 	ok, exist := ae.Interval[d.Node.Name]
 	if !exist {
 		ae.Interval[d.Node.Name] = true
@@ -85,12 +84,12 @@ func (ae *ActuatorElement) Exec(d *model.LogicData) {
 		res := Actuator{
 			Nid:    d.Node.Nid,
 			Aid:    ae.Aid,
-			Values: ae.Values,
+			Values: ae.motion,
 		}
 		pbytes, _ := json.Marshal(res)
 		buff := bytes.NewBuffer(pbytes)
 		addr := (*adapter.AddrMap)[d.Node.Sid]
-		log.Println("FLAG : logic-action - ActuatorElement - Exec")
+		log.Println("in Act.Exec2")
 		resp, err := http.Post("http://"+addr.Addr+"/actuator", "application/json", buff)
 		if err != nil {
 			panic(err)

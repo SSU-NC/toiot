@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -338,7 +339,9 @@ func (h *Handler) RegistLogic(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	log.Println("aLogic = ", aLogic)
 	logic, err := adapter.LogicToModel(&aLogic)
+	log.Println("logic = ", logic)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

@@ -3,6 +3,7 @@ package logic
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
 )
@@ -31,6 +32,7 @@ func BuildLogic(l *model.Logic) (Elementer, error) {
 		return nil, fmt.Errorf("invalid Element's length: %v", *l)
 	}
 	first, err := UnmarshalElement(&l.Elems[0])
+	log.Println("in BuildLogic, l = ", l)
 	if err != nil {
 		return nil, err
 	}
@@ -49,13 +51,17 @@ func BuildLogic(l *model.Logic) (Elementer, error) {
 
 func UnmarshalElement(e *model.Element) (Elementer, error) {
 	elem := GetElementer(e.Elem)
+	log.Println("in UnmarshalElement, e(Element) = ", e)
+
 	if elem == nil {
 		return nil, fmt.Errorf("invalid Element : %s", e.Elem)
 	}
 	if bArg, err := json.Marshal(e.Arg); err == nil {
+		log.Println("in UnmarshalElement, After Marshal bArg = ", string(bArg))
 		if err = json.Unmarshal(bArg, elem); err != nil {
 			return nil, err
 		} else {
+			log.Println("in UnmarshalElement, elem = ", elem)
 			return elem, nil
 		}
 	} else {
