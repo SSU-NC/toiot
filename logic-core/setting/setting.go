@@ -50,7 +50,7 @@ func (as *App) Getenv() {
 		}
 	*/
 	if as.Server == "" {
-		as.Server = "220.70.2.5:8081"
+		as.Server = "10.5.110.11:8081"
 	}
 }
 
