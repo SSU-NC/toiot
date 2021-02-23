@@ -324,6 +324,76 @@ func (h *Handler) ListLogics(c *gin.Context) {
 	c.JSON(http.StatusOK, aLogics)
 }
 
+// ListActuator ...
+func (h *Handler) ListActuators(c *gin.Context) {
+	var (
+		err       error
+		actuators []model.Actuator
+		page      adapter.Page
+		pages     int
+	)
+	log.Println("in ListActuators")
+	if c.Bind(&page); page.IsBinded() {
+		if page.Size == 0 {
+			page.Size = 10
+		}
+		if actuators, err = h.ru.GetActuatorsPage(page); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if page.Page == 1 {
+			pages = h.ru.GetActuatorPageCount(page.Size)
+		}
+		c.JSON(http.StatusOK, gin.H{"actuators": actuators, "pages": pages})
+		return
+	} else {
+		actuators, err := h.ru.GetActuators()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, actuators)
+		return
+	}
+
+}
+
+// RegistActuator ...
+func (h *Handler) RegistActuator(c *gin.Context) {
+	var actuator model.Actuator
+	log.Println("in RegistActuator")
+	if err := c.ShouldBindJSON(&actuator); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := h.ru.RegistActuator(&actuator)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, actuator)
+}
+
+// UnregistActuator ...
+func (h *Handler) UnregistActuator(c *gin.Context) {
+	log.Println("in UnregistActuator")
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	actuator := model.Actuator{ID: id}
+
+	err = h.ru.UnregistActuator(&actuator)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, actuator)
+}
+
 // RegistLogic ...
 // @Summary Add logic info
 // @Description Add logic info

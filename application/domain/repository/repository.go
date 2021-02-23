@@ -32,6 +32,14 @@ type SensorRepo interface {
 	Delete(*model.Sensor) error
 }
 
+type ActuatorRepo interface {
+	GetPages(size int) int
+	FindsWithName() ([]model.Actuator, error)
+	FindsPage(p adapter.Page) ([]model.Actuator, error)
+	Create(*model.Actuator) error
+	Delete(*model.Actuator) error
+}
+
 type LogicRepo interface {
 	FindsWithSensorValues() ([]model.Logic, error)
 	Create(*model.Logic) error

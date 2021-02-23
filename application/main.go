@@ -27,8 +27,9 @@ func main() {
 	lgr := sql.NewLogicRepo()
 	lsr := sql.NewLogicServiceRepo()
 	tpr := sql.NewTopicRepo()
+	acr := sql.NewActuatorkRepo()
 
-	ru := registUsecase.NewRegistUsecase(sir, ndr, snr, lgr, lsr, tpr)
+	ru := registUsecase.NewRegistUsecase(sir, ndr, snr, lgr, lsr, tpr, acr)
 	eu := eventUsecase.NewEventUsecase(sir, lsr)
 
 	h := handler.NewHandler(ru, eu)
@@ -62,7 +63,7 @@ func setEventRoute(r *gin.Engine, h *handler.Handler) {
 func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 	regist := r.Group("/regist")
 	{
-		log.Println("in /regist")
+
 		sink := regist.Group("/sink")
 		{
 			sink.GET("", h.ListSinks)
@@ -80,6 +81,12 @@ func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 			sensor.GET("", h.ListSensors)
 			sensor.POST("", h.RegistSensor)
 			sensor.DELETE("/:id", h.UnregistSensor)
+		}
+		actuator := regist.Group("/actuator")
+		{
+			actuator.GET("", h.ListActuators)
+			actuator.POST("", h.RegistActuator)
+			actuator.DELETE("/:id", h.UnregistActuator)
 		}
 		logic := regist.Group("/logic")
 		{

@@ -27,8 +27,9 @@ type EmailElement struct {
 }
 
 func (ee *EmailElement) Exec(d *model.LogicData) {
+	log.Println("!!!!in EmailElement.Exec !!!!")
 	ok, exist := ee.Interval[d.Node.Name]
-	log.Println("in Email's Exec")
+
 	if !exist {
 		ee.Interval[d.Node.Name] = true
 	}
@@ -53,19 +54,21 @@ func (ee *EmailElement) Exec(d *model.LogicData) {
 
 type ActuatorElement struct {
 	BaseElement
-	Aid      int      `json:"aid"`
-	motion   []Values `json:"motion"`
+	Aid    int `json:"aid"`
+	Motion []struct {
+		Value int `json:"value"`
+		Sleep int `json:"sleep"`
+	} `json:"motion"`
 	Interval map[string]bool
 }
 
 type Actuator struct {
-	Nid    int      `json;"nid"`
-	Aid    int      `json:"aid"`
-	Values []Values `json:"values"`
-}
-type Values struct {
-	Value int `json:"value"`
-	Sleep int `json:"sleep"`
+	Nid    int `json;"nid"`
+	Aid    int `json:"aid"`
+	Motion []struct {
+		Value int `json:"value"`
+		Sleep int `json:"sleep"`
+	} `json:"motion"`
 }
 
 func (ae *ActuatorElement) Exec(d *model.LogicData) {
@@ -73,18 +76,19 @@ func (ae *ActuatorElement) Exec(d *model.LogicData) {
 		Sinkaddr  돌면서 post요청
 	*/
 	//
-	log.Println("in Act.Exec")
+	log.Println("!!!!in ActuatorElement.Exec !!!!")
 	ok, exist := ae.Interval[d.Node.Name]
 	if !exist {
+		log.Println("!!!!in ActuatorElement.Exec2 !!!!")
 		ae.Interval[d.Node.Name] = true
 	}
 	if ok {
 		ae.Interval[d.Node.Name] = false
-
+		log.Println("!!!!in ActuatorElement.Exec3 !!!!")
 		res := Actuator{
 			Nid:    d.Node.Nid,
 			Aid:    ae.Aid,
-			Values: ae.motion,
+			Motion: ae.Motion,
 		}
 		pbytes, _ := json.Marshal(res)
 		buff := bytes.NewBuffer(pbytes)

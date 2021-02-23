@@ -78,6 +78,7 @@ const (
 	CreateNode
 	DeleteNode
 	DeleteSensor
+
 	CreateLogic
 	DeleteLogic
 )
