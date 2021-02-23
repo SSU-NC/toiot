@@ -18,8 +18,10 @@ ShowActionCard
 class ShowActionCard extends Component<ShowActionCardProps, {}> {
 	render() {
 		var action = this.props.logic_elem.arg as lcActionArg;
-		var motion_name = (this.props.logic_elem.arg as lcActuator).elem;
 		var control = (this.props.logic_elem.arg as lcActuator).motion;
+		var motion_name = (this.props.logic_elem.arg as lcActuator).aid;
+		if (motion_name === 1) var name = 'motor';
+		else name = 'switch';
 
 		return (
 			<div className="card margin-bottom">
@@ -54,7 +56,7 @@ class ShowActionCard extends Component<ShowActionCardProps, {}> {
 										</span>
 										<br />
 										<span style={{ fontSize: '15pt'}}>
-											motion: {motion_name} /  value: {control.value} /  sleep: {control.sleep} 
+											motion: {name} /  value: {control.value} /  sleep: {control.sleep} 
 										</span>
 									</div>
 								))}

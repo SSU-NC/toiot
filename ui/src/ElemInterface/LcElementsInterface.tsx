@@ -38,7 +38,7 @@ export interface lcActionArg {
 }
 
 export interface lcActuator {
-	elem: string;
+	aid: number;
 	motion: Array<control>;
 }
 
