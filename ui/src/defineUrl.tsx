@@ -50,6 +50,10 @@ export const SINK_URL = 'http://'
 	.concat(':')
 	.concat(process.env.REACT_APP_DB_PORT)
 	.concat('/regist/sink');
+export const ACTUATOR_URL = 'http://'
+	.concat(process.env.REACT_APP_DB_IP)
+	.concat(':')
+	.concat('/regist/actuator');
 export const TOPIC_URL = 'http://'
 	.concat(process.env.REACT_APP_DB_IP)
 	.concat(':')
@@ -57,9 +61,9 @@ export const TOPIC_URL = 'http://'
 	.concat('/regist/topic');
 
 export const LOGICCORE_URL = 'http://'
-	.concat(process.env.REACT_APP_LOGICCORE_IP)
+	.concat(process.env.REACT_APP_DB_IP)
 	.concat(':')
-	.concat(process.env.REACT_APP_LOGICCORE_PORT)
+	.concat(process.env.REACT_APP_DB_PORT)
 	.concat('/regist/logic');
 
 export const HEALTHCHECK_URL = 'ws://'

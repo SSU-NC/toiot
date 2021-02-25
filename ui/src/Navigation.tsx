@@ -60,6 +60,13 @@ class Navigation extends Component {
 										>
 											Sink
 										</Link>
+										<Link
+											className="dropdown-item"
+											to="/actuator"
+											style={{ background: 'pink' }}
+										>
+											Actuator
+										</Link>
 									</div>
 								</li>
 								<li className="nav-item dropdown">

@@ -1,6 +1,8 @@
+import { type } from 'jquery';
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { logicElem } from '../../ElemInterface/LcElementsInterface';
+import { control, logicElem } from '../../ElemInterface/LcElementsInterface';
+import InputActuatorCard from './InputActuatorCard';
 import '../LogicCore.css';
 
 interface InputActionCardProps {
@@ -11,10 +13,11 @@ interface InputActionCardProps {
 
 interface InputActionCardState {
 	elem: string;
-	arg: {
+	arg: { 
 		text: string;
 	};
 }
+
 interface actionOptionsElem {
 	label: string;
 	value: string;
@@ -31,14 +34,14 @@ class InputActionCard extends Component<
 	state: InputActionCardState = {
 		elem: '',
 		arg: { text: '' },
-	};
+	}
 
 	// Handle action change (select alarm or email)
 	handleActionChange = async (e: any) => {
-		// Change this state and then..
 		await this.setState({
 			elem: e.value,
 		});
+		console.log(this.state.elem + '!!!!!@@#@####!@#!');
 		// change parent's state
 		this.props.handleInputActionCardChange(this.state);
 	};
@@ -46,7 +49,9 @@ class InputActionCard extends Component<
 	// Handle text change by typing
 	handleTextChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		await this.setState({
-			arg: { text: e.target.value },
+			arg: { 
+				text: e.target.value, 
+			},
 		});
 		this.props.handleInputActionCardChange(this.state);
 	};
@@ -55,7 +60,9 @@ class InputActionCard extends Component<
 		let actionOptions: Array<actionOptionsElem> = [
 			{ label: 'alarm', value: 'alarm' },
 			{ label: 'email', value: 'email' },
+			{ label: 'actuator', value: 'actuator'},
 		];
+
 		return (
 			<div className="card form-group">
 				<div className="card-body row">
@@ -94,9 +101,9 @@ class InputActionCard extends Component<
 					</div>
 
 					<div className="col-1"></div>
-					<div className="col-5">
+						{/*<div className="col-4">*/}
 						{this.state.elem === 'alarm' ? ( // If user select alarm
-							<div>
+							<div className="col-5">
 								<span>Alarm MSG</span>
 								<input
 									type="text"
@@ -106,9 +113,9 @@ class InputActionCard extends Component<
 									placeholder="Enter alarm msg which you want to get alert"
 									onChange={this.handleTextChange}
 								/>
-							</div>
+							</div>	
 						) : this.state.elem === 'email' ? ( // If user select email
-							<div>
+							<div className="col-5">
 								<span>Email address</span>
 								<input
 									type="email"
@@ -123,12 +130,16 @@ class InputActionCard extends Component<
 									We'll send message to this e-mail.
 								</small>
 							</div>
+						) : this.state.elem === 'actuator' ? (
+							<InputActuatorCard
+								handleInputActionCardChange = {this.props.handleInputActionCardChange}
+							/>
 						) : (
 							<div></div>
 						)}
 					</div>
 				</div>
-			</div>
+			// </div>
 		);
 	}
 }

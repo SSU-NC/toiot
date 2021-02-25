@@ -28,6 +28,11 @@ export interface value_list_elem {
 	index: number;
 }
 
+export interface actuatorListElem {
+	id: number;
+	name: string;
+}
+
 // sinkList interface
 export interface sinkListElem {
 	id: number;
@@ -86,8 +91,9 @@ export interface topicOptionsElem {
 
 // node health check
 export interface nodeHealthCheckElem {
-	n_id: number;
+	nid: number;
 	state: number;
+	battery: number;
 }
 
 // alarm

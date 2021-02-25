@@ -70,7 +70,7 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 	// Find node state(health) and represent as colors (red - yellow - green, gray)
 	findNodeState = (id: number) => {
 		for (let prop in this.props.nodeState) {
-			if (this.props.nodeState[prop].n_id === id) {
+			if (this.props.nodeState[prop].nid === id) {
 				return (
 					<td
 						style={{
@@ -83,6 +83,20 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 			}
 		}
 		return <td style={{ color: 'gray' }}>●</td>;
+	};
+
+	findNodeBattery = (id: number) => {
+		for (let prop in this.props.nodeState) {
+			if (this.props.nodeState[prop].nid === id) {
+				var battery = this.props.nodeState[prop].battery;
+				if ( battery === 0 ) 
+					return <td style={{color: 'gray'}}>External power</td>
+				if ( battery === 255 )
+					return <td style={{color: 'gray'}}>Not measurable</td>
+				// return <td style={{color: 'gray'}}>{battery}</td>
+			}
+		}
+		return <td style={{color: 'gray'}}>200</td>
 	};
 
 	handlePageChange = (page: number) => {
@@ -101,6 +115,7 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 							<th scope="col">id</th>
 							<th scope="col">sensors</th>
 							<th scope="col">health</th>
+							<th scope="col">battery</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
@@ -112,6 +127,7 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 								<td>{node.id}</td>
 								<td>{node.sensors.map((sensor: any) => sensor.name + ', ')}</td>
 								{this.findNodeState(node.id)}
+								{this.findNodeBattery(node.id)}
 								<td>
 									<button
 										className="btn btn-default btn-sm"
