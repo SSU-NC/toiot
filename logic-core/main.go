@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
 	"github.com/KumKeeHyun/toiot/logic-core/usecase"
 
 	"github.com/KumKeeHyun/toiot/logic-core/adapter"
@@ -44,7 +45,13 @@ func main() {
 	}()
 
 	rr, AddrMap := memory.NewRegistRepo()
+	// test code ------------------------------------------
 	adapter.AddrMap = &AddrMap
+	var tmpSink model.Sink
+	tmpSink.Addr = "10.5.110.41:5000"
+	AddrMap[6] = tmpSink
+	AddrMap[7] = tmpSink
+	// ----------------------------------------------------
 	ks := sarama.NewKafkaConsumer()
 	es := elasticClient.NewElasticClient()
 	ls := logicService.NewLogicService()

@@ -105,7 +105,7 @@ func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 			topic.POST("", h.RegistTopic)
 			topic.DELETE("/:id", h.UnregistTopic)
 		}
-	}
+	}  
 }
 
 func initTopic(tpr repository.TopicRepo) {

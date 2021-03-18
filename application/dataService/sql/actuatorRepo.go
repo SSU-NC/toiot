@@ -25,11 +25,11 @@ func (acr *actuatorRepo) GetPages(size int) int {
 }
 
 func (acr *actuatorRepo) FindsWithName() (al []model.Actuator, err error) {
-	return al, acr.db.Preload("Name").Find(&al).Error
+	return al, acr.db.Find(&al).Error
 }
 func (acr *actuatorRepo) FindsPage(p adapter.Page) (al []model.Actuator, err error) {
 	offset := p.GetOffset()
-	return al, acr.db.Offset(offset).Limit(p.Size).Preload("Name").Find(&al).Error
+	return al, acr.db.Offset(offset).Limit(p.Size).Find(&al).Error
 }
 
 // func (sir *sinkRepo) FindsByTopicIDWithNodesSensorsValuesLogics(tid int) (sl []model.Sink, err error) {

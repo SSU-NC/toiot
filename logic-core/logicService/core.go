@@ -48,7 +48,7 @@ func (m *mux) CreateAndStartLogic(l *model.Logic) error {
 	go func() {
 		log.Println("in CreateAndStartLogic, run go routin")
 		for d := range listen {
-			log.Println("in CreateAndStartLogic, exec되는건가 ?")
+			log.Println("in CreateAndStartLogic, exec")
 			elems.Exec(&d)
 		}
 	}()
