@@ -1,13 +1,17 @@
 package adapter
 
 type States struct {
-	Timestamp string      `json:"timestamp"`
-	State     []NodeState `json:"state"`
+	Timestamp string     `json:"timestamp"`
+	State     HealthInfo `json:"healthinfo"`
 }
 
 type NodeState struct {
 	NodeID int  `json:"nid"`
 	State  bool `json:"state"`
+}
+type HealthInfo struct {
+	SinkID int         `json:"sid"`
+	State  []NodeState `json:"state"`
 }
 
 // type HealthInfo struct {

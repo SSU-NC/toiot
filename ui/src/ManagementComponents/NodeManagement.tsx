@@ -30,6 +30,7 @@ class NodeManagement extends Component<{}, NodeManagementState> {
 		showAllValid: true,
 	};
 
+
 	//Conect web socket
 	componentWillMount() {
 		client.onopen = () => {
@@ -56,6 +57,8 @@ class NodeManagement extends Component<{}, NodeManagementState> {
 			.then((data) => this.setState({ sinkList: data }))
 			.catch((error) => console.error('Error:', error));
 	}
+
+	// node state fetch해오는 코드 없음
 
 	handleAllClick = () => {
 		this.setState({
@@ -131,7 +134,7 @@ class NodeManagement extends Component<{}, NodeManagementState> {
 									className="collapse"
 								>
 									<NodeTable
-										sink_id={sink.id}
+										sink_id={sink.id}                       // 해당 싱크의 노드들을 가져오기 위해 sink_id 받음
 										nodeState={this.state.nodeState}
 									></NodeTable>
 								</div>
