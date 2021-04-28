@@ -1,5 +1,4 @@
 package healthCheckUC
-
 import (
 	"encoding/json"
 	"io"
@@ -54,39 +53,39 @@ func NewHealthCheckUsecase(sr repository.StatusRepo, e chan interface{}) *health
 
 func (hu *healthCheckUsecase) healthCheck(conn net.Conn) {
 
-	for {
-		recvBuf := make([]byte, 4096)
-		n, err := conn.Read(recvBuf)
-		if nil != err {
-			if io.EOF == err {
-				log.Printf("connection is closed from client; %v", conn.RemoteAddr().String())
-				return
-			}
-			log.Printf("fail to receive data; err: %v", err)
+	// for {
+	recvBuf := make([]byte, 4096)
+	n, err := conn.Read(recvBuf)	
+	if nil != err {
+		if io.EOF == err {
+			log.Printf("connection is closed from client; %v", conn.RemoteAddr().String())
 			return
 		}
-		if n > 0 {
-			var healthInfo adapter.HealthInfo
-			var states adapter.States
-
-			recvBuf = ClearPadding(recvBuf)
-			log.Println("recv Buf :", recvBuf)
-			json.Unmarshal(recvBuf, &healthInfo)
-
-			states.State = healthInfo
-			states.Timestamp = string(time.Now().Unix())
-			log.Println("convert to json :", healthInfo)
-			//test_start
-			tmphealth := hu.sr.UpdateTable(states) // 변화가 생긴 것들만 뭘로 변했는지 알려줌 ex : {1 [{1 1} {2 1} {8 0}]}
-			log.Println(tmphealth)
-
-			hu.event <- tmphealth
-			//test_end
-
-			//hu.event <- hu.sr.UpdateTable(sinknum, res)
-
-		}
+		log.Printf("fail to receive data; err: %v", err)
+		return
 	}
+	if n > 0 {
+		var healthInfo adapter.HealthInfo
+		var states adapter.States
+
+		recvBuf = ClearPadding(recvBuf)
+		// log.Println("recv Buf2 :", recvBuf)
+		json.Unmarshal(recvBuf, &healthInfo)
+
+		states.State = healthInfo
+		states.Timestamp = string(time.Now().Unix())
+		log.Println("convert to json :", healthInfo)
+		//test_start
+		tmphealth := hu.sr.UpdateTable(states) // 변화가 생긴 것들만 뭘로 변했는지 알려줌 ex : {1 [{1 1} {2 1} {8 0}]}
+		log.Println(tmphealth)
+
+		// hu.event <- tmphealth
+		// //test_end
+
+		// //hu.event <- hu.sr.UpdateTable(sinknum, res)
+
+	}
+	// }
 }
 
 func ClearPadding(buf []byte) []byte {

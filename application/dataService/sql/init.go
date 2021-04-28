@@ -24,7 +24,7 @@ func Setup() {
 	dbConn.AutoMigrate(
 		&model.Topic{}, &model.LogicService{},
 		&model.Sink{}, &model.Node{},
-		&model.Sensor{}, &model.SensorValue{}, &model.Logic{},
+		&model.Sensor{}, &model.SensorValue{}, &model.Logic{}, &model.Actuator{},
 	)
 
 	// dbConn.Model(&model.LogicService{}).AddForeignKey("topic_id", "topics(id)", "CASCADE", "CASCADE")

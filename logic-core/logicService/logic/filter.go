@@ -17,6 +17,7 @@ type ValueElement struct {
 }
 
 func (ve *ValueElement) Exec(d *model.LogicData) {
+	log.Println("!!!!in ValueElement.Exec !!!!")
 	v, ok := d.Values[ve.Value]
 	if !ok {
 		return
@@ -43,6 +44,7 @@ type TimeElement struct {
 }
 
 func (te *TimeElement) Exec(d *model.LogicData) {
+	log.Println("!!!!in TimeElement.Exec !!!!")
 	timeFmt := "15:04:05"
 	isRange := false
 	log.Println("in Filter.Exec")

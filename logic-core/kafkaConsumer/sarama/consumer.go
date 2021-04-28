@@ -82,7 +82,8 @@ func (consumer *consumer) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (consumer *consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
-		// log.Println("kafka consumer :", string(message.Value))
+		
+		log.Println("kafka consumer :", string(message.Value))
 		ad := adapter.KafkaData{}
 		if err := json.Unmarshal(message.Value, &ad); err != nil {
 			continue
@@ -91,6 +92,7 @@ func (consumer *consumer) ConsumeClaim(session sarama.ConsumerGroupSession, clai
 		if err != nil {
 			continue
 		}
+		
 		consumer.out <- d
 	}
 

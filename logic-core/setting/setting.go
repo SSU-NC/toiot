@@ -51,7 +51,9 @@ func (as *App) Getenv() {
 	*/
 	if as.Server == "" {
 		as.Server = "10.5.110.11:8081"
+		// as.Server = "220.70.2.5:8081"
 	}
+
 }
 
 var Appsetting = &App{}
@@ -64,7 +66,7 @@ type Kafka struct {
 }
 
 func (ks *Kafka) Getenv() {
-	GetenvStr(&ks.Broker, "10.5.110.3:9092", "KAFKA_BROKER") //"localhost:9092", "KAFKA_BROKER")
+	GetenvStr(&ks.Broker, "10.5.110.41:9092", "KAFKA_BROKER") //"localhost:9092", "KAFKA_BROKER")
 	GetenvStr(&ks.GroupID, "logic1", "KAFKA_GROUP")
 	ks.Topics = []string{os.Getenv("KAFKA_TOPIC")}
 	if ks.Topics[0] == "" {
@@ -86,7 +88,7 @@ type Elastic struct {
 func (es *Elastic) Getenv() {
 	temp := os.Getenv("ELASTIC_SERVER")
 	if temp == "" {
-		temp = "10.5.110.1:9200" //"localhost:9200"
+		temp = "10.5.110.38:9200" //"localhost:9200"
 	}
 	es.Addresses = []string{fmt.Sprintf("http://%s", temp)}
 	GetenvInt(&es.RequestRetry, 3, "ELASTIC_RETRY")

@@ -40,12 +40,15 @@ func (m *mux) CreateAndStartLogic(l *model.Logic) error {
 	lchs[l.ID] = listen
 
 	elems, err := logic.BuildLogic(l)
+	log.Println("end BuildLogic")
 	if err != nil {
+		log.Println("end BuildLogic, return error")
 		return err
 	}
 	go func() {
 		log.Println("in CreateAndStartLogic, run go routin")
 		for d := range listen {
+			log.Println("in CreateAndStartLogic, exec")
 			elems.Exec(&d)
 		}
 	}()

@@ -1,6 +1,7 @@
 package eventUsecase
 
 import (
+	"log"
 	"sync"
 
 	"github.com/KumKeeHyun/toiot/application/adapter"
@@ -14,6 +15,7 @@ func waitRespGroup(e EVENT, body interface{}, ll []model.LogicService) (prl []pi
 		go func(_l model.LogicService) {
 			url := makeUrl(_l.Addr, EventPath[e])
 			resp, _ := eventClient.R().SetBody(body).Post(url)
+			log.Println("Post 내용 : ", body, "url : ", url)
 			if !resp.IsSuccess() {
 				prl = append(prl, pingRequest{_l, e, body})
 			}
