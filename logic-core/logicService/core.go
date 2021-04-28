@@ -3,6 +3,7 @@ package logicService
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
 	"github.com/KumKeeHyun/toiot/logic-core/logicService/logic"
@@ -26,6 +27,7 @@ func NewLogicService() *logicService {
 
 func (m *mux) CreateAndStartLogic(l *model.Logic) error {
 	listen := make(chan model.LogicData, 100)
+	log.Println("in CreateAndStartLogic, l=", l)
 	lchs, ok := m.chTable[l.SensorID]
 	if !ok {
 		m.chTable[l.SensorID] = make(map[int]chan model.LogicData)
@@ -38,11 +40,15 @@ func (m *mux) CreateAndStartLogic(l *model.Logic) error {
 	lchs[l.ID] = listen
 
 	elems, err := logic.BuildLogic(l)
+	log.Println("end BuildLogic")
 	if err != nil {
+		log.Println("end BuildLogic, return error")
 		return err
 	}
 	go func() {
+		log.Println("in CreateAndStartLogic, run go routin")
 		for d := range listen {
+			log.Println("in CreateAndStartLogic, exec")
 			elems.Exec(&d)
 		}
 	}()

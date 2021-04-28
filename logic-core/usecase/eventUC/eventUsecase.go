@@ -1,6 +1,8 @@
 package eventUC
 
 import (
+	"log"
+
 	"github.com/KumKeeHyun/toiot/logic-core/adapter"
 	"github.com/KumKeeHyun/toiot/logic-core/domain/repository"
 	"github.com/KumKeeHyun/toiot/logic-core/domain/service"
@@ -27,6 +29,7 @@ func (eu *eventUsecase) DeleteSink(nl []adapter.Node) error {
 
 func (eu *eventUsecase) CreateNode(n *adapter.Node, sn string) error {
 	mn, asl := adapter.NodeToModel(n, sn)
+
 	eu.rr.CreateNode(n.ID, &mn)
 
 	all := []adapter.Logic{}
@@ -55,9 +58,11 @@ func (eu *eventUsecase) DeleteSensor(s *adapter.Sensor) error {
 }
 
 func (eu *eventUsecase) CreateLogic(l *adapter.Logic) error {
+	log.Println("in eu.CreateLogic")
 	if ml, err := adapter.LogicToModel(l); err != nil {
 		return err
 	} else {
+		log.Println("in eu.CreateLogic.good")
 		return eu.ls.CreateAndStartLogic(&ml)
 	}
 }

@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/KumKeeHyun/toiot/logic-core/domain/model"
 	"github.com/KumKeeHyun/toiot/logic-core/usecase"
 
 	"github.com/KumKeeHyun/toiot/logic-core/adapter"
@@ -43,7 +44,14 @@ func main() {
 		trace.Stop()
 	}()
 
-	rr := memory.NewRegistRepo()
+	rr, AddrMap := memory.NewRegistRepo()
+	// test code ------------------------------------------
+	adapter.AddrMap = &AddrMap
+	var tmpSink model.Sink
+	tmpSink.Addr = "10.5.110.41:5000"
+	AddrMap[6] = tmpSink
+	AddrMap[7] = tmpSink
+	// ----------------------------------------------------
 	ks := sarama.NewKafkaConsumer()
 	es := elasticClient.NewElasticClient()
 	ls := logicService.NewLogicService()
@@ -66,6 +74,9 @@ func main() {
 func SetEventRoute(r *gin.Engine, h *handler.Handler) {
 	e := r.Group("/event")
 	{
+		e.POST("/sink/create", h.CreateSink)
+		//여기서 CreateSink 실행되면 메모리 상에 있는 []sinkAddr에 어팬드 해줘야 함.
+		// 이후 로직에 액션으로 이 []sinkAddr 돌면서 해당 주소로 액추에이터 조종 메세지 전달
 		e.POST("/sink/delete", h.DeleteSink)
 		e.POST("/node/create", h.CreateNode)
 		e.POST("/node/delete", h.DeleteNode)
@@ -95,6 +106,7 @@ func RegistLogicService(ls usecase.EventUsecase) {
 	}
 
 	for _, s := range sinks {
+		log.Println("->", s.Name)
 		for _, n := range s.Nodes {
 			ls.CreateNode(&n, s.Name)
 		}

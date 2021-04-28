@@ -28,6 +28,12 @@ type RegistUsecase interface {
 	RegistSensor(s *model.Sensor) error
 	UnregistSensor(s *model.Sensor) error
 
+	GetActuatorPageCount(size int) int
+	GetActuators() ([]model.Actuator, error)
+	GetActuatorsPage(p adapter.Page) ([]model.Actuator, error)
+	RegistActuator(a *model.Actuator) error
+	UnregistActuator(a *model.Actuator) error
+
 	GetLogics() ([]model.Logic, error)
 	RegistLogic(l *model.Logic) error
 	UnregistLogic(l *model.Logic) error
@@ -45,6 +51,7 @@ type EventUsecase interface {
 	RegistLogicService(l *model.LogicService) error
 	CheckAndUnregistLogicServices() error
 
+	CreateSinkEvent(s *model.Sink) error
 	DeleteSinkEvent(s *model.Sink) error
 	CreateNodeEvent(n *model.Node) error
 	DeleteNodeEvent(n *model.Node) error

@@ -8,12 +8,14 @@ import (
 	"syscall"
 
 	"github.com/KumKeeHyun/toiot/health-check/dataService/memory"
+	"github.com/KumKeeHyun/toiot/health-check/setting"
 	"github.com/KumKeeHyun/toiot/health-check/usecase/healthCheckUC"
 	"github.com/KumKeeHyun/toiot/health-check/usecase/websocketUC"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
 
+// TODO: ip 및 port 등등 세팅에 넣어서 처리하기
 func main() {
 	sr := memory.NewStatusRepo()
 
@@ -41,7 +43,7 @@ func main() {
 		fmt.Println("disconnect websocket!")
 	})
 
-	go log.Fatal(r.Run(":8085"))
+	go log.Fatal(r.Run(setting.Healthsetting.Server))
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)

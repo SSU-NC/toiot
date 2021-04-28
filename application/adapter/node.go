@@ -61,3 +61,8 @@ type SensorPage struct {
 	Sensors []model.Sensor `json:"sensors"`
 	Pages   int            `json:"pages"`
 }
+
+type SinkAddr struct {
+	Sid  int    `json:"sid"`
+	Addr string `json:"addr"`
+}

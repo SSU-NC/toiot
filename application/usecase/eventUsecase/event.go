@@ -1,8 +1,10 @@
 package eventUsecase
 
 import (
+	"log"
 	"sync"
 
+	"github.com/KumKeeHyun/toiot/application/adapter"
 	"github.com/KumKeeHyun/toiot/application/domain/model"
 )
 
@@ -13,6 +15,7 @@ func waitRespGroup(e EVENT, body interface{}, ll []model.LogicService) (prl []pi
 		go func(_l model.LogicService) {
 			url := makeUrl(_l.Addr, EventPath[e])
 			resp, _ := eventClient.R().SetBody(body).Post(url)
+			log.Println("Post 내용 : ", body, "url : ", url)
 			if !resp.IsSuccess() {
 				prl = append(prl, pingRequest{_l, e, body})
 			}
@@ -41,6 +44,21 @@ func (eu *eventUsecase) DeleteSinkEvent(s *model.Sink) error {
 	// 	}()
 	// }
 	// wg.Wait()
+
+	return nil
+}
+func (eu *eventUsecase) CreateSinkEvent(s *model.Sink) error {
+	e := CreateSink
+	sinkaddr := adapter.SinkAddr{
+		Sid:  s.ID,
+		Addr: s.Addr,
+	}
+
+	ll, err := eu.lsr.FindsByTopicID(s.Topic.ID)
+	if err != nil {
+		return err
+	}
+	eu.requestRetry = append(eu.requestRetry, waitRespGroup(e, sinkaddr, ll)...)
 
 	return nil
 }

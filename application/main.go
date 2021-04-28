@@ -27,8 +27,9 @@ func main() {
 	lgr := sql.NewLogicRepo()
 	lsr := sql.NewLogicServiceRepo()
 	tpr := sql.NewTopicRepo()
+	acr := sql.NewActuatorkRepo()
 
-	ru := registUsecase.NewRegistUsecase(sir, ndr, snr, lgr, lsr, tpr)
+	ru := registUsecase.NewRegistUsecase(sir, ndr, snr, lgr, lsr, tpr, acr)
 	eu := eventUsecase.NewEventUsecase(sir, lsr)
 
 	h := handler.NewHandler(ru, eu)
@@ -62,11 +63,12 @@ func setEventRoute(r *gin.Engine, h *handler.Handler) {
 func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 	regist := r.Group("/regist")
 	{
+
 		sink := regist.Group("/sink")
 		{
 			sink.GET("", h.ListSinks)
 			sink.POST("", h.RegistSink)
-			sink.DELETE("/:id", h.UnregistSink)
+			sink.DELETE("/Satates:id", h.UnregistSink)
 		}
 		node := regist.Group("/node")
 		{
@@ -80,10 +82,16 @@ func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 			sensor.POST("", h.RegistSensor)
 			sensor.DELETE("/:id", h.UnregistSensor)
 		}
+		actuator := regist.Group("/actuator")
+		{
+			actuator.GET("", h.ListActuators)
+			actuator.POST("", h.RegistActuator)
+			actuator.DELETE("/:id", h.UnregistActuator)
+		}
 		logic := regist.Group("/logic")
 		{
 			logic.GET("", h.ListLogics)
-			logic.POST("", h.RegistLogic)
+			logic.POST("", h.RegistLogic) // << 프론트에서
 			logic.DELETE("/:id", h.UnregistLogic)
 		}
 		logicService := regist.Group("/logic-service")
@@ -97,7 +105,7 @@ func setRegistrationRoute(r *gin.Engine, h *handler.Handler) {
 			topic.POST("", h.RegistTopic)
 			topic.DELETE("/:id", h.UnregistTopic)
 		}
-	}
+	}  
 }
 
 func initTopic(tpr repository.TopicRepo) {

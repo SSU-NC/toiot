@@ -82,7 +82,7 @@ func NewElasticClient() *client {
 	putTemplate.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody([]byte(template)).
-		Put("http://220.70.2.1:9200/_template/template_1")
+		Put("http://10.5.110.38:9200/_template/template_1")
 
 	elasticClient = &client{
 		es:      cli,

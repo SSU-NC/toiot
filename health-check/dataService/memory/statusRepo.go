@@ -70,11 +70,11 @@ func (sr *statusRepo) updateNodeStatus(sinkID int, ns []adapter.NodeState, t tim
 		if !ok {
 			tempState := model.NewStatus(v.State, t)
 			sr.table[sinkID][v.NodeID] = tempState
-			res = append(res, model.NodeStatus{NodeID: v.NodeID, State: tempState.State})
+			res = append(res, model.NodeStatus{NodeID: v.NodeID, State: tempState.State, Battery: v.Battery})
 			continue
 		}
 		if isChanged := nodeState.UpdateState(v.State, t); isChanged {
-			res = append(res, model.NodeStatus{NodeID: v.NodeID, State: nodeState.State})
+			res = append(res, model.NodeStatus{NodeID: v.NodeID, State: nodeState.State, Battery: v.Battery})
 		}
 		sr.table[sinkID][v.NodeID] = nodeState
 	}
@@ -88,7 +88,7 @@ func (sr *statusRepo) updateNodeStatus(sinkID int, ns []adapter.NodeState, t tim
 				delete(sr.table[sinkID], k)
 			} else {
 				sr.table[sinkID][k] = v
-				res = append(res, model.NodeStatus{NodeID: k, State: v.State})
+				res = append(res, model.NodeStatus{NodeID: k, State: v.State}) // , Battery: v.Battery
 			}
 
 		}

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/KumKeeHyun/toiot/logic-core/adapter"
@@ -18,6 +19,31 @@ func NewHandler(evuc usecase.EventUsecase, lcuc usecase.LogicCoreUsecase) *Handl
 		evuc: evuc,
 		lcuc: lcuc,
 	}
+}
+
+func (h *Handler) CreateSink(c *gin.Context) {
+	var addr adapter.SinkAddr
+	log.Println("in CreateSink")
+	if err := c.ShouldBindJSON(&addr); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if err := h.lcuc.AppendSinkAddr(&addr); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, addr)
+
+	// var an adapter.Node
+	// if err := c.ShouldBindJSON(&an); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	// if err := h.evuc.CreateNode(&an, an.Sink.Name); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	// c.JSON(http.StatusOK, an)
 }
 
 func (h *Handler) DeleteSink(c *gin.Context) {
@@ -74,10 +100,12 @@ func (h *Handler) DeleteSensor(c *gin.Context) {
 
 func (h *Handler) CreateLogic(c *gin.Context) {
 	var al adapter.Logic
+
 	if err := c.ShouldBindJSON(&al); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	log.Println("in createLogic, logic = ", al)
 	if err := h.evuc.CreateLogic(&al); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
