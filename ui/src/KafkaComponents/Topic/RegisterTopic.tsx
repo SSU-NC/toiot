@@ -6,9 +6,9 @@ import { topicListElem, topicOptionsElem } from '../../ElemInterface/ElementsInt
 // add, delete input : https://codesandbox.io/s/00xq32n3pn?from-embed=&file=/src/index.js
 
 interface RegisterTopicState {
-	name: string;
-	partitions: number;
-	replications: number;
+	name: string;                 // topic 이름
+	partitions: number;           // 파티션 갯수? 번호?
+	replications: number;         // 복제본 갯수    (--replication-factor 옵션을 부여하면 복제본을 생성)
 	nameValid: boolean;
 	partitionsValid: boolean;
 	replicationsValid: boolean;

@@ -18,7 +18,7 @@ class Navigation extends Component {
 						ToIoT
 					</Link>
 					<div className="container">
-						<div className="navbar-collapse" id="navbarNavAltMarkup">
+						<div className="navbar-collapse" id="navbarNavAltMarkup">    
 							<ul className="navbar-nav">
 								<li className="nav-item active">
 									<NavLink className="nav-item nav-link" to="/">

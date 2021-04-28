@@ -16,8 +16,8 @@ SinkTable
 class SinkTable extends Component<{}, SinkTableState> {
 	state: SinkTableState = {
 		sinkList: [],
-		currentPage: 1,
-		pages: 0,
+		currentPage: 1,       // 현재 페이지
+		pages: 0,   
 	};
 	componentDidMount() {
 		this.getsinkList(this.state.currentPage);

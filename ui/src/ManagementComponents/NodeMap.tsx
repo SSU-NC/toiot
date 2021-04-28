@@ -7,7 +7,7 @@ import { NODE_URL } from '../defineUrl';
 import {
 	nodeListElem,
 	sensorListElem,
-	nodeHealthCheckElem,
+	nodeHealthCheckElem
 } from '../ElemInterface/ElementsInterface';
 import MapNodeTable from './Table/MapNodeTable';
 declare global {

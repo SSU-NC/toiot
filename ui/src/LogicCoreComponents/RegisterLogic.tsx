@@ -15,12 +15,12 @@ import { LOGICCORE_URL, SENSOR_URL, NODE_URL } from '../defineUrl';
 import { Link } from 'react-router-dom';
 
 interface RegisterLogicState {
-	sensorList: Array<sensorListElem>;
-	nodeList: Array<nodeListElem>;
+	sensorList: Array<sensorListElem>;     // 센서 list
+	nodeList: Array<nodeListElem>;           
 
 	logic_name: string;
 	sensor_info: sensorOptionsElem;
-	selected_value: Array<logicElem>;
+	selected_value: Array<logicElem>;      // value, action은 여러 개일 수 있으므로 Array<logicElem> type (logicElem은 범위값 가짐)
 	selected_time: logicElem;
 	selected_action: Array<logicElem>;
 	selected_group: logicElem;
@@ -114,19 +114,20 @@ class RegisterLogic extends Component<{}, RegisterLogicState> {
 		}
 	};
 
+	// 얘는 뭐하는 애임?
 	// handle group card change
-	handleGroupCardChange = (selected_group: logicElem) => {
+	handleGroupCardChange = (selected_group: logicElem) => {  
 		this.setState({
 			//selected_group :{ logic: "group", group : selectedGroups.map((selectedGroup: groupOptionsElem)=>(selectedGroup.value)),},
 			selected_group,
-		});
+		}); 
 	};
 
 	// handle value card change
 	handleValueCardChange = (idx: number) => (selectedValue: logicElem) => {
 		// Value card is updated dynamic. It can be added or removed freely.
 		// so find changing field by using received idx and change state.
-		const new_selected_value = this.state.selected_value.map(
+		const new_selected_value = this.state.selected_value.map(        // new_selected_value는 Array<logicElem> type
 			(value: logicElem, sidx: number) => {
 				if (idx !== sidx) return value;
 				return selectedValue;
@@ -140,7 +141,7 @@ class RegisterLogic extends Component<{}, RegisterLogicState> {
 		this.setState({
 			selected_time,
 		});
-	};
+	}; 
 
 	// Handle action card change
 	handleActionCardChange = (idx: number) => (selectedAction: logicElem) => {

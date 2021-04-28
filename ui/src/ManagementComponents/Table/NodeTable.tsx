@@ -40,7 +40,7 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 	// Get node list from backend
 	getnodeList(page: number) {
 		var url =
-			NODE_URL + '?sink=' + this.props.sink_id + '&page=' + page;
+			NODE_URL + '?sink=' + this.props.sink_id + '&page=' + page;    // 현재 페이지에서 해당 sink의 노드 list 가져오는건가
 
 		fetch(url)
 			.then((res) => res.json())
@@ -70,7 +70,7 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 	// Find node state(health) and represent as colors (red - yellow - green, gray)
 	findNodeState = (id: number) => {
 		for (let prop in this.props.nodeState) {
-			if (this.props.nodeState[prop].n_id === id) {
+			if (this.props.nodeState[prop].nid === id) {
 				return (
 					<td
 						style={{
@@ -91,6 +91,8 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 	};
 
 	render() {
+		var sink_id = this.props.sink_id;
+		var index;
 		return (
 			<>
 				<table className="table">
@@ -98,20 +100,20 @@ class NodeTable extends Component<NodeTableProps, NodeTableState> {
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">name</th>
-							<th scope="col">id</th>
+							<th scope="col">id</th> 
 							<th scope="col">sensors</th>
 							<th scope="col">health</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
-						{this.state.nodeList.map((node: nodeListElem, idx: number) => (
+						{this.state.nodeList.map((node: nodeListElem, idx: number) => (        
 							<tr>
 								<th scope="row">{idx}</th>
 								<td>{node.name}</td>
 								<td>{node.id}</td>
 								<td>{node.sensors.map((sensor: any) => sensor.name + ', ')}</td>
-								{this.findNodeState(node.id)}
+								{this.findNodeState(node.id)}        
 								<td>
 									<button
 										className="btn btn-default btn-sm"

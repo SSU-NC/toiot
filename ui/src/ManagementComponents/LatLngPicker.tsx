@@ -3,16 +3,20 @@ import { locationElem } from '../ElemInterface/ElementsInterface';
 // 참고 : https://apis.map.kakao.com/web/sample/addMapClickEventWithMarker/
 // 참고 : https://chaewonkong.github.io/posts/react-kakao-maps.html
 
+/* global kakao */
+
 declare global {
 	interface Window {
 		kakao: any;
 	}
 }
+
 interface LarLngPickerProps {
 	handleLarLngChange: (location: locationElem) => void;
 }
 
 class LarLngPicker extends Component<LarLngPickerProps, {}> {
+	
 	componentDidMount() {
 		var mapContainer = document.getElementById('map'); // 지도를 표시할 div
 		var mapOption = {

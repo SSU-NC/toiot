@@ -30,17 +30,19 @@ class NodeManagement extends Component<{}, NodeManagementState> {
 		showAllValid: true,
 	};
 
+
+	//Conect web socket
 	componentWillMount() {
 		client.onopen = () => {
 	 		console.log('WebSocket Client for Health Check Connected');
-	 	};
+		};
 	 	client.onmessage = (message: any) => {
-			console.log(message);
+	 		console.log(message);
 	 		this.setState({
 	 			nodeState: JSON.parse(message.data),
-			});
+	 		});
 	 	};
-	 }
+	}
 
 	componentDidMount() {
 		this.getsinkList();
